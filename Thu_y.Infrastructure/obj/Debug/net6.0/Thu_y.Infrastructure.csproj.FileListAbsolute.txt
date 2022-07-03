@@ -1,0 +1,14 @@
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\bin\Debug\net6.0\Thu_y.Infrastructure.deps.json
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\bin\Debug\net6.0\Thu_y.Infrastructure.runtimeconfig.json
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\bin\Debug\net6.0\Thu_y.Infrastructure.dll
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\bin\Debug\net6.0\Thu_y.Infrastructure.pdb
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.AssemblyInfo.cs
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.dll
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\refint\Thu_y.Infrastructure.dll
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.pdb
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\Thu_y.Infrastructure.genruntimeconfig.cache
+C:\Users\Admins\OneDrive\Desktop\Thu_y\Thu_y.Infrastructure\obj\Debug\net6.0\ref\Thu_y.Infrastructure.dll
