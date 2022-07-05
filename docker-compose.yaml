@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  express:
+    build:
+      context: ./
+      dockerfile: ./Thu_y/Dockerfile
+    hostname: netcore1
+    container_name: express
+    volumes:
+      - ./:/netcore
+    ports:
+      - "5000:443"
+      - "5001:80"
+    environment:
+      DEBUG: nodejs-docker-express:*
