@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Thu_y.Modules.ReportModule.Model
+namespace Thu_y.Modules.ReceiptModule.Model
 {
-    public class ReportPagingModel
+    public class AllocateReceiptPagingModel
     {
         [Range(0, int.MaxValue)]
         [Required]
@@ -12,12 +12,10 @@ namespace Thu_y.Modules.ReportModule.Model
         public int PageSize { get; set; }
 
         public string? Id { get; set; }
-        public int? Type { get; set; }
         public string? UserId { get; set; }
-        public DateTimeOffset? DateStart { get; set; }
-        public DateTimeOffset? DateEnd { get; set; }
+        public string? ReceiptId { get; set; }
 
-        public ReportPagingModel(int pageNumber, int pageSize)
+        public AllocateReceiptPagingModel(int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;

@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using AutoMapper;
+using System.Data.Entity;
+using System.Threading.Tasks;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.ReceiptModule.Core;
+using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
 
 namespace Thu_y.Modules.ReceiptModule.Adapters
@@ -8,25 +11,34 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
     public class ReceiptService : IReceiptService
     {
         private readonly IReceiptRepository _receiptRepository;
+        private readonly IReceiptAllocateRepository _receiptAllocateRepository;
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         public ReceiptService(IServiceProvider serviceProvider)
         {
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            _receiptAllocateRepository = serviceProvider.GetRequiredService<IReceiptAllocateRepository>();
             _receiptRepository = serviceProvider.GetRequiredService<IReceiptRepository>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
-        public Task<string> CreateAsync(ReceiptEntity model , CancellationToken cancellationToken = default)
+        public Task<string> CreateAsync(ReceiptModel model , CancellationToken cancellationToken = default)
         {
-            _receiptRepository.Add(model);
+            var receipt = _mapper.Map<ReceiptEntity>(model);
+            _receiptRepository.Add(receipt);
             _unitOfWork.SaveChange();
             return Task.FromResult(model.Id);
         }
 
-        public Task UpdateAsync(ReceiptEntity model, CancellationToken cancellationToken = default)
+        public Task UpdateAsync(ReceiptModel model, CancellationToken cancellationToken = default)
         {
             try
             {
-                _receiptRepository.Update(model);
+                var receipt = _receiptRepository.Get(x => x.Id == model.Id).FirstOrDefault();
+                if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
+
+                _mapper.Map(model,receipt);
+                _receiptRepository.Update(receipt);
                 _unitOfWork.SaveChange();
                 return Task.CompletedTask;
             }
@@ -36,11 +48,11 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
             }
         }
 
-        public Task DeleteAsync(ReceiptEntity model, CancellationToken cancellationToken = default)
+        public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             try
             {
-                var checkReceipt = GetByReceptId(model.Id);
+                var checkReceipt = GetByReceptId(id);
                 if (checkReceipt == null)
                 {
                     throw new Exception("No user found!") { HResult = 400 };
@@ -60,6 +72,37 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
             var result =
                _receiptRepository.Get(w => w.Id == id && w.DateDeleted == null).FirstOrDefault();
             return result;
+        }
+
+        public bool AllocateReceipt(ReceiptAllocateModel model)
+        {
+            var item = _mapper.Map<ReceiptAllocateEntity>(model);
+            _receiptAllocateRepository.Add(item);
+            _unitOfWork.SaveChange();
+            return true;
+        }
+
+        public bool UpdateAllocateReceipt(ReceiptAllocateModel model)
+        {
+            var item = _receiptAllocateRepository.Get(x => x.Id == model.Id).FirstOrDefault();
+            if (item == null) throw new Exception("Not found!") { HResult = 400 };
+
+            _mapper.Map(model, item);
+            _receiptAllocateRepository.Update(item);
+            _unitOfWork.SaveChange();
+
+            return true;
+        }
+
+        public bool DeleteAllocateReceipt(string id)
+        {
+            var item = _receiptAllocateRepository.Get(x => x.Id == id).FirstOrDefault();
+            if (item == null) throw new Exception("Not found!") { HResult = 400 };
+
+            _receiptAllocateRepository.Delete(item);
+            _unitOfWork.SaveChange();
+
+            return true;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace Thu_y.Modules.ReceiptModule.Core
         public string CodeName { get; set; }
         public string CodeNumber { get; set; }
         public DateTimeOffset EffectiveDate { get; set; }
+
+        public virtual ICollection<ReceiptAllocateEntity> Allocates { get; set; }
     }
 }
