@@ -50,4 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-/.vs/Thu_y/FileContentIndex
+
+.vs/
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
