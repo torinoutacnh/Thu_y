@@ -8,9 +8,5 @@ namespace Thu_y.Modules.AbttoirModule
         public int Status { get; set; }
         public int Amount { get; set; }
         public string AnimalId { get; set; }
-
-        public string AbattoirId { get; set; }
-        [ForeignKey("AbattoirId")]
-        public virtual AbattoirEntity Abattoir { get; set; }
     }
 }

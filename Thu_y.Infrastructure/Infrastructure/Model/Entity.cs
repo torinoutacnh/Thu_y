@@ -7,6 +7,7 @@ namespace Thu_y.Infrastructure.Model
         [Key]
         public string Id { get; set; }
 
+        public int Status { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset DateUpdated { get; set; }
         public DateTimeOffset? DateDeleted { get; set; }

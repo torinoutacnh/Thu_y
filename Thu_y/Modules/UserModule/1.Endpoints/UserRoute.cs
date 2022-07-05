@@ -24,7 +24,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 {
                     if (userService.CreateUser(model))
                     {
-                        return Results.Ok(value: new ResponseModel<string>("Success"));
+                        return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                     }
                     throw new Exception("Failed to create!");
                 }
@@ -45,7 +45,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 {
                     if (userService.UpdateUser(model))
                     {
-                        return Results.Ok(value: new ResponseModel<string>("Success"));
+                        return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                     }
                     throw new Exception("Failed to update!");
                 }
@@ -66,7 +66,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 {
                     if (userService.DeleteUser(id))
                     {
-                        return Results.Ok(value: new ResponseModel<string>("Success"));
+                        return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                     }
                     throw new Exception("Failed to delete!");
                 }

@@ -1,7 +1,7 @@
-﻿using Thu_y.Modules.Module;
-using Thu_y.Modules.ReportModule.Adapters;
+﻿using Thu_y.Modules.ReportModule.Adapters;
 using Thu_y.Modules.ReportModule.Endpoints;
 using Thu_y.Modules.ReportModule.Ports;
+using Thu_y.Utils.Module;
 
 namespace Thu_y.Modules.ReportModule
 {
@@ -10,6 +10,7 @@ namespace Thu_y.Modules.ReportModule
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
             endpoints.MapFormEndpoints();
+            endpoints.MapReportEndpoints();
             return endpoints;
         }
 

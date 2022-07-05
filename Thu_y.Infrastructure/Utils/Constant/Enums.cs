@@ -23,4 +23,11 @@ namespace Thu_y.Infrastructure.Utils.Constant
         Male = 1,
         Female = 2
     }
+
+    public enum ReportType
+    {
+        A = 1,
+        B = 2,
+        C = 3,
+    }
 }

@@ -1,7 +1,7 @@
-﻿using Thu_y.Modules.Module;
-using Thu_y.Modules.UserModule.Adapters;
+﻿using Thu_y.Modules.UserModule.Adapters;
 using Thu_y.Modules.UserModule.Endpoints;
 using Thu_y.Modules.UserModule.Ports;
+using Thu_y.Utils.Module;
 
 namespace Thu_y.Modules.UserModule
 {

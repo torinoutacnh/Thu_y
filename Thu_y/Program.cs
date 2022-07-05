@@ -2,11 +2,12 @@ using AutoMapper;
 using Thu_y.Db.DbContext;
 using Thu_y.Infrastructure.DbContext;
 using Thu_y.Infrastructure.UOF;
-using Thu_y.Modules.Module;
 using Thu_y.Modules.ReportModule.Model.Mapper;
+using Thu_y.Modules.ShareModule.Model.Mapper;
 using Thu_y.Modules.UserModule.Model.Mapper;
 using Thu_y.Utils.Infrastructure.Application;
 using Thu_y.Utils.Infrastructure.Application.Models;
+using Thu_y.Utils.Module;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile(new UserModuleProfile());
     cfg.AddProfile(new FormMapperProfile());
+    cfg.AddProfile(new ShareModuleProfile());
 });
 
 builder.Services.AddHttpClient();

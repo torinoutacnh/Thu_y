@@ -45,7 +45,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 {
                     if (scheduleService.CreateSchedule(model))
                     {
-                        return Results.Ok(value: new ResponseModel<string>("Success"));
+                        return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                     }
                     throw new Exception("Failed to create!");
                 }
@@ -66,7 +66,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 {
                     if (scheduleService.UpdateSchedule(model))
                     {
-                        return Results.Ok(value: new ResponseModel<string>("Success"));
+                        return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                     }
                     throw new Exception("Failed to create!");
                 }
@@ -87,7 +87,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 {
                     if (scheduleService.DeleteSchedule(id))
                     {
-                        return Results.Ok(value: new ResponseModel<string>("Success"));
+                        return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                     }
                     throw new Exception("Failed to delete!");
                 }

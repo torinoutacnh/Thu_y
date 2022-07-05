@@ -7,7 +7,5 @@ namespace Thu_y.Modules.AbttoirModule
     {
         public string Name { get; set; }
         public string Address { get; set; }
-
-        public virtual ICollection<AbattoirDetailEntity> AbattoirDetails { get; set; }
     }
 }

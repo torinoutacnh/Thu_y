@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Thu_y.Modules.AbttoirModule;
+using Thu_y.Modules.ReceiptModule.Core;
 using Thu_y.Modules.ReportModule.Core;
-using Thu_y.Modules.ShareModule;
+using Thu_y.Modules.ShareModule.Core;
 using Thu_y.Modules.UserModule.Core;
 
 namespace Thu_y.Db.DbContext
@@ -23,5 +24,10 @@ namespace Thu_y.Db.DbContext
         public DbSet<ReportTicketValueEntity> ReportTicketValue { get; set; }
         public DbSet<FormEntity> Form { get; set; }
         public DbSet<FormAttributeEntity> FormAttribute { get; set; }
+
+        // Receipt entity
+        public DbSet<ReceiptAllocateEntity> ReceiptAllocate { get; set; }
+        public DbSet<ReceiptEntity> Receipt { get; set; }
+        public DbSet<ReceiptReportEntity> ReceiptReport { get; set; }
     }
 }

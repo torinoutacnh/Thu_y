@@ -10,6 +10,8 @@ namespace Thu_y.Modules.UserModule.Core
         public DateTimeOffset DateEnd { get; set; }
 
         public string AbattoirId { get; set; }
+        public string AbattoirName { get; set; }
+        public string AbattoirAddress { get; set; }
 
         public string UserId { get; set; }
         [ForeignKey("UserId")]
