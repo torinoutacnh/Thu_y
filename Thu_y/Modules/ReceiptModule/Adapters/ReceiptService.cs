@@ -35,5 +35,31 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
                 return Task.FromException(e);
             }
         }
+
+        public Task DeleteAsync(ReceiptEntity model, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var checkReceipt = GetByReceptId(model.Id);
+                if (checkReceipt == null)
+                {
+                    throw new Exception("No user found!") { HResult = 400 };
+                }
+                _receiptRepository.Delete(checkReceipt);
+                _unitOfWork.SaveChange();
+                return Task.CompletedTask;
+            }
+            catch (Exception e)
+            {
+                return Task.FromException(e);
+            }
+        }
+        
+        public ReceiptEntity GetByReceptId(string id)
+        {
+            var result =
+               _receiptRepository.Get(w => w.Id == id && w.DateDeleted == null).FirstOrDefault();
+            return result;
+        }
     }
 }
