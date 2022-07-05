@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.ReportModule.Core;
 using Thu_y.Modules.ReportModule.Model;

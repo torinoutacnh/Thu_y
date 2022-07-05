@@ -8,6 +8,8 @@ namespace Thu_y.Infrastructure.Repository
     {
         protected readonly IDbContext DbContext;
 
+        
+
         private DbSet<T> _dbSet;
 
         protected DbSet<T> DbSet

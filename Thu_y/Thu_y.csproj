@@ -23,4 +23,8 @@
     <ProjectReference Include="..\Thu_y.Infrastructure\Thu_y.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modules\ReceiptModule\Endpoints\" />
+  </ItemGroup>
+
 </Project>
