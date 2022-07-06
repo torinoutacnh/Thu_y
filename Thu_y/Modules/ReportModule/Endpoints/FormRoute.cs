@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Thu_y.Infrastructure.Utils.Constant;
 using Thu_y.Modules.ReportModule.Core;
 using Thu_y.Modules.ReportModule.Model;
 using Thu_y.Modules.ReportModule.Ports;
@@ -23,7 +20,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapFormEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] async (string code, IFormRepository formRepository, IMapper mapper) =>
+            endpoints.MapGet(FormEndpoint.GetForm, async (string code, IFormRepository formRepository, IMapper mapper) =>
             {
                 try
                 {
@@ -40,8 +37,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
-            }).WithTags(FormEndpoint.BasePath)
-              .Accepts<string>("application/json");
+            }).WithTags(FormEndpoint.BasePath);
 
             endpoints.MapPost(FormEndpoint.CreateForm, async (FormModel model, IFormService formService) =>
             {

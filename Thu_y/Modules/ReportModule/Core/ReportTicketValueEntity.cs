@@ -12,7 +12,7 @@ namespace Thu_y.Modules.ReportModule.Core
         public string FormNumber { get; set; }
         public string FormName { get; set; }
         public string FormCode { get; set; }
-        public string MyProperty { get; set; }
+
         public string AttributeId { get; set; }
         public string ReportId { get; set; }
 
