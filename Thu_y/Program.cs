@@ -1,5 +1,7 @@
 using AutoMapper;
+using Thu_y;
 using Thu_y.Db.DbContext;
+using Thu_y.Extensions;
 using Thu_y.Infrastructure.DbContext;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.ReceiptModule.Model.Mapper;
@@ -17,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper").Get<SystemHelperModel>());
+builder.Services.AddJWTSetting(builder.Configuration.GetSection("JWTSetting").Get<JWTSettingModel>());
 
 builder.Services.AddDbContext<IDbContext, AppDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -36,10 +39,11 @@ builder.Services.Configure<RouteOptions>(options => {
     options.LowercaseUrls = true;
     options.LowercaseQueryStrings = false;
 });
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
 
 builder.Services.RegisterModules();
+
+builder.Services.AddAuth();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -56,8 +60,8 @@ app.UseSystemSetting();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseHttpLogging();
-app.UseAuthentication();
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapEndpoints();
 

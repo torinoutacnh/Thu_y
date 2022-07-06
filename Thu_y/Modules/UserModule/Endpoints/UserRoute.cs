@@ -12,6 +12,8 @@ namespace Thu_y.Modules.UserModule.Endpoints
         public const string CreateUser = BasePath + "/create-user";
         public const string UpdateUser = BasePath + "/update-user";
         public const string DeleteUser = BasePath + "/delete-user";
+        public const string Login = BasePath + "/login";
+
     }
 
     public static class UserRoute
@@ -79,6 +81,20 @@ namespace Thu_y.Modules.UserModule.Endpoints
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
+            }).WithTags(UserEndpoint.BasePath);
+
+            endpoints.MapPost(UserEndpoint.Login, (UserDtoModel request, IUserService userService) =>
+            {
+                if (string.IsNullOrEmpty(request.UsetName) || string.IsNullOrEmpty(request.Password))
+                    return Results.NotFound(new ResponseModel<string>(message: "Not found User"));
+
+                var user = userService.GetByAccount(request.UsetName);
+                if(user == null) 
+                    return Results.NotFound(new ResponseModel<string>(message: "Not found User"));
+
+                if (user.Password != request.Password) 
+                    return Results.NotFound(new ResponseModel<string>(message: "Wrong password"));
+                return Results.Ok(userService.CreateJWTToken(user));
             }).WithTags(UserEndpoint.BasePath);
 
             return endpoints;
