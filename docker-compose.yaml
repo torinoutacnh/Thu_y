@@ -9,7 +9,7 @@ services:
     volumes:
       - ./:/netcore
     ports:
-      - "5000:443"
       - "5001:80"
+      - "5000:443"
     environment:
       DEBUG: nodejs-docker-express:*
