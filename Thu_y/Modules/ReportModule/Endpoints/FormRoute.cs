@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Thu_y.Modules.ReportModule.Core;
 using Thu_y.Modules.ReportModule.Model;
@@ -39,7 +40,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapPost(FormEndpoint.CreateForm, async (FormModel model, IFormService formService) =>
+            endpoints.MapPost(FormEndpoint.CreateForm,[Authorize(AuthenticationSchemes = "Bearer")] async (FormModel model, IFormService formService) =>
             {
                 try
                 {
@@ -57,7 +58,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapPut(FormEndpoint.UpdateForm, async (FormModel model, IFormService formService) =>
+            endpoints.MapPut(FormEndpoint.UpdateForm, [Authorize(AuthenticationSchemes = "Bearer")] async (FormModel model, IFormService formService) =>
             {
                 try
                 {
@@ -75,7 +76,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapDelete(FormEndpoint.DeleteForm, async (string id, IFormService formService) =>
+            endpoints.MapDelete(FormEndpoint.DeleteForm, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IFormService formService) =>
             {
                 try
                 {

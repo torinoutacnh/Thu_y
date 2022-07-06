@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
@@ -20,7 +21,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
     {
         public static IEndpointRouteBuilder MapAllocateReceiptEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost(AllocateReceiptEndpoint.GetAllReceipt, (AllocateReceiptPagingModel model, IReceiptAllocateRepository receiptAllocate, IMapper mapper ) =>
+            endpoints.MapPost(AllocateReceiptEndpoint.GetAllReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (AllocateReceiptPagingModel model, IReceiptAllocateRepository receiptAllocate, IMapper mapper ) =>
             {
                 try
                 {
@@ -43,7 +44,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapPost(AllocateReceiptEndpoint.CreateReceipt, (ReceiptAllocateModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(AllocateReceiptEndpoint.CreateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptAllocateModel model, IReceiptService receiptService) =>
             {
                 try
                 {
@@ -60,7 +61,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapPut(AllocateReceiptEndpoint.UpdateReceipt, (ReceiptAllocateModel model, IReceiptService receiptService) =>
+            endpoints.MapPut(AllocateReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptAllocateModel model, IReceiptService receiptService) =>
             {
                 try
                 {
@@ -77,7 +78,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapDelete(AllocateReceiptEndpoint.DeleteReceipt, (string id, IReceiptService receiptService) =>
+            endpoints.MapDelete(AllocateReceiptEndpoint.DeleteReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (string id, IReceiptService receiptService) =>
             {
                 try
                 {

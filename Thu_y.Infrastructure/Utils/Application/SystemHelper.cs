@@ -21,19 +21,5 @@ namespace Thu_y.Utils.Infrastructure.Application
             }
             return "Development";
         }
-
-        public static IServiceCollection AddSystemSetting(this IServiceCollection services, SystemHelperModel systemSettingModel)
-        {
-            SystemHelperModel.Instance = systemSettingModel ?? new SystemHelperModel();
-
-            return services;
-        }
-
-        public static IApplicationBuilder UseSystemSetting(this IApplicationBuilder app)
-        {
-            SystemHelperModel.Configs = app.ApplicationServices.GetRequiredService<IConfiguration>();
-
-            return app;
-        }
     }
 }

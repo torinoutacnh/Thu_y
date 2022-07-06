@@ -3,6 +3,11 @@ using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.UserModule.Ports;
 using Thu_y.Modules.UserModule.Core;
 using Thu_y.Modules.UserModule.Model;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Thu_y.Utils.Infrastructure.Application.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace Thu_y.Modules.UserModule.Adapters
 {

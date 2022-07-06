@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using System.Data.Entity;
 using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
@@ -20,7 +21,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
     {
         public static IEndpointRouteBuilder MapReceiptEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost(ReceiptEndpoint.GetAllReceipt, (ReceiptPagingModel model, IReceiptRepository receiptRepository,IMapper mapper) =>
+            endpoints.MapPost(ReceiptEndpoint.GetAllReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptPagingModel model, IReceiptRepository receiptRepository,IMapper mapper) =>
             {
                 try
                 {
@@ -45,7 +46,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptEndpoint.BasePath);
 
-            endpoints.MapPost(ReceiptEndpoint.CreateReceipt, async (ReceiptModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(ReceiptEndpoint.CreateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptModel model, IReceiptService receiptService) =>
             {
                 try
                 {
@@ -62,7 +63,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptEndpoint.BasePath);
 
-            endpoints.MapPut(ReceiptEndpoint.UpdateReceipt,async (ReceiptModel model, IReceiptService receiptService) =>
+            endpoints.MapPut(ReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptModel model, IReceiptService receiptService) =>
             {
                 try
                 {
@@ -79,7 +80,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptEndpoint.BasePath);
 
-            endpoints.MapDelete(ReceiptEndpoint.DeleteReceipt, async (string id, IReceiptService receiptService) =>
+            endpoints.MapDelete(ReceiptEndpoint.DeleteReceipt,[Authorize(AuthenticationSchemes = "Bearer")] async (string id, IReceiptService receiptService) =>
             {
                 try
                 {
