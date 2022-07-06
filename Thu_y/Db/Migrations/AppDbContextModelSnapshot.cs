@@ -257,9 +257,6 @@ namespace Thu_y.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SortNo")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -583,7 +580,7 @@ namespace Thu_y.Db.Migrations
             modelBuilder.Entity("Thu_y.Modules.ReceiptModule.Core.ReceiptAllocateEntity", b =>
                 {
                     b.HasOne("Thu_y.Modules.ReceiptModule.Core.ReceiptEntity", "Receipt")
-                        .WithMany("Allocates")
+                        .WithMany()
                         .HasForeignKey("ReceiptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -641,11 +638,6 @@ namespace Thu_y.Db.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Thu_y.Modules.ReceiptModule.Core.ReceiptEntity", b =>
-                {
-                    b.Navigation("Allocates");
                 });
 
             modelBuilder.Entity("Thu_y.Modules.ReportModule.Core.FormAttributeEntity", b =>

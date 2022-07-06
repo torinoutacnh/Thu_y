@@ -6,6 +6,5 @@
         public string Name { get; set; }
         public string DataType { get; set; }
         public string ControlType { get; set; }
-        public int SortNo { get; set; }
     }
 }
