@@ -7,13 +7,13 @@ namespace Thu_y.Modules.ReceiptModule.Model.Mapper
     {
         public ReceiptModuleProfile()
         {
-            CreateMap<ReceiptModel, ReceiptModel>()
-                .ForMember(x => x.Id, opt => opt.Ignore())
-                .ReverseMap();
+            CreateMap<ReceiptEntity, ReceiptModel>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+            CreateMap<ReceiptEntity, ReceiptModel>();
 
-            CreateMap<ReceiptAllocateModel, ReceiptAllocateEntity>()
-                .ForMember(x=>x.Id, opt=>opt.Ignore())
-                .ReverseMap();
+            CreateMap<ReceiptAllocateEntity, ReceiptAllocateModel>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+            CreateMap<ReceiptAllocateModel, ReceiptAllocateEntity>();
         }
     }
 }
