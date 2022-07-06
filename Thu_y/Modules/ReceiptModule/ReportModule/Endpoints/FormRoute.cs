@@ -23,7 +23,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapFormEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] async (string code, IFormRepository formRepository, IMapper mapper) =>
+            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = "Bearer", Roles = "Manager")] async (string code, IFormRepository formRepository, IMapper mapper) =>
             {
                 try
                 {
@@ -40,8 +40,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
-            }).WithTags(FormEndpoint.BasePath)
-              .Accepts<string>("application/json");
+            }).WithTags(FormEndpoint.BasePath);
 
             endpoints.MapPost(FormEndpoint.CreateForm, async (FormModel model, IFormService formService) =>
             {

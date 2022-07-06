@@ -78,24 +78,9 @@ namespace Thu_y.Modules.UserModule.Adapters
                 }),
                 IssuedAt = DateTime.Now,
                 Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
 
-            //var claim = new[]
-            //{
-            //    new Claim("account", loggedUser.Account),
-            //    new Claim(ClaimTypes.Name, loggedUser.Name),
-            //    new Claim(ClaimTypes.Email, loggedUser.Email),
-            //    new Claim(ClaimTypes.Role, loggedUser.Role.ToString())
-            //};
-            //var token = new JwtSecurityToken
-            //(
-            //    issuer: JWTSettingModel.Instance.Issuer,
-            //    audience: JWTSettingModel.Instance.Audience,
-            //    claims: claim,
-            //    expires: DateTime.Now.AddHours(1),
-            //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
-            //);
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
