@@ -3,11 +3,6 @@ using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.UserModule.Ports;
 using Thu_y.Modules.UserModule.Core;
 using Thu_y.Modules.UserModule.Model;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using Thu_y.Utils.Infrastructure.Application.Models;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Thu_y.Modules.UserModule.Adapters
 {
@@ -40,7 +35,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             var user = _userRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
             if (user == null) throw new Exception("No user found!") { HResult = 400 };
 
-            var updated = _mapper.Map(model, user);
+            var updated = _mapper.Map(model,user);
             _userRepository.Update(updated);
             _unitOfWork.SaveChange();
 
@@ -56,48 +51,6 @@ namespace Thu_y.Modules.UserModule.Adapters
             _unitOfWork.SaveChange();
 
             return true;
-        }
-
-        public UserEntity GetByAccount(string username)
-        {
-            return _userRepository.Get(_ => _.Account == username && _.DateDeleted == null).FirstOrDefault();
-        }
-
-        public string CreateJWTToken(UserEntity loggedUser)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(JWTSettingModel.Instance.SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("account", loggedUser.Account),
-                    new Claim(ClaimTypes.Name, loggedUser.Name),
-                    new Claim(ClaimTypes.Email, loggedUser.Email),
-                    new Claim(ClaimTypes.Role, loggedUser.Role.ToString())
-                }),
-                IssuedAt = DateTime.Now,
-                Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
-            };
-
-            //var claim = new[]
-            //{
-            //    new Claim("account", loggedUser.Account),
-            //    new Claim(ClaimTypes.Name, loggedUser.Name),
-            //    new Claim(ClaimTypes.Email, loggedUser.Email),
-            //    new Claim(ClaimTypes.Role, loggedUser.Role.ToString())
-            //};
-            //var token = new JwtSecurityToken
-            //(
-            //    issuer: JWTSettingModel.Instance.Issuer,
-            //    audience: JWTSettingModel.Instance.Audience,
-            //    claims: claim,
-            //    expires: DateTime.Now.AddHours(1),
-            //    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
-            //);
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
     }
 }
