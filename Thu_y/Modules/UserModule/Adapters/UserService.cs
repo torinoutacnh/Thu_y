@@ -3,11 +3,6 @@ using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.UserModule.Ports;
 using Thu_y.Modules.UserModule.Core;
 using Thu_y.Modules.UserModule.Model;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using Thu_y.Utils.Infrastructure.Application.Models;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Thu_y.Modules.UserModule.Adapters
 {
@@ -40,7 +35,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             var user = _userRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
             if (user == null) throw new Exception("No user found!") { HResult = 400 };
 
-            var updated = _mapper.Map(model, user);
+            var updated = _mapper.Map(model,user);
             _userRepository.Update(updated);
             _unitOfWork.SaveChange();
 

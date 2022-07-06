@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Thu_y.Infrastructure.Utils.Constant;
 using Thu_y.Modules.ReportModule.Core;
 using Thu_y.Modules.ReportModule.Model;
 using Thu_y.Modules.ReportModule.Ports;

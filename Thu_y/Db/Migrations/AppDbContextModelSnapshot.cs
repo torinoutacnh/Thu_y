@@ -257,6 +257,9 @@ namespace Thu_y.Db.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SortNo")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -306,18 +309,6 @@ namespace Thu_y.Db.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApproveId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApproveName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AttributeId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("datetimeoffset");
 
@@ -328,10 +319,6 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -393,10 +380,6 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MyProperty")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -600,7 +583,7 @@ namespace Thu_y.Db.Migrations
             modelBuilder.Entity("Thu_y.Modules.ReceiptModule.Core.ReceiptAllocateEntity", b =>
                 {
                     b.HasOne("Thu_y.Modules.ReceiptModule.Core.ReceiptEntity", "Receipt")
-                        .WithMany("Allocates")
+                        .WithMany()
                         .HasForeignKey("ReceiptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -658,11 +641,6 @@ namespace Thu_y.Db.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Thu_y.Modules.ReceiptModule.Core.ReceiptEntity", b =>
-                {
-                    b.Navigation("Allocates");
                 });
 
             modelBuilder.Entity("Thu_y.Modules.ReportModule.Core.FormAttributeEntity", b =>
