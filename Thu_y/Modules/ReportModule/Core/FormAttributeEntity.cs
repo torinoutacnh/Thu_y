@@ -8,6 +8,7 @@ namespace Thu_y.Modules.ReportModule.Core
         public string Name { get; set; }
         public string DataType { get; set; }
         public string ControlType { get; set; }
+        public int SortNo { get; set; }
 
         public string FormId { get; set; }
         [ForeignKey("FormId")]
