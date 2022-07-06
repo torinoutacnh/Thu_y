@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Thu_y.Modules.AbttoirModule;
+using Thu_y.Modules.AbttoirModule.Core;
 using Thu_y.Modules.ReceiptModule.Core;
 using Thu_y.Modules.ReportModule.Core;
 using Thu_y.Modules.ShareModule.Core;

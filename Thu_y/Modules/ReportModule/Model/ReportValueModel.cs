@@ -10,5 +10,6 @@ namespace Thu_y.Modules.ReportModule.Model
         [Required]
         public string Value { get; set; }
         public string ReportId { get; set; }
+        public string AnimalId { get; set; }
     }
 }

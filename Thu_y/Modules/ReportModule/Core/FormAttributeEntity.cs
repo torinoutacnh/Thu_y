@@ -9,7 +9,7 @@ namespace Thu_y.Modules.ReportModule.Core
         public string DataType { get; set; }
         public string ControlType { get; set; }
         public int SortNo { get; set; }
-
+       
         public string FormId { get; set; }
         [ForeignKey("FormId")]
         public virtual FormEntity Form { get; set; }

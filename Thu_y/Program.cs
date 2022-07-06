@@ -4,6 +4,7 @@ using Thu_y.Db.DbContext;
 using Thu_y.Extensions;
 using Thu_y.Infrastructure.DbContext;
 using Thu_y.Infrastructure.UOF;
+using Thu_y.Modules.AbttoirModule.Model.Mapper;
 using Thu_y.Modules.ReceiptModule.Model.Mapper;
 using Thu_y.Modules.ReportModule.Model.Mapper;
 using Thu_y.Modules.ShareModule.Model.Mapper;
@@ -30,6 +31,7 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile(new FormMapperProfile());
     cfg.AddProfile(new ShareModuleProfile());
     cfg.AddProfile(new ReceiptModuleProfile());
+    cfg.AddProfile(new AbttoirModuleProfile());
 });
 
 builder.Services.AddHttpClient();

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Thu_y.Infrastructure.Model;
 
-namespace Thu_y.Modules.AbttoirModule
+namespace Thu_y.Modules.AbttoirModule.Core
 {
     public class AbattoirDetailEntity : Entity
     {
