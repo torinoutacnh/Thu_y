@@ -12,5 +12,9 @@ namespace Thu_y.Modules.ReportModule.Core
         public ReportType Type { get; set; }
 
         public virtual ICollection<ReportTicketValueEntity> Values { get; set; }
+
+        public virtual ICollection<SealTabEntity> SealTabs { get; set; }
+        public virtual ICollection<ListAnimalEntity> ListAnimals { get; set; }
+
     }
 }

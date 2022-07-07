@@ -14,7 +14,8 @@ namespace Thu_y.Modules.ReportModule.Adapters
         private readonly IFormService _formService;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly IListAnimalRepository _listAnimalRepository;
+        private readonly ISealTabRepository _sealTabRepository;
         public ReportService(IServiceProvider serviceProvider)
         {
             _reportTicketRepository = serviceProvider.GetRequiredService<IReportTicketRepository>();
@@ -22,6 +23,8 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _formService = serviceProvider.GetRequiredService<IFormService>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            _sealTabRepository = serviceProvider.GetRequiredService<ISealTabRepository>();
+            _listAnimalRepository = serviceProvider.GetRequiredService<IListAnimalRepository>();
         }
 
         public bool CreateReport(ReportModel model)

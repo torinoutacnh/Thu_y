@@ -22,6 +22,9 @@ namespace Thu_y.Modules.ReportModule
             services.AddScoped<IReportTicketValueRepository, ReportTicketValueRepository>();
             services.AddScoped<IFormService, FormService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<ISealTabRepository, SealTabRepository>();
+            services.AddScoped<IListAnimalRepository, ListAnimalRepository>();
+
             return services;
         }
     }
