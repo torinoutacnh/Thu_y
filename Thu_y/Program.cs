@@ -1,4 +1,4 @@
-using AutoMapper;
+using AutoDependencyRegistration;
 using Thu_y;
 using Thu_y.Db.DbContext;
 using Thu_y.Extensions;
@@ -9,7 +9,6 @@ using Thu_y.Modules.ReceiptModule.Model.Mapper;
 using Thu_y.Modules.ReportModule.Model.Mapper;
 using Thu_y.Modules.ShareModule.Model.Mapper;
 using Thu_y.Modules.UserModule.Model.Mapper;
-using Thu_y.Utils.Infrastructure.Application;
 using Thu_y.Utils.Infrastructure.Application.Models;
 using Thu_y.Utils.Module;
 
@@ -36,7 +35,8 @@ builder.Services.AddAutoMapper(cfg =>
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
-builder.Services.Configure<RouteOptions>(options => {
+builder.Services.Configure<RouteOptions>(options =>
+{
     options.AppendTrailingSlash = false;
     options.LowercaseUrls = true;
     options.LowercaseQueryStrings = false;
@@ -45,6 +45,13 @@ builder.Services.AddAuth();
 builder.Services.AddAuthorization();
 
 builder.Services.RegisterModules();
+builder.Services.AddCors(o => o.AddDefaultPolicy(builder =>
+{
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+}));
+builder.Services.AutoRegisterDependencies();
 
 var app = builder.Build();
 

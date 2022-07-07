@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoDependencyRegistration.Attributes;
+using AutoMapper;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.AbttoirModule.Core;
 using Thu_y.Modules.AbttoirModule.Model;
@@ -6,6 +7,7 @@ using Thu_y.Modules.AbttoirModule.Ports;
 
 namespace Thu_y.Modules.AbttoirModule.Adapters
 {
+    [RegisterClassAsScoped]
     public class AbattoirService : IAbattoirService
     {
         private readonly IAbattoirRepository _abattoirRepository;
