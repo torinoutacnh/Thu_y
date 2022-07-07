@@ -15,9 +15,9 @@ namespace Thu_y.Modules.AbttoirModule
 
         public IServiceCollection RegisterModule(IServiceCollection services)
         {
-            //services.AddScoped<IAbattoirDetailRepository, AbattoirDetailRepository>();
-            //services.AddScoped<IAbattoirRepository, AbattoirRepository>();
-            //services.AddScoped<IAbattoirService, AbattoirService>();
+            services.AddScoped<IAbattoirDetailRepository, AbattoirDetailRepository>();
+            services.AddScoped<IAbattoirRepository, AbattoirRepository>();
+            services.AddScoped<IAbattoirService, AbattoirService>();
             return services;
         }
     }

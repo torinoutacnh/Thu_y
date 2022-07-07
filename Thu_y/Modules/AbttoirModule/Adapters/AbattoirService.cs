@@ -7,7 +7,7 @@ using Thu_y.Modules.AbttoirModule.Ports;
 
 namespace Thu_y.Modules.AbttoirModule.Adapters
 {
-    [RegisterClassAsScoped]
+    //[RegisterClassAsScoped]
     public class AbattoirService : IAbattoirService
     {
         private readonly IAbattoirRepository _abattoirRepository;

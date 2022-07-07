@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AutoDependencyRegistration.Attributes;
+using AutoMapper;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.ShareModule.Core;
 using Thu_y.Modules.ShareModule.Model;
@@ -6,6 +7,7 @@ using Thu_y.Modules.ShareModule.Ports;
 
 namespace Thu_y.Modules.ShareModule.Adapters
 {
+    //[RegisterClassAsScoped]
     public class AnimalService: IAnimalService
     {
         private readonly IAnimalRepository _animalRepository;
@@ -16,19 +18,19 @@ namespace Thu_y.Modules.ShareModule.Adapters
         {
             _animalRepository = serviceProvider.GetRequiredService<IAnimalRepository>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
-            _mapper = serviceProvider.GetRequiredService<Mapper>();
+            _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
-        public bool CreateAnimal(AnimalModel model)
+        public Task<string> CreateAsync(AnimalModel model, CancellationToken cancellationToken = default)
         {
             var ani = _mapper.Map<AnimalEntity>(model);
-            _animalRepository.Add(ani);
+            var data = _animalRepository.Add(ani);
             _unitOfWork.SaveChange();
 
-            return true;
+            return Task.FromResult(data.Id);
         }
 
-        public bool UpdateAnimal(AnimalModel model)
+        public Task UpdateAsync(AnimalModel model, CancellationToken cancellationToken = default)
         {
             var ani = _animalRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
             if (ani == null) throw new Exception("No animal found!") { HResult = 400 };
@@ -37,10 +39,10 @@ namespace Thu_y.Modules.ShareModule.Adapters
             _animalRepository.Update(ani);
             _unitOfWork.SaveChange();
 
-            return true;
+            return Task.CompletedTask;
         }
 
-        public bool DeleteAnimal(string id)
+        public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             var ani = _animalRepository.Get(x => x.Id.Equals(id)).FirstOrDefault();
             if (ani == null) throw new Exception("No animal found!") { HResult = 400 };
@@ -48,7 +50,7 @@ namespace Thu_y.Modules.ShareModule.Adapters
             _animalRepository.Delete(ani);
             _unitOfWork.SaveChange();
 
-            return true;
+            return Task.CompletedTask;
         }
     }
 }

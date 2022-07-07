@@ -16,6 +16,8 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string CreateForm = BasePath + "/create-form";
         public const string UpdateForm = BasePath + "/update-form";
         public const string DeleteForm = BasePath + "/delete-form";
+        public const string GetTemplate = BasePath + "/template";
+
     }
     public static class FormRoute
     {
@@ -92,6 +94,25 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
 
+            }).WithTags(FormEndpoint.BasePath);
+
+            endpoints.MapGet(FormEndpoint.GetTemplate, [Authorize(AuthenticationSchemes = "Bearer")] (IFormRepository formRepository, IMapper mapper) =>
+            {
+                try
+                {
+                    var form = formRepository.Get().ToList();
+                    if (form == null) throw new Exception("NoT found form!") { HResult = 400 };
+
+                    return Results.Ok(value: new ResponseModel<ICollection<FormTemplateModel>>(mapper.Map<ICollection<FormTemplateModel>>(form)));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                }
             }).WithTags(FormEndpoint.BasePath);
 
             return endpoints;

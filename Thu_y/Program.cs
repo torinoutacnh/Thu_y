@@ -51,7 +51,7 @@ builder.Services.AddCors(o => o.AddDefaultPolicy(builder =>
            .AllowAnyMethod()
            .AllowAnyHeader();
 }));
-builder.Services.AutoRegisterDependencies();
+//builder.Services.AutoRegisterDependencies();
 
 var app = builder.Build();
 
@@ -67,6 +67,7 @@ app.UseSwaggerUI();
 app.UseSystemSetting();
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors();
 app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();

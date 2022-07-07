@@ -7,8 +7,10 @@ namespace Thu_y.Modules.ShareModule.Model.Mapper
     {
         public ShareModuleProfile()
         {
-            CreateMap<AnimalModel, AnimalEntity>().ReverseMap();
-            CreateMap<VacineModel, VacineEntity>().ReverseMap();
+            CreateMap<AnimalModel, AnimalEntity>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<AnimalEntity, AnimalModel>();
         }
     }
 }

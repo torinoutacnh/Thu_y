@@ -1,4 +1,5 @@
 ﻿using Thu_y.Modules.ShareModule.Adapters;
+using Thu_y.Modules.ShareModule.Endpoints;
 using Thu_y.Modules.ShareModule.Ports;
 using Thu_y.Utils.Module;
 
@@ -8,6 +9,7 @@ namespace Thu_y.Modules.ShareModule
     {
         public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
+            endpoints.MapAnimalEndpoints();
             return endpoints;
         }
 
@@ -16,6 +18,7 @@ namespace Thu_y.Modules.ShareModule
             services.AddScoped<IAnimalRepository, AnimalRepository>();
             services.AddScoped<IVacineRepository, VacineRepository>();
             services.AddScoped<IAnimalService, AnimalService>();
+            services.AddScoped<IVacineService, VacineService>();
             return services;
         }
     }

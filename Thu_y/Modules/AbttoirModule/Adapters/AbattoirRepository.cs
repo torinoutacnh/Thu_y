@@ -6,7 +6,7 @@ using Thu_y.Modules.AbttoirModule.Ports;
 
 namespace Thu_y.Modules.AbttoirModule.Adapters
 {
-    [RegisterClassAsScoped]
+    //[RegisterClassAsScoped]
     public class AbattoirRepository : Repository<AbattoirEntity>, IAbattoirRepository
     {
         public AbattoirRepository(IDbContext dbContext) : base(dbContext)
