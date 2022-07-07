@@ -23,7 +23,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapFormEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = "Bearer", Roles = "Manager")] async (string code, IFormRepository formRepository, IMapper mapper) =>
+            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = "Bearer")] async (string code, IFormRepository formRepository, IMapper mapper) =>
             {
                 try
                 {

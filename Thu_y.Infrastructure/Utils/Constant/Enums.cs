@@ -30,4 +30,16 @@ namespace Thu_y.Infrastructure.Utils.Constant
         B = 2,
         C = 3,
     }
+    public enum DataTypes
+    {
+        A = 1,
+        B = 2,
+        C = 3,
+    }
+    public enum ControlTypes
+    {
+        Texts = 1,
+        Numbers = 2,
+        DateTimeOffsets = 3,
+    }
 }
