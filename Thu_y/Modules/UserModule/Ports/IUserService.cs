@@ -9,6 +9,7 @@ namespace Thu_y.Modules.UserModule.Ports
         bool UpdateUser(UserModel model);
         bool DeleteUser(string id);
         UserEntity GetByAccount(string username);
+        List<UserEntity> GetAccount(int PageIndex, int PageNumber);
         string CreateJWTToken(UserEntity loggedUser);
     }
 }

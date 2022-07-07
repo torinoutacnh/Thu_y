@@ -11,6 +11,7 @@ namespace Thu_y.Modules.UserModule.Model.Mapper
             CreateMap<UserScheduleEntity, UpdateScheduleModel>().ReverseMap();
 
             CreateMap<UserEntity, UserModel>();
+            CreateMap<UserEntity, UserGetListModel>().ReverseMap();
             CreateMap<UserModel, UserEntity>()
                 .ForMember(x=>x.Id,opt=>opt.Ignore());
         }

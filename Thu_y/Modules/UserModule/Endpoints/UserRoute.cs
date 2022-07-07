@@ -1,6 +1,9 @@
 ﻿using Thu_y.Modules.UserModule.Ports;
 using Thu_y.Modules.UserModule.Model;
 using Thu_y.Utils.Infrastructure.Application.Models;
+using Microsoft.AspNetCore.Authorization;
+using Thu_y.Modules.ReportModule.Model;
+using AutoMapper;
 
 namespace Thu_y.Modules.UserModule.Endpoints
 {
@@ -13,6 +16,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
         public const string UpdateUser = BasePath + "/update-user";
         public const string DeleteUser = BasePath + "/delete-user";
         public const string Login = BasePath + "/login";
+        public const string GetUser = BasePath + "/get-user";
     }
 
     public static class UserRoute
@@ -84,16 +88,35 @@ namespace Thu_y.Modules.UserModule.Endpoints
 
             endpoints.MapPost(UserEndpoint.Login, (UserDtoModel request, IUserService userService) =>
             {
-                if (string.IsNullOrEmpty(request.UsetName) || string.IsNullOrEmpty(request.Password))
+                if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
                     return Results.NotFound(new ResponseModel<string>(message: "Not found User"));
 
-                var user = userService.GetByAccount(request.UsetName);
+                var user = userService.GetByAccount(request.UserName);
                 if (user == null)
                     return Results.NotFound(new ResponseModel<string>(message: "Not found User"));
 
                 if (user.Password != request.Password)
                     return Results.NotFound(new ResponseModel<string>(message: "Wrong password"));
                 return Results.Ok(userService.CreateJWTToken(user));
+            }).WithTags(UserEndpoint.BasePath);
+
+            endpoints.MapGet(UserEndpoint.GetUser, [Authorize(AuthenticationSchemes = "Bearer")] async (int pageIndex, int pageNumber,IUserService userService, IMapper mapper) =>
+            {
+                try
+                {
+                    var listUser = userService.GetAccount(pageIndex,pageNumber);
+                    if (listUser == null) throw new Exception("NoT found form!") { HResult = 400 };
+
+                    return Results.Ok(value: new ResponseModel<ICollection<UserGetListModel>>(mapper.Map<ICollection<UserGetListModel>>(listUser)));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                }
             }).WithTags(UserEndpoint.BasePath);
 
             return endpoints;

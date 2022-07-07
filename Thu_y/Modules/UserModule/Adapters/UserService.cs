@@ -8,6 +8,7 @@ using System.Text;
 using Thu_y.Utils.Infrastructure.Application.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using Thu_y.Infrastructure.Utils.Constant;
 
 namespace Thu_y.Modules.UserModule.Adapters
 {
@@ -27,8 +28,9 @@ namespace Thu_y.Modules.UserModule.Adapters
 
         public bool CreateUser(UserModel model)
         {
-            var user = _mapper.Map(model, new UserEntity());
 
+            var user = _mapper.Map(model, new UserEntity());
+            user.Role = RoleType.Employee;
             _userRepository.Add(user);
             _unitOfWork.SaveChange();
 
@@ -40,7 +42,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             var user = _userRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
             if (user == null) throw new Exception("No user found!") { HResult = 400 };
 
-            var updated = _mapper.Map(model,user);
+            var updated = _mapper.Map(model, user);
             _userRepository.Update(updated);
             _unitOfWork.SaveChange();
 
@@ -83,6 +85,11 @@ namespace Thu_y.Modules.UserModule.Adapters
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public List<UserEntity> GetAccount(int PageIndex, int PageNumber)
+        {
+            return _userRepository.Get(_ => _.Status == 0).Skip((PageIndex-1) * PageNumber).Take(PageNumber).ToList();
         }
     }
 }
