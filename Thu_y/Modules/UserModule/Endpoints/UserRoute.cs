@@ -89,15 +89,23 @@ namespace Thu_y.Modules.UserModule.Endpoints
             endpoints.MapPost(UserEndpoint.Login, (UserDtoModel request, IUserService userService) =>
             {
                 if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
-                    return Results.NotFound(new ResponseModel<string>(message: "Not found User"));
+                    return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Not found User"));
 
                 var user = userService.GetByAccount(request.UserName);
                 if (user == null)
-                    return Results.NotFound(new ResponseModel<string>(message: "Not found User"));
+                    return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Not found User"));
 
                 if (user.Password != request.Password)
-                    return Results.NotFound(new ResponseModel<string>(message: "Wrong password"));
-                return Results.Ok(userService.CreateJWTToken(user));
+                    return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Wrong password"));
+                var token = userService.CreateJWTToken(user);
+                var data = new ResponseLoginModel
+                {
+                    Name = user.Name,
+                    Account = user.Account,
+                    Role = user.Role,
+                    Token = token
+                };
+                return Results.Ok(new ResponseModel<ResponseLoginModel>(data: data));
             }).WithTags(UserEndpoint.BasePath);
 
             endpoints.MapGet(UserEndpoint.GetUser, [Authorize(AuthenticationSchemes = "Bearer")] async (int pageIndex, int pageNumber,IUserService userService, IMapper mapper) =>

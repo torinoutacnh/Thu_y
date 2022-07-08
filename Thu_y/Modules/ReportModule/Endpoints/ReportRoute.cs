@@ -16,6 +16,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string UpdateReport = BasePath + "/update-report";
         public const string DeleteReport = BasePath + "/delete-report";
         public const string GetKillReport = BasePath + "/animal-killing";
+        public const string ListAbattoirReport = BasePath + "/list-abattoir";
     }
 
     public static class ReportRoute
@@ -100,20 +101,38 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapGet(ReportEndpoint.GetKillReport, async (string userId, IReportTicketRepository reportTicketRepository) =>
+            endpoints.MapGet(ReportEndpoint.GetKillReport, async (string userId, string? reportName , IReportTicketRepository reportTicketRepository) =>
             {
                 try
                 {
-                    var data = reportTicketRepository.GetAnimalKillingReport(userId);
+                    var data = reportTicketRepository.GetAnimalKillingReport(userId, reportName);
                     return Results.Ok(value: new ResponseModel<ICollection<AnimalKillingReportModel>>(data: data));
                 }
                 catch (Exception ex)
                 {
                     if (ex.HResult >= 400 && ex.HResult < 500)
                     {
-                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                        return Results.Json(new ResponseModel<ListAbttoirReportModel>(message: ex.Message), statusCode: ex.HResult);
                     }
-                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                    return Results.Json(new ResponseModel<ListAbttoirReportModel>(message: ex.Message), statusCode: 500);
+                }
+
+            }).WithTags(ReportEndpoint.BasePath);
+
+            endpoints.MapGet(ReportEndpoint.ListAbattoirReport, async (string userId, IReportTicketRepository reportTicketRepository) =>
+            {
+                try
+                {
+                    var data = reportTicketRepository.GetListAbattoirReport(userId);
+                    return Results.Ok(value: new ResponseModel<ICollection<ListAbttoirReportModel>>(data: data));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<ListAbttoirReportModel>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<ListAbttoirReportModel>(message: ex.Message), statusCode: 500);
                 }
 
             }).WithTags(ReportEndpoint.BasePath);

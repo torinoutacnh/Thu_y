@@ -6,6 +6,7 @@ namespace Thu_y.Modules.ReportModule.Ports
 {
     public interface IReportTicketRepository : IRepository<ReportTicketEntity>
     {
-        ICollection<AnimalKillingReportModel> GetAnimalKillingReport(string userId);
+        ICollection<AnimalKillingReportModel> GetAnimalKillingReport(string userId, string reportName);
+        ICollection<ListAbttoirReportModel> GetListAbattoirReport(string userId);
     }
 }
