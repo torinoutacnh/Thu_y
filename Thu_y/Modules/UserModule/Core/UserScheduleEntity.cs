@@ -6,15 +6,15 @@ namespace Thu_y.Modules.UserModule.Core
 {
     public class UserScheduleEntity : Entity
     {
-        public DateTimeOffset DateStart { get; set; }
-        public DateTimeOffset DateEnd { get; set; }
+        public DateTimeOffset? DateStart { get; set; }
+        public DateTimeOffset? DateEnd { get; set; }
 
-        public string AbattoirId { get; set; }
-        public string AbattoirName { get; set; }
-        public string AbattoirAddress { get; set; }
+        public string? AbattoirId { get; set; }
+        public string? AbattoirName { get; set; }
+        public string? AbattoirAddress { get; set; }
 
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey("UserId")]
-        public virtual UserEntity User { get; set; }
+        public virtual UserEntity? User { get; set; }
     }
 }

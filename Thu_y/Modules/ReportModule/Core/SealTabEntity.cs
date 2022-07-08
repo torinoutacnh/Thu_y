@@ -5,13 +5,13 @@ namespace Thu_y.Modules.ReportModule.Core
 {
     public class SealTabEntity : Entity
     {
-        public string CodeSeal { get; set; }
-        public string Name { get; set; }
-        public string Content { get; set; }
+        public string? CodeSeal { get; set; }
+        public string? Name { get; set; }
+        public string? Content { get; set; }
 
-        public string ReportTicketId { get; set; }
+        public string? ReportTicketId { get; set; }
 
         [ForeignKey("ReportTicketId")]
-        public virtual ReportTicketEntity ReportTicket { get; set; }
+        public virtual ReportTicketEntity? ReportTicket { get; set; }
     }
 }

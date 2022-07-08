@@ -4,16 +4,16 @@ namespace Thu_y.Modules.ReceiptModule.Core
 {
     public class ReceiptReportEntity : Entity
     {
-        public string UserId { get; set; }
-        public string UserName { get; set; }
+        public string? UserId { get; set; }
+        public string? UserName { get; set; }
 
-        public string ReceiptAllocateId { get; set; }
+        public string? ReceiptAllocateId { get; set; }
 
-        public string ReceiptName { get; set; }
-        public string CodeName { get; set; }
-        public string CodeNumber { get; set; }
+        public string? ReceiptName { get; set; }
+        public string? CodeName { get; set; }
+        public string? CodeNumber { get; set; }
 
-        public DateTimeOffset DateUse { get; set; }
-        public int PageUse { get; set; }
+        public DateTimeOffset? DateUse { get; set; }
+        public int? PageUse { get; set; }
     }
 }
