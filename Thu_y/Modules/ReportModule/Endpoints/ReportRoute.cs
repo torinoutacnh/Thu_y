@@ -15,6 +15,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string CreateReport = BasePath + "/create-report";
         public const string UpdateReport = BasePath + "/update-report";
         public const string DeleteReport = BasePath + "/delete-report";
+        public const string GetKillReport = BasePath + "/animal-killing";
     }
 
     public static class ReportRoute
@@ -87,6 +88,24 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 {
                     reportService.DeleteReport(id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                }
+
+            }).WithTags(ReportEndpoint.BasePath);
+
+            endpoints.MapGet(ReportEndpoint.GetKillReport, async (string userId, IReportTicketRepository reportTicketRepository) =>
+            {
+                try
+                {
+                    var data = reportTicketRepository.GetAnimalKillingReport(userId);
+                    return Results.Ok(value: new ResponseModel<ICollection<AnimalKillingReportModel>>(data: data));
                 }
                 catch (Exception ex)
                 {

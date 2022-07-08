@@ -9,6 +9,7 @@ namespace Thu_y.Utils.Infrastructure.Application
     {
         public static SystemHelperModel Setting => SystemHelperModel.Instance;
         public static IConfiguration Configs => SystemHelperModel.Configs;
+        public static string AppDb => SystemHelperModel.Configs.GetConnectionString("Development");
         public static string ConnectionString => SystemHelperModel.Configs.GetConnectionString(IsProduction());
 
         public static string IsProduction()

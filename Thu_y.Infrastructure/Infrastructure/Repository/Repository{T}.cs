@@ -1,14 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Invedia.Data.Dapper.SqlGenerator;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Thu_y.Infrastructure.DbContext;
+using Thu_y.Utils.Infrastructure.Application;
 
 namespace Thu_y.Infrastructure.Repository
 {
     public abstract class Repository<T> : IRepository<T> where T : Model.Entity, new()
     {
         protected readonly IDbContext DbContext;
-
-        
+        protected ISqlGenerator<T> SqlGenerator { get; }
+        protected string ConnectionString;
 
         private DbSet<T> _dbSet;
 
@@ -29,6 +31,8 @@ namespace Thu_y.Infrastructure.Repository
         protected Repository(IDbContext dbContext)
         {
             DbContext = dbContext;
+            ConnectionString = SystemHelper.AppDb;
+            SqlGenerator = new SqlGenerator<T>(SqlProvider.MSSQL, true);
         }
 
         protected void TryAttach(T entity)
@@ -181,5 +185,7 @@ namespace Thu_y.Infrastructure.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+
     }
 }

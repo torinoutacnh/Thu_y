@@ -24,6 +24,7 @@ namespace Thu_y.Modules.ReportModule.Model.Mapper
 
             CreateMap<ReportValueModel, ReportTicketValueEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x=>x.ReportTicket,opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<FormEntity, FormTemplateModel>()

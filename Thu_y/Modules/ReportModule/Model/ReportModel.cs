@@ -9,6 +9,7 @@ namespace Thu_y.Modules.ReportModule.Model
         [Required]
         public string Name { get; set; }
         public string UserId { get; set; }
+        public string UserName { get; set; }
         public string FormId { get; set; }
         public ReportType Type { get; set; }
         [Required]
