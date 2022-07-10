@@ -32,14 +32,18 @@ namespace Thu_y.Infrastructure.Utils.Constant
     }
     public enum DataTypes
     {
-        A = 1,
-        B = 2,
-        C = 3,
+        InputType = 1,
+        DropDownListType = 2
     }
     public enum ControlTypes
     {
-        Texts = 1,
-        Numbers = 2,
-        DateTimeOffsets = 3,
+        TextControl = 1,
+        TelControl = 2,
+        DateControl = 3,
+        EmailControl = 4,
+        DatetimeLocalControl = 5,
+        ImageControl = 6,
+        PasswordControl = 7,
+        NumberControl = 8
     }
 }

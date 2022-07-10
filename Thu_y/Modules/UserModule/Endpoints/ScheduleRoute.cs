@@ -60,7 +60,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 }
             }).WithTags(ScheduleEndpoint.BasePath);
 
-            endpoints.MapPut(ScheduleEndpoint.UpdateSchedule, async (UpdateScheduleModel model, IScheduleService scheduleService) =>
+            endpoints.MapPost(ScheduleEndpoint.UpdateSchedule, async (UpdateScheduleModel model, IScheduleService scheduleService) =>
             {
                 try
                 {

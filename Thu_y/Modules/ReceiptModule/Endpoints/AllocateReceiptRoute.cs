@@ -61,7 +61,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapPut(AllocateReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptAllocateModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(AllocateReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptAllocateModel model, IReceiptService receiptService) =>
             {
                 try
                 {

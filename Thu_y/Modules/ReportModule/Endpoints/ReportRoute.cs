@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Thu_y.Modules.ReportModule.Model;
@@ -18,7 +19,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string GetKillReport = BasePath + "/animal-killing";
         public const string ListAbattoirReport = BasePath + "/list-abattoir";
     }
-
+    [EnableCors("LongPolicy")]
     public static class ReportRoute
     {
         public static IEndpointRouteBuilder MapReportEndpoints(this IEndpointRouteBuilder endpoints)
@@ -66,7 +67,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapPut(ReportEndpoint.UpdateReport, async (ReportModel model, IReportService reportService) =>
+            endpoints.MapPost(ReportEndpoint.UpdateReport, async (ReportModel model, IReportService reportService) =>
             {
                 try
                 {

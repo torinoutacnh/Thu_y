@@ -60,7 +60,7 @@ namespace Thu_y.Modules.ShareModule.Endpoints
                 }
             }).WithTags(AnimalEndpoint.BasePath);
 
-            endpoints.MapPut(AnimalEndpoint.UpdateAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (AnimalModel model, IAnimalService animalService) =>
+            endpoints.MapPost(AnimalEndpoint.UpdateAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (AnimalModel model, IAnimalService animalService) =>
             {
                 try
                 {

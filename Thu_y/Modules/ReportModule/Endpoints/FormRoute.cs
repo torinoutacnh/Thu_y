@@ -60,7 +60,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapPut(FormEndpoint.UpdateForm, [Authorize(AuthenticationSchemes = "Bearer")] async (FormModel model, IFormService formService) =>
+            endpoints.MapPost(FormEndpoint.UpdateForm, [Authorize(AuthenticationSchemes = "Bearer")] async (FormModel model, IFormService formService) =>
             {
                 try
                 {
