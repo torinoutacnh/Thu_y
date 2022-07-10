@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.ReportModule.Core;
 using Thu_y.Modules.ReportModule.Model;
@@ -38,26 +39,27 @@ namespace Thu_y.Modules.ReportModule.Adapters
 
         public bool UpdateForm(FormModel model)
         {
-            var oldForm = _formRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
-            if (oldForm == null) throw new Exception("Form not found!");
-            var oldAttr = _formAttributeRepository.Get(x => x.FormId.Equals(oldForm.Id));
+            //var oldForm = _formRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
+            //if (oldForm == null) throw new Exception("Form not found!");
 
-            _mapper.Map(model, oldForm);
-            _formRepository.Update(oldForm);
+            //_mapper.Map(model, oldForm);
+            //_formRepository.Update(oldForm, oldForm => oldForm.FormName, oldForm => oldForm.FormNumber, oldForm => oldForm.FormCode, oldForm => oldForm.Status);
 
-            foreach(var attr in oldAttr)
-            {
-                _formAttributeRepository.Delete(attr,true);
-            }
+            //var oldAttrs = _formAttributeRepository.Get(x => x.FormId == model.Id);
 
-            var newAttr = _mapper.ProjectTo<FormAttributeEntity>(model.Attributes.AsQueryable());
-            foreach(var attr in newAttr)
-            {
-                attr.FormId = oldForm.Id;
-                _formAttributeRepository.Add(attr);
-            }
+            //var newAttrs = model.Attributes;
+            //foreach(var attr in newAttrs)
+            //{
+            //    var old = oldAttrs.First(x => x.Name == attr.Name);
+            //    if(old != null)
+            //    {
 
-            _unitOfWork.SaveChange();
+            //    }
+            //}
+            //_formAttributeRepository.AddRange(oldAttrs.ToArray());
+
+
+            //_unitOfWork.SaveChange();
 
             return true;
         }
