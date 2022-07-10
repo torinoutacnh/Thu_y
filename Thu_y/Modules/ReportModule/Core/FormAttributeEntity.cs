@@ -12,7 +12,6 @@ namespace Thu_y.Modules.ReportModule.Core
         public int? SortNo { get; set; }
         public string? Col_Design { get; set; }
         public string? api_DropDownlist { get; set; }
-
         public string? FormId { get; set; }
         [ForeignKey("FormId")]
         public virtual FormEntity? Form { get; set; }
