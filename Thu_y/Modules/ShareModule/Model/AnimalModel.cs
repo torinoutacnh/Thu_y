@@ -9,6 +9,5 @@ namespace Thu_y.Modules.ShareModule.Model
         public string Description { get; set; }
         public int DayAge { get; set; }
         public SexType Sex { get; set; }
-        public ICollection<VacineModel> Vacines { get; set; }
     }
 }

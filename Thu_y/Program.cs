@@ -1,4 +1,4 @@
-using AutoDependencyRegistration;
+﻿using Microsoft.OpenApi.Models;
 using Thu_y;
 using Thu_y.Db.DbContext;
 using Thu_y.Extensions;
@@ -17,7 +17,32 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(o =>
+{
+    o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "AddAuthorization",
+        Description = "Lấy Bearer token mới bắn được API nha mấy nhóc!",
+        Type = SecuritySchemeType.Http
+    });
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+             new OpenApiSecurityScheme
+             {
+                 Reference = new OpenApiReference
+                 {
+                     Id = "Bearer",
+                     Type = ReferenceType.SecurityScheme
+                 }
+             },
+             new List<string>()
+        }
+    });
+});
 builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper").Get<SystemHelperModel>());
 builder.Services.AddJwtSetting(builder.Configuration.GetSection("JwtSetting").Get<JWTSettingModel>());
 
