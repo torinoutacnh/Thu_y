@@ -36,11 +36,6 @@ namespace Thu_y.Modules.ReportModule.Adapters
                 x.ReportId = report.Id;
                 return true;
             });
-            report.Values.All(x =>
-            {
-                x.ReportId = report.Id;
-                return true;
-            });
 
             _reportTicketRepository.Add(report);
             _unitOfWork.SaveChange();

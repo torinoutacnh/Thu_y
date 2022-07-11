@@ -4,6 +4,7 @@ namespace Thu_y.Modules.ReceiptModule.Model
 {
     public class ReceiptModel
     {
+  
         public string Id { get; set; }
         [Required]
         public string Name { get; set; }

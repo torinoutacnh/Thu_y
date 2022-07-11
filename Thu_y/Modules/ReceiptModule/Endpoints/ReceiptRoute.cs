@@ -50,7 +50,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
             {
                 try
                 {
-                    await receiptService.CreateAsync(model);
+                     receiptService.CreateAsync(model);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)

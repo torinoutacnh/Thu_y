@@ -11,5 +11,7 @@ namespace Thu_y.Modules.ReportModule.Model
         public string Value { get; set; }
         public string ReportId { get; set; }
         public string AnimalId { get; set; }
+        public string AttributeName { get; set; }
+        public string FormName { get; set; }
     }
 }

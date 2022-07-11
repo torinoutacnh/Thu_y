@@ -100,6 +100,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 var token = userService.CreateJWTToken(user);
                 var data = new ResponseLoginModel
                 {
+                    UserId = user.Id,
                     Name = user.Name,
                     Account = user.Account,
                     Role = user.Role,

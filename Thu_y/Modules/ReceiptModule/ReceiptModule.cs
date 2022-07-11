@@ -11,6 +11,7 @@ namespace Thu_y.Modules.ReceiptModule
         {
             endpoints.MapReceiptEndpoints();
             endpoints.MapAllocateReceiptEndpoints();
+            endpoints.MapReceiptReportEndpoints();
 
             return endpoints;
         }
@@ -21,6 +22,7 @@ namespace Thu_y.Modules.ReceiptModule
             services.AddScoped<IReceiptAllocateRepository, ReceiptAllocateRepository>();
             services.AddScoped<IReceiptReportRepository, ReceiptReportRepository>();
             services.AddScoped<IReceiptService, ReceiptService>();
+            services.AddScoped<IReceiptReportService, ReceiptReportService>();
 
             return services;
         }

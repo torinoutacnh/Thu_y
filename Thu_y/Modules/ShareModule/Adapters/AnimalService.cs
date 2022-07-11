@@ -24,6 +24,10 @@ namespace Thu_y.Modules.ShareModule.Adapters
         public Task<string> CreateAsync(AnimalModel model, CancellationToken cancellationToken = default)
         {
             var ani = _mapper.Map<AnimalEntity>(model);
+            foreach (var item in ani.Vacines)
+            {
+                item.AnimalId = ani.Id;
+            };
             var data = _animalRepository.Add(ani);
             _unitOfWork.SaveChange();
 

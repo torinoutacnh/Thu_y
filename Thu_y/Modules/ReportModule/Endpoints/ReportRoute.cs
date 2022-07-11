@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Thu_y.Modules.ReportModule.Model;
@@ -17,13 +18,15 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string DeleteReport = BasePath + "/delete-report";
         public const string GetKillReport = BasePath + "/animal-killing";
         public const string ListAbattoirReport = BasePath + "/list-abattoir";
+        public const string ListQuarantineReport = BasePath + "/list-quarantine";
+
     }
 
     public static class ReportRoute
     {
         public static IEndpointRouteBuilder MapReportEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost(ReportEndpoint.GetAllReport,async ([FromBody]ReportPagingModel model, IReportTicketRepository reportRepository,IMapper mapper) =>
+            endpoints.MapPost(ReportEndpoint.GetAllReport, [Authorize(AuthenticationSchemes = "Bearer")] async ([FromBody]ReportPagingModel model, IReportTicketRepository reportRepository,IMapper mapper) =>
             {
                 try
                 {
@@ -49,7 +52,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapPost(ReportEndpoint.CreateReport, async (ReportModel model, IReportService reportService) =>
+            endpoints.MapPost(ReportEndpoint.CreateReport, [Authorize(AuthenticationSchemes = "Bearer")] async (ReportModel model, IReportService reportService) =>
             {
                 try
                 {
@@ -66,7 +69,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapPut(ReportEndpoint.UpdateReport, async (ReportModel model, IReportService reportService) =>
+            endpoints.MapPost(ReportEndpoint.UpdateReport, [Authorize(AuthenticationSchemes = "Bearer")] async (ReportModel model, IReportService reportService) =>
             {
                 try
                 {
@@ -83,7 +86,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapDelete(ReportEndpoint.DeleteReport, async (string id, IReportService reportService) =>
+            endpoints.MapPost(ReportEndpoint.DeleteReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IReportService reportService) =>
             {
                 try
                 {
@@ -101,7 +104,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapGet(ReportEndpoint.GetKillReport, async (string userId, string? reportName , IReportTicketRepository reportTicketRepository) =>
+            endpoints.MapGet(ReportEndpoint.GetKillReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId, string? reportName , IReportTicketRepository reportTicketRepository) =>
             {
                 try
                 {
@@ -119,7 +122,25 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapGet(ReportEndpoint.ListAbattoirReport, async (string userId, IReportTicketRepository reportTicketRepository) =>
+            endpoints.MapGet(ReportEndpoint.ListQuarantineReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId, IReportTicketRepository reportTicketRepository) =>
+            {
+                try
+                {
+                    var data = reportTicketRepository.GetListQuarantineReport(userId);
+                    return Results.Ok(value: new ResponseModel<ICollection<ListQuarantineReportModel>>(data: data));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<ListQuarantineReportModel>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<ListQuarantineReportModel>(message: ex.Message), statusCode: 500);
+                }
+
+            }).WithTags(ReportEndpoint.BasePath);
+
+            endpoints.MapGet(ReportEndpoint.ListAbattoirReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId, IReportTicketRepository reportTicketRepository) =>
             {
                 try
                 {

@@ -3,7 +3,7 @@ using Thu_y.Infrastructure.Model;
 
 namespace Thu_y.Modules.ReceiptModule.Core
 {
-    public class ReceiptAllocateEntity:Entity
+    public class ReceiptAllocateEntity : Entity
     {
         public string? UserId { get; set; }
         public string? UserName { get; set; }

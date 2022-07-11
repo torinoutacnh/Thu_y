@@ -22,12 +22,18 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
             _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
-        public Task<string> CreateAsync(ReceiptModel model , CancellationToken cancellationToken = default)
+        public bool CreateAsync(ReceiptModel model)
         {
-            var receipt = _mapper.Map<ReceiptEntity>(model);
-            _receiptRepository.Add(receipt);
+            var entity = new ReceiptEntity();
+            _mapper.Map(model, entity);
+            //foreach (var item in enity.Allocates)
+            //{
+            //    item.ReceiptId = enity.Id;
+            //}
+            entity.Allocates.All(_ => { _.ReceiptId = entity.Id; return true; });
+            _receiptRepository.Add(entity);
             _unitOfWork.SaveChange();
-            return Task.FromResult(model.Id);
+            return true;
         }
 
         public Task UpdateAsync(ReceiptModel model, CancellationToken cancellationToken = default)

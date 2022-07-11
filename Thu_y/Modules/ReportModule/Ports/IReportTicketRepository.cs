@@ -8,5 +8,6 @@ namespace Thu_y.Modules.ReportModule.Ports
     {
         ICollection<AnimalKillingReportModel> GetAnimalKillingReport(string userId, string reportName);
         ICollection<ListAbttoirReportModel> GetListAbattoirReport(string userId);
+        ICollection<ListQuarantineReportModel> GetListQuarantineReport(string userId);
     }
 }
