@@ -80,7 +80,7 @@ namespace Thu_y.Modules.AbttoirModule.Endpoints
                 }
             }).WithTags(AbattoirEndpoint.BasePath);
 
-            endpoints.MapDelete(AbattoirEndpoint.DeleteAbattoir, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IAbattoirService abattoirService) =>
+            endpoints.MapPost(AbattoirEndpoint.DeleteAbattoir, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IAbattoirService abattoirService) =>
             {
                 try
                 {

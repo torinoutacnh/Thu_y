@@ -65,7 +65,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 }
             }).WithTags(UserEndpoint.BasePath);
 
-            endpoints.MapDelete(UserEndpoint.DeleteUser, async (string id, IUserService userService) =>
+            endpoints.MapPost(UserEndpoint.DeleteUser, async (string id, IUserService userService) =>
             {
                 try
                 {

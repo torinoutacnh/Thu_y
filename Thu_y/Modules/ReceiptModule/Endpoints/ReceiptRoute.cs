@@ -80,7 +80,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptEndpoint.BasePath);
 
-            endpoints.MapDelete(ReceiptEndpoint.DeleteReceipt,[Authorize(AuthenticationSchemes = "Bearer")] async (string id, IReceiptService receiptService) =>
+            endpoints.MapPost(ReceiptEndpoint.DeleteReceipt,[Authorize(AuthenticationSchemes = "Bearer")] async (string id, IReceiptService receiptService) =>
             {
                 try
                 {

@@ -77,7 +77,7 @@ namespace Thu_y.Modules.ShareModule.Endpoints
                 }
             }).WithTags(AnimalEndpoint.BasePath);
 
-            endpoints.MapDelete(AnimalEndpoint.DeleteAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IAnimalService animalService) =>
+            endpoints.MapPost(AnimalEndpoint.DeleteAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IAnimalService animalService) =>
             {
                 try
                 {

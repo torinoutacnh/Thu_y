@@ -79,7 +79,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapDelete(FormEndpoint.DeleteForm, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IFormService formService) =>
+            endpoints.MapPost(FormEndpoint.DeleteForm, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IFormService formService) =>
             {
                 try
                 {

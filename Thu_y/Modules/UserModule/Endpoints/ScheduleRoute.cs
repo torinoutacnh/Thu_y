@@ -81,7 +81,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 }
             }).WithTags(ScheduleEndpoint.BasePath);
 
-            endpoints.MapDelete(ScheduleEndpoint.DeleteSchedule, async (string id, IScheduleService scheduleService) =>
+            endpoints.MapPost(ScheduleEndpoint.DeleteSchedule, async (string id, IScheduleService scheduleService) =>
             {
                 try
                 {
