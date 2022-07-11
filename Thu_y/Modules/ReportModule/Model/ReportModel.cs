@@ -6,7 +6,6 @@ namespace Thu_y.Modules.ReportModule.Model
     public class ReportModel
     {
         public string Id { get; set; }
-        [Required]
         public string Name { get; set; }
 
         [Required]
@@ -16,7 +15,6 @@ namespace Thu_y.Modules.ReportModule.Model
         [Required]
         public string FormId { get; set; }
         public ReportType Type { get; set; }
-        [Required]
         public ICollection<ReportValueModel> Values { get; set; }
     }
 }

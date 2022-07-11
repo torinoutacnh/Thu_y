@@ -21,7 +21,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string ListQuarantineReport = BasePath + "/list-quarantine";
 
     }
-
+    [EnableCors("LongPolicy")]
     public static class ReportRoute
     {
         public static IEndpointRouteBuilder MapReportEndpoints(this IEndpointRouteBuilder endpoints)

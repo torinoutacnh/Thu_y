@@ -44,7 +44,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 }
             }).WithTags(UserEndpoint.BasePath);
 
-            endpoints.MapPut(UserEndpoint.UpdateUser, async (UserModel model, IUserService userService) =>
+            endpoints.MapPost(UserEndpoint.UpdateUser, async (UserModel model, IUserService userService) =>
             {
                 try
                 {

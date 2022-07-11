@@ -9,7 +9,7 @@ namespace Thu_y.Modules.ShareModule.Core
         public string? Description { get; set; }
         public int? DayAge { get; set; }
         public SexType Sex { get; set; }
-
+        public decimal? Pricing { get; set; }
         public virtual ICollection<VacineEntity>? Vacines { get; set; }
     }
 }

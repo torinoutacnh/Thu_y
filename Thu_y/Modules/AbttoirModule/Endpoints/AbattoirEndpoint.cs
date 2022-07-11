@@ -63,7 +63,7 @@ namespace Thu_y.Modules.AbttoirModule.Endpoints
                 }
             }).WithTags(AbattoirEndpoint.BasePath);
 
-            endpoints.MapPut(AbattoirEndpoint.UpdateAbattoir, [Authorize(AuthenticationSchemes = "Bearer")] async (AbattoirModel model, IAbattoirService abattoirService) =>
+            endpoints.MapPost(AbattoirEndpoint.UpdateAbattoir, [Authorize(AuthenticationSchemes = "Bearer")] async (AbattoirModel model, IAbattoirService abattoirService) =>
             {
                 try
                 {

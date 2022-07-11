@@ -42,15 +42,33 @@ builder.Services.Configure<RouteOptions>(options =>
     options.LowercaseQueryStrings = false;
 });
 builder.Services.AddAuth();
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(name: "LongPolicy",
+//                      policy =>
+//                      {
+//                          policy.WithOrigins("https://apithuy72.amazingtech.vn",
+//                                              "https://amazingtech.vn",
+//                                              "https://localhost:3000",
+//                                              "http://localhost:3000")
+//                            .AllowAnyMethod()
+//                            .AllowAnyHeader()
+//                            .SetIsOriginAllowed(hostname => true)
+//                            .SetIsOriginAllowedToAllowWildcardSubdomains();
+//                      });
+
+
+//});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("LongCors", builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
 builder.Services.AddAuthorization();
 
 builder.Services.RegisterModules();
-builder.Services.AddCors(o => o.AddDefaultPolicy(builder =>
-{
-    builder.AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader();
-}));
 //builder.Services.AutoRegisterDependencies();
 
 var app = builder.Build();
@@ -67,7 +85,7 @@ app.UseSwaggerUI();
 app.UseSystemSetting();
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors();
+app.UseCors("LongCors");
 app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();

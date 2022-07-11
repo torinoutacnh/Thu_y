@@ -63,7 +63,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptEndpoint.BasePath);
 
-            endpoints.MapPut(ReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(ReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptModel model, IReceiptService receiptService) =>
             {
                 try
                 {

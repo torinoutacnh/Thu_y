@@ -48,17 +48,12 @@ namespace Thu_y.Modules.ReportModule.Adapters
             var report = _reportTicketRepository.Get(x => x.Id.Equals(model.Id)).Include(x => x.Values).FirstOrDefault();
             if (report == null) throw new Exception("No report found!") { HResult = 404 };
 
-            var newVals = _mapper.ProjectTo<ReportTicketValueEntity>(model.Values.AsQueryable());
-            _mapper.Map(model, report);
-            _reportTicketRepository.Update(report);
-
-            report.Values.All(x =>
+            foreach(var val in report.Values)
             {
-                _reportTicketValueRepository.Delete(x, true);
-                return true;
-            });
+                val.Value = model.Values?.Where(v => v.AttributeId == val.AttributeId).FirstOrDefault()?.Value;
+                _reportTicketValueRepository.Update(val, val => val.Value);
+            }
 
-            _reportTicketValueRepository.AddRange(newVals.ToArray());
             _unitOfWork.SaveChange();
 
             return true;
