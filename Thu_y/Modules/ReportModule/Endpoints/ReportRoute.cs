@@ -38,9 +38,9 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     && x.DateCreated <= (model.DateEnd ?? DateTimeOffset.MaxValue)
                     && model.Type == null ? true : (int)x.Type == model.Type
                     && model.UserId == null ? true : x.UserId.Equals(model.UserId))
-                    .Include(x => x.Values)
-                    .Include(x => x.SealTabs)
-                    .Include(x => x.ListAnimals)
+                    //.Include(x => x.Values)
+                    //.Include(x => x.SealTabs)
+                    //.Include(x => x.ListAnimals)
                     .Skip(model.PageNumber * model.PageSize)
                     .Take(model.PageSize).ToList();
 

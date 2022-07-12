@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Thu_y.Infrastructure.Model;
 using Thu_y.Infrastructure.Utils.Constant;
-
 namespace Thu_y.Modules.ReportModule.Core
 {
     public class ListAnimalEntity : Entity
@@ -11,11 +10,11 @@ namespace Thu_y.Modules.ReportModule.Core
         public bool IsCar { get; set; }
 
         [Column(TypeName = "decimal(18, 4)")]
-        public decimal? Amount { get; set; }
+        public decimal Amount { get; set; }
         public int? DayAge { get; set; }
 
         [Column(TypeName = "decimal(18, 4)")]
-        public decimal? TotalPrice { get; set; } // dựa vào animalentity để lấy đơn giá nhân với Amount = total
+        public decimal TotalPrice { get; set; } // dựa vào animalentity để lấy đơn giá nhân với Amount = total
         public SexType AnimalSex { get; set; }
         public string? Purpose { get; set; }
         public string? ReportTicketId { get; set; }

@@ -12,7 +12,7 @@ namespace Thu_y.Modules.ShareModule.Core
         public SexType Sex { get; set; }
 
         [Column(TypeName = "decimal(18, 4)")]
-        public decimal? Pricing { get; set; }
+        public decimal Pricing { get; set; }
         public virtual ICollection<VacineEntity>? Vacines { get; set; }
     }
 }
