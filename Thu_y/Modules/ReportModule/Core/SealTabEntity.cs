@@ -9,7 +9,9 @@ namespace Thu_y.Modules.ReportModule.Core
         public string? Name { get; set; }
         public string? Content { get; set; }
         public string? Id_Pricing { get; set; }
-        public double? Price { get; set; }
+
+        [Column(TypeName = "decimal(18, 4)")]
+        public decimal? Price { get; set; }
         public string? ReportTicketId { get; set; }
 
         [ForeignKey("ReportTicketId")]

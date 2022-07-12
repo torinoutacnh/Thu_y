@@ -20,6 +20,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string GetKillReport = BasePath + "/animal-killing";
         public const string ListAbattoirReport = BasePath + "/list-abattoir";
         public const string ListQuarantineReport = BasePath + "/list-quarantine";
+        public const string RevenueQuarantineReport = BasePath + "/revenue-quarantine";
 
     }
     [EnableCors("LongPolicy")]
@@ -38,10 +39,12 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     && model.Type == null ? true : (int)x.Type == model.Type
                     && model.UserId == null ? true : x.UserId.Equals(model.UserId))
                     .Include(x => x.Values)
+                    .Include(x => x.SealTabs)
+                    .Include(x => x.ListAnimals)
                     .Skip(model.PageNumber * model.PageSize)
-                    .Take(model.PageSize);
+                    .Take(model.PageSize).ToList();
 
-                    return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.ProjectTo<ReportModel>(reports).ToList()));
+                    return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.Map<List<ReportModel>>(reports)));
                 }
                 catch (Exception ex)
                 {
@@ -105,11 +108,11 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapGet(ReportEndpoint.GetKillReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId, string? reportName , IReportTicketRepository reportTicketRepository) =>
+            endpoints.MapGet(ReportEndpoint.GetKillReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId , IReportTicketRepository reportTicketRepository) =>
             {
                 try
                 {
-                    var data = reportTicketRepository.GetAnimalKillingReport(userId, reportName);
+                    var data = reportTicketRepository.GetAnimalKillingReport(userId);
                     return Results.Ok(value: new ResponseModel<ICollection<AnimalKillingReportModel>>(data: data));
                 }
                 catch (Exception ex)
@@ -155,6 +158,24 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                         return Results.Json(new ResponseModel<ListAbttoirReportModel>(message: ex.Message), statusCode: ex.HResult);
                     }
                     return Results.Json(new ResponseModel<ListAbttoirReportModel>(message: ex.Message), statusCode: 500);
+                }
+
+            }).WithTags(ReportEndpoint.BasePath);
+
+            endpoints.MapGet(ReportEndpoint.RevenueQuarantineReport, [Authorize(AuthenticationSchemes = "Bearer")] async (DateTimeOffset fromDay, DateTimeOffset toDay, IReportTicketRepository reportTicketRepository) =>
+            {
+                try
+                {
+                    var data = reportTicketRepository.GetQuarantineRevenueReport(fromDay, toDay);
+                    return Results.Ok(value: new ResponseModel<ICollection<QuarantineRevenueReport>>(data: data));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<QuarantineRevenueReport>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<QuarantineRevenueReport>(message: ex.Message), statusCode: 500);
                 }
 
             }).WithTags(ReportEndpoint.BasePath);

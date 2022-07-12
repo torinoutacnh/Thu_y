@@ -16,9 +16,9 @@ namespace Thu_y.Modules.ReportModule.Adapters
         {
         }
 
-        public ICollection<AnimalKillingReportModel> GetAnimalKillingReport(string userId, string? reportName = null)
+        public ICollection<AnimalKillingReportModel> GetAnimalKillingReport(string userId)
         {
-            var queryDetail = string.IsNullOrEmpty(reportName)? "" : $"and [Name] = '{reportName}'";
+            //var queryDetail = string.IsNullOrEmpty(reportName)? "" : $"and [Name] = '{reportName}'";
             StringBuilder sqlQuery = new StringBuilder(@$"select ReportName, ReportId,
                                                             [Số] as [STT],
 	                                                        [Chữ ký của chủ cơ sở] as [AbattoirOwner],
@@ -32,7 +32,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                         (
 	                                                        select rp.[Name] as ReportName, rv.AttributeName, rv.[Value] as [value], rv.ReportId 
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
-	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId {reportName} )
+	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId )
 															and rp.FormId = 'c81c3aad-b1f1-41de-80c7-ee1f724b6a1d'
                                                         ) t
                                                         PIVOT(
@@ -101,6 +101,54 @@ namespace Thu_y.Modules.ReportModule.Adapters
             catch (Exception ex)
             {
                 return new List<ListAbttoirReportModel>();
+            }
+            finally
+            {
+                if (con != null && con.State != ConnectionState.Closed) con.Close();
+            }
+        }
+
+        public ICollection<QuarantineRevenueReport> GetQuarantineRevenueReport(DateTimeOffset fromDay, DateTimeOffset toDay) // Báo cáo doanh thu kiểm dịch
+        {
+            StringBuilder sqlQuery = new StringBuilder(@$"select ReportName, ReportId, DateCreated, AnimalAmount, SealAmount, TotalPrice,
+														[Số] as [STT],
+														[Chữ ký của chủ cơ sở] as [OwnerName],
+														[Tên người kiểm dịch] as [Staff]
+                                                        from(
+                                                        SELECT * FROM
+                                                        (
+	                                                        select rp.[Name] as ReportName, rv.AttributeName, rv.[Value] as [value], rv.ReportId,rp.DateCreated,
+															(select count(*) from ListAnimalEntity where rp.Id = ReportTicketId) as [AnimalAmount],
+															(select count(*) from SealTabEntity where rp.Id = ReportTicketId) as [SealAmount],
+															isnull(rp.TotalPrice +(select sum(Price) from SealTabEntity where rp.Id = ReportTicketId),0) as [TotalPrice]
+                                                            from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
+	                                                        where rv.ReportId in (select  Id from ReportTicket 
+																				  where convert(varchar(10),DateCreated,110)>= convert(varchar(10),@fromDay,110)
+																				  and convert(varchar(10),DateCreated,110)<= convert(varchar(10),@toDay,110))
+															and rp.FormId = '4e64e271-38f9-4f87-9c7a-c03df9fa67fb'
+                                                        ) t
+                                                        PIVOT(
+                                                        	max([value])
+                                                        	for AttributeName in(
+                                                        		[Số],
+                                                        		[Chữ ký của chủ cơ sở],
+																[Tên người kiểm dịch])
+                                                        ) as pivot_table) as tb");
+
+            var param = new DynamicParameters();
+            param.Add("@fromDay", fromDay, DbType.DateTimeOffset, ParameterDirection.Input);
+            param.Add("@toDay", toDay, DbType.DateTimeOffset, ParameterDirection.Input);
+            IDbConnection con = null;
+            try
+            {
+                con = new SqlConnection(ConnectionString);
+                con.Open();
+                var result = con.Query<QuarantineRevenueReport>(sqlQuery.ToString(), param).ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new List<QuarantineRevenueReport>();
             }
             finally
             {

@@ -4,7 +4,7 @@ namespace Thu_y.Modules.ReportModule.Ports
 {
     public interface IReportService
     {
-        bool CreateReport(ReportModel model);
+        Task CreateReport(ReportModel model, CancellationToken cancellationToken = default);
         bool UpdateReport(ReportModel model);
         bool DeleteReport(string id);
     }

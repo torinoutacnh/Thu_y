@@ -16,5 +16,7 @@ namespace Thu_y.Modules.ReportModule.Model
         public string FormId { get; set; }
         public ReportType Type { get; set; }
         public ICollection<ReportValueModel> Values { get; set; }
+        public ICollection<ListAnimalModel>? ListAnimals { get; set; }
+        public  ICollection<SealTabModel>? SealTabs { get; set; }
     }
 }

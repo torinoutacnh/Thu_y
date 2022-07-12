@@ -34,6 +34,12 @@ namespace Thu_y.Modules.AbttoirModule.Endpoints
                     .Skip(model.PageNumber * model.PageSize)
                     .Take(model.PageSize);
 
+                    //var receipts = abattoirRepository.Get(x =>
+                    //model.Phone == null? true : x.Phone == model.Phone && 
+                    //true)
+                    //.Skip(model.PageNumber * model.PageSize)
+                    //.Take(model.PageSize);
+
                     return Results.Ok(value: new ResponseModel<List<AbattoirModel>>(mapper.ProjectTo<AbattoirModel>(receipts).ToList()));
                 }
                 catch (Exception ex)

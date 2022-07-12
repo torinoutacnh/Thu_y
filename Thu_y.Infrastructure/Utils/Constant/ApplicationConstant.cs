@@ -11,11 +11,9 @@ namespace Thu_y.Infrastructure.Utils.Constant
         
     }
 
-    public class AttributeIdConstants
+    public class FormIdConstants
     {
-        public const string TongNhapId = "78f2707e-192d-4ab9-bd92-77cdcd0f2a38";
-        public const string TongGietId = "86715134-2dbb-4273-be97-219d30dbaf0a";
-        public const string TonkhoId = "0b12d96d-01b9-4dc1-9075-f8e49867e5ec";
-        public const string ConLaiId = "c3fa4709-39c2-4f02-a033-269976116e48";
+        public const string QuanrantineId = "4e64e271-38f9-4f87-9c7a-c03df9fa67fb";
+        public const string AnimalDeadId = "c81c3aad-b1f1-41de-80c7-ee1f724b6a1d";
     }
 }

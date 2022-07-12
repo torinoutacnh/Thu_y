@@ -31,6 +31,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                     model.CodeName == null ? true : x.CodeName.Contains(model.CodeName) &&
                     model.Name == null ? true : x.Name.Contains(model.Name) &&
                     model.CodeNumber == null ? true : x.CodeNumber.Contains(model.CodeNumber))
+                    .Include(x => x.Allocates)
                     .Skip(model.PageNumber * model.PageSize)
                     .Take(model.PageSize);
 
