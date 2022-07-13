@@ -9,7 +9,7 @@ namespace Thu_y.Modules.ReportModule.Model
         public string AnimalId { get; set; }
         public bool IsCar { get; set; }
         public decimal Amount { get; set; }
-        public int? DayAge { get; set; }
+        public int DayAge { get; set; }
         public SexType AnimalSex { get; set; }
     }
 }

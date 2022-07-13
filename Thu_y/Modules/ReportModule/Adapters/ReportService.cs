@@ -94,7 +94,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
         #endregion Create ReportTicket
 
 
-        public bool UpdateReport(ReportModel model)
+        public Task UpdateReport(ReportModel model)
         {
             var report = _reportTicketRepository.Get(x => x.Id ==model.Id);
             if (report == null) throw new Exception("No report found!") { HResult = 404 };
@@ -107,10 +107,10 @@ namespace Thu_y.Modules.ReportModule.Adapters
 
             //_unitOfWork.SaveChange();
 
-            return true;
+            return Task.CompletedTask;
         }
 
-        public bool DeleteReport(string id)
+        public Task DeleteReport(string id)
         {
             var report = _reportTicketRepository.Get(x => x.Id.Equals(id)).FirstOrDefault();
             if (report == null) throw new Exception("No report found!") { HResult = 404 };
@@ -118,7 +118,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _reportTicketRepository.Delete(report);
             _unitOfWork.SaveChange();
 
-            return true;
+            return Task.CompletedTask;
         }
     }
 }
