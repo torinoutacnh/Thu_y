@@ -12,6 +12,8 @@ namespace Thu_y.Utils.Infrastructure.Application
         public static string AppDb => SystemHelperModel.Configs.GetConnectionString("Development");
         public static string ConnectionString => SystemHelperModel.Configs.GetConnectionString(IsProduction());
 
+        public static DateTimeOffset SystemTimeNow => DateTimeOffset.UtcNow;
+
         public static string IsProduction()
         {
             var env = SystemHelperModel.Configs?.AsEnumerable().Where(c => c.Key.Equals("ASPNETCORE_ENVIRONMENT")).FirstOrDefault();

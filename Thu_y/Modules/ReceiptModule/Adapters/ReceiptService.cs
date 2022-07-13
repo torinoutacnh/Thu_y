@@ -5,6 +5,7 @@ using Thu_y.Infrastructure.UOF;
 using Thu_y.Modules.ReceiptModule.Core;
 using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
+using Thu_y.Utils.Infrastructure.Application;
 
 namespace Thu_y.Modules.ReceiptModule.Adapters
 {
@@ -22,93 +23,129 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
             _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
-        public bool CreateAsync(ReceiptModel model)
+        #region Get Receipt by Id
+        public ReceiptEntity GetReceptById(string id)
+        {
+            var result =
+               _receiptRepository.GetSingle(w => w.Id == id && w.DateDeleted == null);
+            return result;
+        }
+        #endregion Get Receipt by Id
+
+        #region Create Receipt
+        public Task CreateAsync(ReceiptModel model, CancellationToken cancellationToken = default)
         {
             var entity = new ReceiptEntity();
             _mapper.Map(model, entity);
-            //foreach (var item in enity.Allocates)
-            //{
-            //    item.ReceiptId = enity.Id;
-            //}
-            entity.Allocates.All(_ => { _.ReceiptId = entity.Id; return true; });
+
+            foreach (var item in entity.Allocates)
+            {
+                item.ReceiptId = entity.Id;
+                item.TotalPage = item.Amount * entity.Page;
+            }
+
+
             _receiptRepository.Add(entity);
             _unitOfWork.SaveChange();
-            return true;
+            return Task.CompletedTask;
         }
+        #endregion Create Receipt
 
-        public Task UpdateAsync(ReceiptModel model, CancellationToken cancellationToken = default)
+        #region Update Receipt
+        public Task UpdateAsync(UpdateReceiptModel model, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var receipt = _receiptRepository.Get(x => x.Id == model.Id).FirstOrDefault();
-                if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
 
-                _mapper.Map(model,receipt);
-                _receiptRepository.Update(receipt);
-                _unitOfWork.SaveChange();
-                return Task.CompletedTask;
-            }
-            catch (Exception e)
+            var receipt = GetReceptById(model.Id);
+            if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
+
+            if (model.Page != receipt.Page)
             {
-                return Task.FromException(e);
+                var allocate = _receiptAllocateRepository.Get(_ => _.ReceiptId == receipt.Id).ToList();
+                foreach (var item in allocate)
+                {
+                    item.ReceiptId = receipt.Id;
+                    item.TotalPage = item.Amount * receipt.Page;
+                    _receiptAllocateRepository.Update(item);
+                }
             }
+
+            _mapper.Map(model, receipt);
+            _receiptRepository.Update(receipt);
+            _unitOfWork.SaveChange();
+            return Task.CompletedTask;
+
         }
+        #endregion Update Receipt
 
+        #region Delete Receipt
         public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            try
+            var receipt = _receiptRepository.Get(_ => _.Id == id, true, _ => _.Allocates).FirstOrDefault();
+            if (receipt == null)
+                throw new Exception("No Receipt found!") { HResult = 400 };
+
+            receipt.DateDeleted = SystemHelper.SystemTimeNow;
+
+            if (receipt.Allocates != null)
             {
-                var checkReceipt = GetByReceptId(id);
-                if (checkReceipt == null)
+                foreach (var allocate in receipt.Allocates)
                 {
-                    throw new Exception("No user found!") { HResult = 400 };
+                    allocate.DateDeleted = SystemHelper.SystemTimeNow;
+                    _receiptAllocateRepository.Update(allocate);
                 }
-                _receiptRepository.Delete(checkReceipt);
-                _unitOfWork.SaveChange();
-                return Task.CompletedTask;
             }
-            catch (Exception e)
-            {
-                return Task.FromException(e);
-            }
-        }
-        
-        public ReceiptEntity GetByReceptId(string id)
-        {
-            var result =
-               _receiptRepository.Get(w => w.Id == id && w.DateDeleted == null).FirstOrDefault();
-            return result;
-        }
-
-        public bool AllocateReceipt(ReceiptAllocateModel model)
-        {
-            var item = _mapper.Map<ReceiptAllocateEntity>(model);
-            _receiptAllocateRepository.Add(item);
+            _receiptRepository.Update(receipt);
             _unitOfWork.SaveChange();
-            return true;
+            return Task.CompletedTask;
         }
+        #endregion Delete Receipt
 
-        public bool UpdateAllocateReceipt(ReceiptAllocateModel model)
+        #region Create Allocate Receipt
+        public Task CreateAllocateReceipt(ReceiptAllocateModel model, CancellationToken cancellationToken = default)
         {
-            var item = _receiptAllocateRepository.Get(x => x.Id == model.Id).FirstOrDefault();
-            if (item == null) throw new Exception("Not found!") { HResult = 400 };
+            var receipt = GetReceptById(model.ReceiptId);
+            if (receipt == null)
+                throw new Exception("Not found Receipt!") { HResult = 404 };
 
-            _mapper.Map(model, item);
-            _receiptAllocateRepository.Update(item);
+            var totalPage = receipt.Page * model.Amount;
+            var entity = _mapper.Map<ReceiptAllocateEntity>(model);
+            entity.TotalPage = totalPage;
+
+            _receiptAllocateRepository.Add(entity);
+            _unitOfWork.SaveChange();
+            return Task.CompletedTask;
+        }
+        #endregion Create Allocate Receipt
+
+        #region Update Allocate Receipt
+        public Task UpdateAllocateReceipt(ReceiptAllocateModel model, CancellationToken cancellationToken = default)
+        {
+            var entity = _receiptAllocateRepository.GetSingle(x => x.Id == model.Id);
+            if (entity == null) throw new Exception("Not found AllocateReceipt!") { HResult = 400 };
+
+            var receipt = GetReceptById(entity.ReceiptId);
+            if (receipt == null) throw new Exception("Not found Receipt!") { HResult = 400 };
+
+            _mapper.Map(model, entity);
+            entity.TotalPage = receipt.Page * model.Amount;
+            _receiptAllocateRepository.Update(entity);
             _unitOfWork.SaveChange();
 
-            return true;
+            return Task.CompletedTask;
         }
+        #endregion Update Allocate Receipt
 
-        public bool DeleteAllocateReceipt(string id)
+        #region Delete Allocate Receipt
+        public Task DeleteAllocateReceipt(string id, CancellationToken cancellationToken = default)
         {
-            var item = _receiptAllocateRepository.Get(x => x.Id == id).FirstOrDefault();
-            if (item == null) throw new Exception("Not found!") { HResult = 400 };
+            var item = _receiptAllocateRepository.GetSingle(x => x.Id == id);
+            if (item == null) throw new Exception("Not found AllocateReceipt!") { HResult = 400 };
 
             _receiptAllocateRepository.Delete(item);
             _unitOfWork.SaveChange();
 
-            return true;
+            return Task.CompletedTask;
         }
+        #endregion Delete Allocate Receipt
     }
 }

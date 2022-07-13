@@ -11,18 +11,18 @@ namespace Thu_y.Modules.ReceiptModule.Model.Mapper
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.Allocates, opt => opt.MapFrom(y => y.Allocates))
                 .ReverseMap();
-            //CreateMap<ReceiptEntity, ReceiptModel>();
 
             CreateMap<ReceiptAllocateModel, ReceiptAllocateEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ReverseMap();
-           // CreateMap<ReceiptAllocateEntity, ReceiptAllocateModel>();
 
             CreateMap<ReceiptReportModel, ReceiptReportEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore());
             CreateMap<ReceiptReportEntity, ReceiptReportModel>();
 
             CreateMap<ReceiptReportEntity, ReceiptReportQuarantineModel>().ReverseMap();
+
+            CreateMap<UpdateReceiptModel, ReceiptEntity>();
         }
     }
 }

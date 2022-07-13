@@ -21,23 +21,26 @@ namespace Thu_y.Modules.AbttoirModule.Adapters
             _mapper = serviceProvider.GetRequiredService<IMapper>();
         }
 
+        #region Create Abattoir
         public Task<string> CreateAsync(AbattoirModel model, CancellationToken cancellationToken = default)
         {
-            var receipt = _mapper.Map<AbattoirEntity>(model);
-            var data = _abattoirRepository.Add(receipt);
+            var abattoir = _mapper.Map<AbattoirEntity>(model);
+            var data = _abattoirRepository.Add(abattoir);
             _unitOfWork.SaveChange();
             return Task.FromResult(data.Id);
         }
+        #endregion Create Abattoir
 
+        #region Update Abattoir
         public Task UpdateAsync(AbattoirModel model, CancellationToken cancellationToken = default)
         {
             try
             {
-                var receipt = GetByReceptId(model.Id);
-                if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
+                var abattoir = GetAbattoirById(model.Id);
+                if (abattoir == null) throw new Exception("No receipt found!") { HResult = 404 };
 
-                _mapper.Map(model, receipt);
-                _abattoirRepository.Update(receipt);
+                _mapper.Map(model, abattoir);
+                _abattoirRepository.Update(abattoir);
                 _unitOfWork.SaveChange();
                 return Task.CompletedTask;
             }
@@ -46,15 +49,17 @@ namespace Thu_y.Modules.AbttoirModule.Adapters
                 return Task.FromException(e);
             }
         }
+        #endregion Update Abattoir
 
+        #region Delete Abattoir
         public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             try
             {
-                var checkReceipt = GetByReceptId(id);
+                var checkReceipt = GetAbattoirById(id);
                 if (checkReceipt == null)
                 {
-                    throw new Exception("No user found!") { HResult = 400 };
+                    throw new Exception("No abattoir found!") { HResult = 400 };
                 }
                 _abattoirRepository.Delete(checkReceipt);
                 _unitOfWork.SaveChange();
@@ -65,12 +70,15 @@ namespace Thu_y.Modules.AbttoirModule.Adapters
                 return Task.FromException(e);
             }
         }
+        #endregion Delete Abattoir
 
-        public AbattoirEntity GetByReceptId(string id)
+        #region Get Abattoir by Id
+        public AbattoirEntity GetAbattoirById(string id)
         {
-            var result =
-               _abattoirRepository.Get(w => w.Id == id && w.DateDeleted == null).FirstOrDefault();
-            return result;
+            return _abattoirRepository.Get(w => w.Id == id).FirstOrDefault();
+
         }
+        #endregion Get Abattoir by Id
+
     }
 }

@@ -5,11 +5,11 @@ namespace Thu_y.Modules.ReceiptModule.Ports
 {
     public interface IReceiptService
     {
-        bool CreateAsync(ReceiptModel model);
-        Task UpdateAsync(ReceiptModel model, CancellationToken cancellationToken = default);
+        Task CreateAsync(ReceiptModel model, CancellationToken cancellationToken = default);
+        Task UpdateAsync(UpdateReceiptModel model, CancellationToken cancellationToken = default);
         Task DeleteAsync(string id, CancellationToken cancellationToken = default);
-        bool AllocateReceipt(ReceiptAllocateModel model);
-        bool UpdateAllocateReceipt(ReceiptAllocateModel model);
-        bool DeleteAllocateReceipt(string id);
+        Task CreateAllocateReceipt(ReceiptAllocateModel model, CancellationToken cancellationToken = default);
+        Task UpdateAllocateReceipt(ReceiptAllocateModel model, CancellationToken cancellationToken = default);
+        Task DeleteAllocateReceipt(string id, CancellationToken cancellationToken = default);
     }
 }

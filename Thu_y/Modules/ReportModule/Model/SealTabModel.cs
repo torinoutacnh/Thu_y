@@ -1,4 +1,6 @@
-﻿namespace Thu_y.Modules.ReportModule.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Thu_y.Modules.ReportModule.Model
 {
     public class SealTabModel
     {

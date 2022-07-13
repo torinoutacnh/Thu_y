@@ -11,5 +11,6 @@ namespace Thu_y.Infrastructure.Repository
         void Update(T entity, params string[] changedProperties);
         void Update(T entity);
         void Delete(T entity, bool isPhysicalDelete = false);
+        T GetSingle(Expression<Func<T, bool>>? predicate = null, bool isIncludeDeleted = false, params Expression<Func<T, object>>[] includeProperties);
     }
 }

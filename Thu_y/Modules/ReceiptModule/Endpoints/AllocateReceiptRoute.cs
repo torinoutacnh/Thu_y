@@ -44,11 +44,11 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapPost(AllocateReceiptEndpoint.CreateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptAllocateModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(AllocateReceiptEndpoint.CreateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptAllocateModel model, IReceiptService receiptService) =>
             {
                 try
                 {
-                    receiptService.AllocateReceipt(model);
+                    await receiptService.CreateAllocateReceipt(model);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
@@ -61,11 +61,11 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapPost(AllocateReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptAllocateModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(AllocateReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptAllocateModel model, IReceiptService receiptService) =>
             {
                 try
                 {
-                    receiptService.UpdateAllocateReceipt(model);
+                    await receiptService.UpdateAllocateReceipt(model);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
@@ -78,11 +78,11 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(AllocateReceiptEndpoint.BasePath);
 
-            endpoints.MapPost(AllocateReceiptEndpoint.DeleteReceipt, [Authorize(AuthenticationSchemes = "Bearer")] (string id, IReceiptService receiptService) =>
+            endpoints.MapPost(AllocateReceiptEndpoint.DeleteReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteAllocateReceiptModel model, IReceiptService receiptService) =>
             {
                 try
                 {
-                    receiptService.DeleteAllocateReceipt(id);
+                    await receiptService.DeleteAllocateReceipt(model.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)

@@ -14,6 +14,7 @@ namespace Thu_y.Modules.ReportModule.Model
         public string? Id { get; set; }
         public int? Type { get; set; }
         public string? UserId { get; set; }
+        public string? FormId { get; set; }
         public DateTimeOffset? DateStart { get; set; }
         public DateTimeOffset? DateEnd { get; set; }
 

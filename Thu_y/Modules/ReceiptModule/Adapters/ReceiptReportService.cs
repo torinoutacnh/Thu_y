@@ -11,59 +11,56 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
         private readonly IReceiptReportRepository _receiptReportRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IReceiptAllocateRepository _receiptAllocateRepository;
 
         public ReceiptReportService(IServiceProvider serviceProvider)
         {
             _receiptReportRepository = serviceProvider.GetRequiredService<IReceiptReportRepository>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
+            _receiptAllocateRepository = serviceProvider.GetRequiredService<IReceiptAllocateRepository>();
         }
 
+        #region Create Receipt Report
         public Task<string> CreateAsync(ReceiptReportModel model, CancellationToken cancellationToken = default)
         {
+            var allocateReceipt = _receiptAllocateRepository.GetSingle(_ => _.Id == model.ReceiptAllocateId);
+            if (allocateReceipt == null) throw new Exception("Not found Allocate Receipt!") { HResult = 404 };
+
             var receipt = _mapper.Map<ReceiptReportEntity>(model);
             var data = _receiptReportRepository.Add(receipt);
             _unitOfWork.SaveChange();
-            return Task.FromResult(data.Id);
+            return Task.FromResult(receipt.Id);
         }
+        #endregion Create Receipt Report
 
-        public Task UpdateAsync(ReceiptModel model, CancellationToken cancellationToken = default)
+        #region Update Receipt Report
+        public Task UpdateAsync(ReceiptReportModel model, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var receipt = _receiptReportRepository.Get(x => x.Id == model.Id).FirstOrDefault();
-                if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
+            var receipt = _receiptReportRepository.GetSingle(x => x.Id == model.Id);
+            if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
 
-                _mapper.Map(model, receipt);
-                _receiptReportRepository.Update(receipt);
-                _unitOfWork.SaveChange();
-                return Task.CompletedTask;
-            }
-            catch (Exception e)
-            {
-                return Task.FromException(e);
-            }
+            _mapper.Map(model, receipt);
+            _receiptReportRepository.Update(receipt);
+            _unitOfWork.SaveChange();
+            return Task.CompletedTask;
         }
+        #endregion Update Receipt Report
 
+        #region Delete Receipt Report
         public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var checkReceipt = _receiptReportRepository.Get(w => w.Id == id && w.DateDeleted == null).FirstOrDefault();
-                if (checkReceipt == null)
-                {
-                    throw new Exception("No user found!") { HResult = 400 };
-                }
-                _receiptReportRepository.Delete(checkReceipt);
-                _unitOfWork.SaveChange();
-                return Task.CompletedTask;
-            }
-            catch (Exception e)
-            {
-                return Task.FromException(e);
-            }
-        }
+            var checkReceipt = _receiptReportRepository.GetSingle(w => w.Id == id);
+            if (checkReceipt == null)
+                throw new Exception("Not found Receipt Report!") { HResult = 404 };
 
+            _receiptReportRepository.Delete(checkReceipt);
+            _unitOfWork.SaveChange();
+            return Task.CompletedTask;
+        }
+        #endregion Delete Receipt Report
+
+        #region Get Receipt Report
         public ICollection<ReceiptReportQuarantineModel> GetReceiptReport(ReceiptReportPagingModel model)
         {
             var data = _receiptReportRepository.Get(_ => _.UserId == model.UserId && _.ReceiptName == model.ReportName)
@@ -71,5 +68,6 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
                                                .Take(model.PageSize).ToList();
             return _mapper.Map<ICollection<ReceiptReportQuarantineModel>>(data);
         }
+        #endregion Get Receipt Report
     }
 }

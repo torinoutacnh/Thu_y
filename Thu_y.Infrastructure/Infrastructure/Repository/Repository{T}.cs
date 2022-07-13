@@ -186,6 +186,10 @@ namespace Thu_y.Infrastructure.Repository
             GC.SuppressFinalize(this);
         }
 
-
+        public T GetSingle(Expression<Func<T, bool>>? predicate = null, bool isIncludeDeleted = false, params Expression<Func<T, object>>[] includeProperties)
+        {
+            
+            return Get(predicate, isIncludeDeleted, includeProperties).FirstOrDefault();
+        }
     }
 }

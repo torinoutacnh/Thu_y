@@ -13,7 +13,7 @@ namespace Thu_y.Modules.ReceiptModule.Core
         public int? TotalPage { get; set; }
 
         public string? ReceiptName { get; set; }
-        public string? ReceiptId { get; set; }
+        public string ReceiptId { get; set; }
         [ForeignKey("ReceiptId")]
         public virtual ReceiptEntity? Receipt { get; set; }
     }

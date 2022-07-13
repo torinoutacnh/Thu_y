@@ -4,26 +4,28 @@ namespace Thu_y.Modules.ReceiptModule.Model
 {
     public class ReceiptAllocateModel
     {
-        public ReceiptAllocateModel()
-        {
-            if (string.IsNullOrEmpty(Id))
-                Id = Guid.NewGuid().ToString("D");
-        }
         public string Id { get; set; }
+
         [Required]
         public string UserId { get; set; }
+
         [Required]
         public string ReceiptId { get; set; }
+
         [Range(0, int.MaxValue)]
         [Required]
         public int Amount { get; set; }
-        [Range(0,int.MaxValue)]
-        [Required]
-        public int TotalPage { get; set; }
 
+        [Required]
         public string UserName { get; set; }
+
+        [Required]
         public string CodeName { get; set; }
+
+        [Required]
         public string CodeNumber { get; set; }
+
+        [Required]
         public string ReceiptName { get; set; }
     }
 }

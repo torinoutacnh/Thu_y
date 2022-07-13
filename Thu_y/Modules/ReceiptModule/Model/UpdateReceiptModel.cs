@@ -2,9 +2,9 @@
 
 namespace Thu_y.Modules.ReceiptModule.Model
 {
-    public class ReceiptModel
+    public class UpdateReceiptModel
     {
-  
+        [Required]
         public string Id { get; set; }
         [Required]
         public string Name { get; set; }
@@ -16,7 +16,5 @@ namespace Thu_y.Modules.ReceiptModule.Model
         public string CodeNumber { get; set; }
         [Required]
         public DateTimeOffset EffectiveDate { get; set; }
-
-        public ICollection<ReceiptAllocateModel>? Allocates { get; set; }
     }
 }

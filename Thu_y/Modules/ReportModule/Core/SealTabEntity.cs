@@ -12,7 +12,7 @@ namespace Thu_y.Modules.ReportModule.Core
 
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Price { get; set; }
-        public string? ReportTicketId { get; set; }
+        public string ReportTicketId { get; set; }
 
         [ForeignKey("ReportTicketId")]
         public virtual ReportTicketEntity? ReportTicket { get; set; }

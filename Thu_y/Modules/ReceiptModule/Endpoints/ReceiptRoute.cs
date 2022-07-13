@@ -51,7 +51,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
             {
                 try
                 {
-                     receiptService.CreateAsync(model);
+                    await receiptService.CreateAsync(model);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
@@ -64,7 +64,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptEndpoint.BasePath);
 
-            endpoints.MapPost(ReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (ReceiptModel model, IReceiptService receiptService) =>
+            endpoints.MapPost(ReceiptEndpoint.UpdateReceipt, [Authorize(AuthenticationSchemes = "Bearer")] async (UpdateReceiptModel model, IReceiptService receiptService) =>
             {
                 try
                 {

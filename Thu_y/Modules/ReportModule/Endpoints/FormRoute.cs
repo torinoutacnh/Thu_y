@@ -27,8 +27,9 @@ namespace Thu_y.Modules.ReportModule.Endpoints
             {
                 try
                 {
-                    var form = formRepository.Get(x => x.FormCode.ToLower().Equals(code.ToLower()) || x.Id.ToLower().Equals(code.ToLower())).Include(x => x.FormAttributes).FirstOrDefault();
-                    //form.FormAttributes.ToList() = form.FormAttributes.OrderBy(p => p.SortNo).ToList();
+                    var form = formRepository.Get(x => x.FormCode.ToLower() == code.ToLower() || x.Id.ToLower() == code.ToLower())
+                                             .Include(x => x.FormAttributes)
+                                             .FirstOrDefault();
                     if (form == null) throw new Exception("NoT found form!") { HResult = 400 };
 
                     return Results.Ok(value: new ResponseModel<FormModel>(mapper.Map<FormModel>(form)));

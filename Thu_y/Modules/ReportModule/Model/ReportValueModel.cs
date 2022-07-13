@@ -9,8 +9,12 @@ namespace Thu_y.Modules.ReportModule.Model
         public string AttributeId { get; set; }
         [Required]
         public string Value { get; set; }
+
+        [Required]
         public string ReportId { get; set; }
         public string AnimalId { get; set; }
+
+        [Required]
         public string AttributeName { get; set; }
         public string FormName { get; set; }
     }

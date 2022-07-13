@@ -86,11 +86,11 @@ namespace Thu_y.Modules.AbttoirModule.Endpoints
                 }
             }).WithTags(AbattoirEndpoint.BasePath);
 
-            endpoints.MapPost(AbattoirEndpoint.DeleteAbattoir, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IAbattoirService abattoirService) =>
+            endpoints.MapPost(AbattoirEndpoint.DeleteAbattoir, [Authorize(AuthenticationSchemes = "Bearer")] async(DeleteAbattoirModel model, IAbattoirService abattoirService) =>
             {
                 try
                 {
-                    await abattoirService.DeleteAsync(id);
+                    await abattoirService.DeleteAsync(model.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
