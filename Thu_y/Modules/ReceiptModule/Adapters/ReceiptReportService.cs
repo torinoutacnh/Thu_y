@@ -38,7 +38,7 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
         public Task UpdateAsync(ReceiptReportModel model, CancellationToken cancellationToken = default)
         {
             var receipt = _receiptReportRepository.GetSingle(x => x.Id == model.Id);
-            if (receipt == null) throw new Exception("No receipt found!") { HResult = 404 };
+            if (receipt == null) throw new Exception("Not found Receipt Report!") { HResult = 404 };
 
             _mapper.Map(model, receipt);
             _receiptReportRepository.Update(receipt);

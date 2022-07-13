@@ -30,12 +30,12 @@ namespace Thu_y.Infrastructure.Utils.Constant
         B = 2,
         C = 3,
     }
-    public enum DataTypes
+    public enum ControlTypes
     {
         InputType = 1,
         DropDownListType = 2
     }
-    public enum ControlTypes
+    public enum DataTypes
     {
         TextControl = 1,
         TelControl = 2,
@@ -45,5 +45,10 @@ namespace Thu_y.Infrastructure.Utils.Constant
         ImageControl = 6,
         PasswordControl = 7,
         NumberControl = 8
+    }
+
+    public enum SealType
+    {
+
     }
 }

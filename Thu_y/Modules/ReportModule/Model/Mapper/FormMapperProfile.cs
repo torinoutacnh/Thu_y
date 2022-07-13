@@ -41,6 +41,11 @@ namespace Thu_y.Modules.ReportModule.Model.Mapper
 
             CreateMap<FormEntity, FormTemplateModel>()
                 .ReverseMap();
+
+            CreateMap<SealConfigModel, SealConfigEntity>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ReverseMap();
+                
         }
     }
 }

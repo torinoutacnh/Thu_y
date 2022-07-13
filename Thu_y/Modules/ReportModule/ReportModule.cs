@@ -11,6 +11,7 @@ namespace Thu_y.Modules.ReportModule
         {
             endpoints.MapFormEndpoints();
             endpoints.MapReportEndpoints();
+            endpoints.MapSealConfigEndpoints();
             return endpoints;
         }
 
@@ -24,6 +25,8 @@ namespace Thu_y.Modules.ReportModule
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ISealTabRepository, SealTabRepository>();
             services.AddScoped<IListAnimalRepository, ListAnimalRepository>();
+            services.AddScoped<ISealConfigRepository, SealConfigRepository>();
+            services.AddScoped<ISealConfigService, SealConfigService>();
 
             return services;
         }
