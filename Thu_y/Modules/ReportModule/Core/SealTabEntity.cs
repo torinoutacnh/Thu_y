@@ -5,6 +5,11 @@ namespace Thu_y.Modules.ReportModule.Core
 {
     public class SealTabEntity : Entity
     {
+        public SealTabEntity()
+        {
+            Price = 1M;
+        }
+
         public string? CodeSeal { get; set; }
         public string? Name { get; set; }
         public string? Content { get; set; }
