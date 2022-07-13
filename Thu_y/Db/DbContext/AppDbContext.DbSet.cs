@@ -24,6 +24,9 @@ namespace Thu_y.Db.DbContext
         public DbSet<ReportTicketValueEntity> ReportTicketValue { get; set; }
         public DbSet<FormEntity> Form { get; set; }
         public DbSet<FormAttributeEntity> FormAttribute { get; set; }
+        public DbSet<SealConfigEntity> SealConfig { get; set; }
+        public DbSet<SealTabEntity> SealTab { get; set; }
+        public DbSet<ListAnimalEntity> ListAnimal { get; set; }
 
         // Receipt entity
         public DbSet<ReceiptAllocateEntity> ReceiptAllocate { get; set; }
