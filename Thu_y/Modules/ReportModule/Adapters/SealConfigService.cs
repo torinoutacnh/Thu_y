@@ -68,5 +68,14 @@ namespace Thu_y.Modules.ReportModule.Adapters
             return _mapper.Map<SealConfigModel>(entity);
         }
         #endregion Get SealConfig By Id or Name
+
+        #region Get List SealConfig
+        public ICollection<SealConfigModel> GetListSealConfig()
+        {
+
+               var entity = _sealConfigRepository.Get();
+            return _mapper.Map<ICollection<SealConfigModel>>(entity);
+        }
+        #endregion Get List SealConfig
     }
 }

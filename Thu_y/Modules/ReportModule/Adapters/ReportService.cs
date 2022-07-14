@@ -60,7 +60,12 @@ namespace Thu_y.Modules.ReportModule.Adapters
             {
                 foreach (var animal in entity.ListAnimals)
                 {
-                    var unitPrice = _animalRepository.Get(_ => _.Id == animal.Id).Select(_ => _.Pricing).FirstOrDefault();
+                    //var unitPrice = _animalRepository.Get(_ => _.Id == animal.Id).Select(_ => _.Pricing).FirstOrDefault();
+                    //if (unitPrice == null)
+                    //    throw new Exception($"Not found {animal.AnimalName} in animal categories") { HResult = 404 };
+                    var lsAnimal = _animalRepository.Get();
+                    var unitPrice = lsAnimal.Where(_ => _.Name == animal.AnimalName).Select(x => x.Pricing).FirstOrDefault();
+
                     if (unitPrice == null)
                         throw new Exception($"Not found {animal.AnimalName} in animal categories") { HResult = 404 };
 
@@ -81,35 +86,47 @@ namespace Thu_y.Modules.ReportModule.Adapters
                 value.ReportId = entity.Id;
             }
 
+            if (entity.ListAnimals != null)
+            {
+                foreach (var animal in entity.ListAnimals)
+                {
+                    var lsAnimal = _animalRepository.Get();
+                    var unitPrice = lsAnimal.Where(_ => _.Name == animal.AnimalName).Select(x => x.Pricing).FirstOrDefault();
+
+                    if (unitPrice == null)
+                        throw new Exception($"Not found {animal.AnimalName} in animal categories") { HResult = 404 };
+
+                    animal.TotalPrice = animal.Amount * unitPrice;
+                    animal.ReportTicketId = entity.Id;
+                }
+            }
+
             if (entity.SealTabs != null)
             {
                 foreach (var seal in entity.SealTabs)
                 {
                     seal.ReportTicketId = entity.Id;
+                    entity.TotalPrice += 1; // chạy hết vong thì được tổng số seal
                 }
             }
+
             _reportTicketRepository.Add(entity);
             _unitOfWork.SaveChange();
         }
         #endregion Create ReportTicket
 
-
-        public Task UpdateReport(ReportModel model)
+        #region Update Report
+        public Task UpdateReport(UpdateReportModel model)
         {
-            var report = _reportTicketRepository.Get(x => x.Id ==model.Id);
+            var report = _reportTicketRepository.GetSingle(x => x.Id == model.ReportId);
             if (report == null) throw new Exception("No report found!") { HResult = 404 };
 
-            //foreach(var val in report.Values)
-            //{
-            //    val.Value = model.Values?.Where(v => v.AttributeId == val.AttributeId).FirstOrDefault()?.Value;
-            //    _reportTicketValueRepository.Update(val, val => val.Value);
-            //}
-
-            //_unitOfWork.SaveChange();
-
+            _reportTicketRepository.UpdateMultiReport(model.Values, model.ReportId);
             return Task.CompletedTask;
         }
+        #endregion Update Report
 
+        #region Delete Report
         public Task DeleteReport(string id)
         {
             var report = _reportTicketRepository.Get(x => x.Id.Equals(id)).FirstOrDefault();
@@ -120,5 +137,6 @@ namespace Thu_y.Modules.ReportModule.Adapters
 
             return Task.CompletedTask;
         }
+        #endregion Delete Report
     }
 }

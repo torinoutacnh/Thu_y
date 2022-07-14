@@ -8,5 +8,6 @@ namespace Thu_y.Modules.ReportModule.Ports
         Task UpdateAsync(SealConfigModel model, CancellationToken cancellationToken = default);
         Task DeleteAsync(string id, CancellationToken cancellationToken = default);
         SealConfigModel GetSealConfigByIdOrName(string id, string sealName);
+        ICollection<SealConfigModel> GetListSealConfig();
     }
 }

@@ -37,7 +37,14 @@ namespace Thu_y.Modules.ReportModule.Model.Mapper
             CreateMap<SealTabModel, SealTabEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
                 .ForMember(x => x.ReportTicket, opt => opt.Ignore())
+                .ForMember(des => des.Name, opt => opt.MapFrom((src, des) => src.SealName))
+                .ForMember(des => des.CodeSeal, opt => opt.MapFrom((src, des) => src.SealCode))
                 .ReverseMap();
+
+            CreateMap<SealTabEntity, SealTabModel>()
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(des => des.SealName, opt => opt.MapFrom((src, des) => src.Name))
+                .ForMember(des => des.SealCode, opt => opt.MapFrom((src, des) => src.CodeSeal));
 
             CreateMap<FormEntity, FormTemplateModel>()
                 .ReverseMap();

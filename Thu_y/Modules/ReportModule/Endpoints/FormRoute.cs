@@ -80,11 +80,11 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapPost(FormEndpoint.DeleteForm, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IFormService formService) =>
+            endpoints.MapPost(FormEndpoint.DeleteForm, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, IFormService formService) =>
             {
                 try
                 {
-                    formService.DeleteForm(id);
+                    formService.DeleteForm(request.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)

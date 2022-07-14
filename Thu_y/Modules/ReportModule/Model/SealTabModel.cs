@@ -7,10 +7,10 @@ namespace Thu_y.Modules.ReportModule.Model
         public string Id { get; set; }
 
         [Required]
-        public string CodeSeal { get; set; }
+        public string SealCode { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string SealName { get; set; }
         public string Content { get; set; }
         public string Id_Pricing { get; set; }
         public string ReportTicketId { get; set; }

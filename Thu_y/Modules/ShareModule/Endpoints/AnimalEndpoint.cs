@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Thu_y.Modules.ReportModule.Model;
 using Thu_y.Modules.ShareModule.Model;
 using Thu_y.Modules.ShareModule.Ports;
 using Thu_y.Utils.Infrastructure.Application.Models;
@@ -23,15 +24,11 @@ namespace Thu_y.Modules.ShareModule.Endpoints
             {
                 try
                 {
-                    var receipts = animalRepository.Get(x =>
-                    model.Id == null ? true : x.Id == model.Id &&
-                    model.Name == null ? true : x.Name == model.Name &&
-                    model.DayAge == null ? true : x.DayAge == model.DayAge &&
-                    model.Sex == null ? true : x.Sex == model.Sex)
+                    var animal = animalRepository.Get(x => model.Name == null? true :   x.Name == model.Name)
                     .Skip(model.PageNumber * model.PageSize)
-                    .Take(model.PageSize);
+                    .Take(model.PageSize);  
 
-                    return Results.Ok(value: new ResponseModel<List<AnimalModel>>(mapper.ProjectTo<AnimalModel>(receipts).ToList()));
+                    return Results.Ok(value: new ResponseModel<List<AnimalModel>>(mapper.ProjectTo<AnimalModel>(animal).ToList()));
                 }
                 catch (Exception ex)
                 {
@@ -77,11 +74,11 @@ namespace Thu_y.Modules.ShareModule.Endpoints
                 }
             }).WithTags(AnimalEndpoint.BasePath);
 
-            endpoints.MapPost(AnimalEndpoint.DeleteAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IAnimalService animalService) =>
+            endpoints.MapPost(AnimalEndpoint.DeleteAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, IAnimalService animalService) =>
             {
                 try
                 {
-                    await animalService.DeleteAsync(id);
+                    await animalService.DeleteAsync(request.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)

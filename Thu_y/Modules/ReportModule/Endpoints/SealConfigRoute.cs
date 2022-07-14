@@ -19,13 +19,13 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapSealConfigEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet(SealConfigEndpoint.GetConfig, [Authorize(AuthenticationSchemes = "Bearer")] (string? id, string? sealName, ISealConfigService sealConfigService) =>
+            endpoints.MapGet(SealConfigEndpoint.GetConfig, [Authorize(AuthenticationSchemes = "Bearer")] (ISealConfigService sealConfigService) =>
             {
                 try
                 {
-                    var seal = sealConfigService.GetSealConfigByIdOrName(id, sealName);
+                    var seal = sealConfigService.GetListSealConfig();
 
-                    return Results.Ok(value: new ResponseModel<SealConfigModel>(data: seal));
+                    return Results.Ok(value: new ResponseModel<ICollection<SealConfigModel>>(data: seal));
                 }
                 catch (Exception ex)
                 {
@@ -71,11 +71,11 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(SealConfigEndpoint.BasePath);
 
-            endpoints.MapPost(SealConfigEndpoint.DeleteConfig, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, ISealConfigService sealConfigService) =>
+            endpoints.MapPost(SealConfigEndpoint.DeleteConfig, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, ISealConfigService sealConfigService) =>
             {
                 try
                 {
-                    await sealConfigService.DeleteAsync(id);
+                    await sealConfigService.DeleteAsync(request.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)

@@ -21,6 +21,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string ListAbattoirReport = BasePath + "/list-abattoir";
         public const string ListQuarantineReport = BasePath + "/list-quarantine";
         public const string RevenueQuarantineReport = BasePath + "/revenue-quarantine";
+        public const string GetSingleReport = BasePath + "/single-report";
 
     }
     [EnableCors("LongPolicy")]
@@ -28,19 +29,25 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapReportEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost(ReportEndpoint.GetAllReport, [Authorize(AuthenticationSchemes = "Bearer")] async ([FromBody]ReportPagingModel model, IReportTicketRepository reportRepository,IMapper mapper) =>
+            endpoints.MapPost(ReportEndpoint.GetAllReport, [Authorize(AuthenticationSchemes = "Bearer")] async ([FromBody] ReportPagingModel model, IReportTicketRepository reportRepository, IMapper mapper) =>
             {
                 try
                 {
-                    var reports = reportRepository.Get(x => 
-                    model.Id == null ? true : x.Id.Equals(model.Id)
-                    && x.DateCreated >= (model.DateStart ?? DateTimeOffset.MinValue)
-                    && x.DateCreated <= (model.DateEnd ?? DateTimeOffset.MaxValue)
-                    && model.Type == null ? true : (int)x.Type == model.Type
-                    && model.UserId == null ? true : x.UserId == model.UserId
-                    && x.FormId == null ? true : x.FormId == model.FormId)
-                    .Skip(model.PageNumber * model.PageSize)
-                    .Take(model.PageSize).ToList();
+                    
+                    var reports = new List<Core.ReportTicketEntity>();
+                    if (string.IsNullOrEmpty(model.UserId))
+                    {
+                        reports = reportRepository.Get(x => x.FormId == model.FormId, true, y => y.Values)
+                                                  .OrderByDescending(x => x.DateCreated)
+                                                  .Skip(model.PageNumber * model.PageSize)
+                                                  .Take(model.PageSize).ToList();
+                        return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.Map<List<ReportModel>>(reports)));
+
+                    }
+                    reports = reportRepository.Get(x => x.UserId == model.UserId && x.FormId == model.FormId, true, y => y.Values)
+                                              .OrderByDescending(x => x.DateCreated)
+                                              .Skip(model.PageNumber * model.PageSize)
+                                              .Take(model.PageSize).ToList();
 
                     return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.Map<List<ReportModel>>(reports)));
                 }
@@ -65,17 +72,17 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 {
                     if (ex.HResult >= 400 && ex.HResult < 500)
                     {
-                        return Results.Json(new ResponseModel<string>(message: ex.Message),statusCode:ex.HResult);
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapPost(ReportEndpoint.UpdateReport, [Authorize(AuthenticationSchemes = "Bearer")] async (ReportModel model, IReportService reportService) =>
+            endpoints.MapPost(ReportEndpoint.UpdateReport, [Authorize(AuthenticationSchemes = "Bearer")] async (UpdateReportModel model, IReportService reportService) =>
             {
                 try
                 {
-                    reportService.UpdateReport(model);
+                    await reportService.UpdateReport(model);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
@@ -88,11 +95,11 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapPost(ReportEndpoint.DeleteReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IReportService reportService) =>
+            endpoints.MapPost(ReportEndpoint.DeleteReport, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, IReportService reportService) =>
             {
                 try
                 {
-                    reportService.DeleteReport(id);
+                    await reportService.DeleteReport(request.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
@@ -106,7 +113,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
 
             }).WithTags(ReportEndpoint.BasePath);
 
-            endpoints.MapGet(ReportEndpoint.GetKillReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId , IReportTicketRepository reportTicketRepository) =>
+            endpoints.MapGet(ReportEndpoint.GetKillReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string userId, IReportTicketRepository reportTicketRepository) =>
             {
                 try
                 {
@@ -176,6 +183,27 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     return Results.Json(new ResponseModel<QuarantineRevenueReport>(message: ex.Message), statusCode: 500);
                 }
 
+            }).WithTags(ReportEndpoint.BasePath);
+
+            endpoints.MapGet(ReportEndpoint.GetSingleReport, [Authorize(AuthenticationSchemes = "Bearer")] async ( string reportId, IReportTicketRepository reportRepository, IMapper mapper) =>
+            {
+                try
+                {
+                    var reports = reportRepository.Get(x => x.Id == reportId)
+                                                  .Include(y => y.Values)
+                                                  .Include(y => y.SealTabs)
+                                                  .Include(y => y.ListAnimals).FirstOrDefault();
+
+                    return Results.Ok(value: new ResponseModel<ReportModel>(mapper.Map<ReportModel>(reports)));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                }
             }).WithTags(ReportEndpoint.BasePath);
 
             return endpoints;

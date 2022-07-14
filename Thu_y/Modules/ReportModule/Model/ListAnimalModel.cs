@@ -11,5 +11,6 @@ namespace Thu_y.Modules.ReportModule.Model
         public decimal Amount { get; set; }
         public int DayAge { get; set; }
         public SexType AnimalSex { get; set; }
+        public string ReportTicketId { get; set; }
     }
 }

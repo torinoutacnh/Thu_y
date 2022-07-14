@@ -12,11 +12,9 @@ namespace Thu_y.Modules.ShareModule.Model
         [Range(0, int.MaxValue)]
         [Required]
         public int PageSize { get; set; }
-        public string? Id { get; set; }
 
-        public string? Name { get; set; }
-        public int? DayAge { get; set; }
-        public SexType? Sex { get; set; }
+        [Required]
+        public string Name { get; set; }
 
         public AnimalPagingModel(int pageNumber, int pageSize)
         {

@@ -118,9 +118,9 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                         SELECT * FROM
                                                         (
 	                                                        select rp.[Name] as ReportName, rv.AttributeName, rv.[Value] as [value], rv.ReportId,rp.DateCreated,
-															(select count(*) from ListAnimalEntity where rp.Id = ReportTicketId) as [AnimalAmount],
-															(select count(*) from SealTabEntity where rp.Id = ReportTicketId) as [SealAmount],
-															isnull(rp.TotalPrice +(select sum(Price) from SealTabEntity where rp.Id = ReportTicketId),0) as [TotalPrice]
+															(select count(*) from ListAnimal where rp.Id = ReportTicketId) as [AnimalAmount],
+															(select count(*) from SealTab where rp.Id = ReportTicketId) as [SealAmount],
+															isnull(rp.TotalPrice +(select sum(Price) from SealTab where rp.Id = ReportTicketId),0) as [TotalPrice]
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
 	                                                        where rv.ReportId in (select  Id from ReportTicket 
 																				  where convert(varchar(10),DateCreated,110)>= convert(varchar(10),@fromDay,110)
@@ -158,7 +158,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
 
         public ICollection<ListQuarantineReportModel> GetListQuarantineReport(string userId) //danh sách báo cáo kiểm dịch
         {
-            StringBuilder sqlQuery = new StringBuilder(@$"select ReportName,
+            StringBuilder sqlQuery = new StringBuilder(@$"select ReportName, ReportId,
 															[Số] as [STT],
 	                                                        [Họ và tên chủ hàng] as [OwnerName],
                                                             [Địa chỉ giao dịch] as [Address],
@@ -169,7 +169,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                         SELECT * FROM
                                                         (
 	                                                        select rp.[Name] as ReportName, rp.Id as ReportId, rv.AttributeName, rv.[Value] as [value]
-															,(select count(*) from ListAnimalEntity where rp.Id = ReportTicketId) as [Amount]
+															,(select count(*) from ListAnimal where rp.Id = ReportTicketId) as [Amount]
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId
 	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId)
                                                             and rp.FormId = '4e64e271-38f9-4f87-9c7a-c03df9fa67fb'
@@ -200,6 +200,37 @@ namespace Thu_y.Modules.ReportModule.Adapters
             catch (Exception ex)
             {
                 return new List<ListQuarantineReportModel>();
+            }
+            finally
+            {
+                if (con != null && con.State != ConnectionState.Closed) con.Close();
+            }
+        }
+
+        public bool UpdateMultiReport(List<Values> lsModel, string reportId)
+        {
+            StringBuilder sqlQuery = new StringBuilder(@$"UPDATE [ReportTicketValue] SET [Value] = CASE [AttributeId] ");
+            foreach (var data in lsModel)
+            {
+                sqlQuery.Append($"WHEN '{data.AttributeId}' THEN '{data.Value}' ");
+            }
+
+            sqlQuery.Append("ELSE [Value] END WHERE [ReportId] = @reportId ");
+
+            var param = new DynamicParameters();
+
+            param.Add("reportId", reportId, DbType.String, ParameterDirection.Input);
+            IDbConnection con = null;
+            try
+            {
+                con = new SqlConnection(ConnectionString);
+                con.Open();
+                var result = con.Execute(sqlQuery.ToString(), param, commandType: CommandType.Text);
+                return result != 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
             finally
             {

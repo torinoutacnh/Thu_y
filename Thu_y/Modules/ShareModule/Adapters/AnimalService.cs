@@ -23,8 +23,11 @@ namespace Thu_y.Modules.ShareModule.Adapters
 
         public Task<string> CreateAsync(AnimalModel model, CancellationToken cancellationToken = default)
         {
-            var ani = _mapper.Map<AnimalEntity>(model);
-            var data = _animalRepository.Add(ani);
+            var animal = _animalRepository.GetSingle(_ => _.Name == model.Name);
+            if (animal != null) throw new Exception($"'{model.Name}' is existed!") { HResult = 400 };
+
+            var entity = _mapper.Map<AnimalEntity>(model);
+            var data = _animalRepository.Add(entity);
             _unitOfWork.SaveChange();
 
             return Task.FromResult(data.Id);
@@ -32,8 +35,8 @@ namespace Thu_y.Modules.ShareModule.Adapters
 
         public Task UpdateAsync(AnimalModel model, CancellationToken cancellationToken = default)
         {
-            var ani = _animalRepository.Get(x => x.Id.Equals(model.Id)).FirstOrDefault();
-            if (ani == null) throw new Exception("No animal found!") { HResult = 400 };
+            var ani = _animalRepository.GetSingle(x => x.Id == model.Id);
+            if (ani == null) throw new Exception("Not found animal!") { HResult = 404 };
 
             _mapper.Map(model, ani);
             _animalRepository.Update(ani);
@@ -44,10 +47,10 @@ namespace Thu_y.Modules.ShareModule.Adapters
 
         public Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            var ani = _animalRepository.Get(x => x.Id.Equals(id)).FirstOrDefault();
-            if (ani == null) throw new Exception("No animal found!") { HResult = 400 };
+            var ani = _animalRepository.GetSingle(x => x.Id == id);
+            if (ani == null) throw new Exception("Not found animal!") { HResult = 404 };
 
-            _animalRepository.Delete(ani);
+            _animalRepository.Delete(ani, true);
             _unitOfWork.SaveChange();
 
             return Task.CompletedTask;

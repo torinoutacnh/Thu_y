@@ -35,5 +35,13 @@ namespace Thu_y.Modules.ReportModule.Ports
         /// <param name="toDay"></param>
         /// <returns></returns>
         ICollection<QuarantineRevenueReport> GetQuarantineRevenueReport(DateTimeOffset fromDay, DateTimeOffset toDay);
+
+        /// <summary>
+        /// Update report with multi attribute
+        /// </summary>
+        /// <param name="lsModel"></param>
+        /// <param name="reportId"></param>
+        /// <returns></returns>
+        bool UpdateMultiReport(List<Values> lsModel, string reportId);
     }
 }

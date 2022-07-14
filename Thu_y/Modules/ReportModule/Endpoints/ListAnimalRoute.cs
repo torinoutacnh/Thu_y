@@ -5,43 +5,43 @@ using Thu_y.Utils.Infrastructure.Application.Models;
 
 namespace Thu_y.Modules.ReportModule.Endpoints
 {
-    public class SealTabEndpoint
+    public class ListAnimalEndpoint
     {
         public const string Prefix = "";
-        public const string BasePath = Prefix + "/sealtab";
-        public const string GetSealTab = BasePath;
-        public const string CreateSeal = BasePath + "/create";
-        public const string UpdateSeal = BasePath + "/update";
-        public const string DeleteSeal = BasePath + "/delete";
-
+        public const string BasePath = Prefix + "/listanimal";
+        public const string GetListAni = BasePath;
+        public const string CreateLsAnimal = BasePath + "/create";
+        public const string UpdateLsAnimal = BasePath + "/update";
+        public const string DeleteLsAnimal = BasePath + "/delete";
     }
-    public static class SealTabRoute
+
+    public static class ListAnimalRoute
     {
-        public static IEndpointRouteBuilder MapSealTabEndpoints(this IEndpointRouteBuilder endpoints)
+        public static IEndpointRouteBuilder MapListAnimalEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet(SealTabEndpoint.GetSealTab, [Authorize(AuthenticationSchemes = "Bearer")] (string reportId, ISealTabService sealTabService) =>
+            endpoints.MapGet(ListAnimalEndpoint.GetListAni, [Authorize(AuthenticationSchemes = "Bearer")] (string reportId, IListAnimalService listAnimalService) =>
             {
                 try
                 {
-                    var seal = sealTabService.GetSealtabByReportId(reportId);
+                    var animal = listAnimalService.GetListAnimalByReportId(reportId);
 
-                    return Results.Ok(value: new ResponseModel<ICollection<SealTabModel>>(data: seal));
+                    return Results.Ok(value: new ResponseModel<ICollection<ListAnimalModel>>(data: animal));
                 }
                 catch (Exception ex)
                 {
                     if (ex.HResult >= 400 && ex.HResult < 500)
                     {
-                        return Results.Json(new ResponseModel<ICollection<SealTabModel>>(message: ex.Message), statusCode: ex.HResult);
+                        return Results.Json(new ResponseModel<ICollection<ListAnimalModel>>(message: ex.Message), statusCode: ex.HResult);
                     }
-                    return Results.Json(new ResponseModel<ICollection<SealTabModel>>(message: ex.Message), statusCode: 500);
+                    return Results.Json(new ResponseModel<ICollection<ListAnimalModel>>(message: ex.Message), statusCode: 500);
                 }
-            }).WithTags(SealTabEndpoint.BasePath);
+            }).WithTags(ListAnimalEndpoint.BasePath);
 
-            endpoints.MapPost(SealTabEndpoint.CreateSeal, [Authorize(AuthenticationSchemes = "Bearer")] async (SealTabModel model, ISealTabService sealTabService) =>
+            endpoints.MapPost(ListAnimalEndpoint.CreateLsAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (ListAnimalModel model, IListAnimalService listAnimalService) =>
             {
                 try
                 {
-                    var data = sealTabService.CreateAsync(model);
+                    var data = listAnimalService.CreateAsync(model);
                     return Results.Ok(value: new ResponseModel<string>(data: data.Result));
                 }
                 catch (Exception ex)
@@ -52,13 +52,13 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
-            }).WithTags(SealTabEndpoint.BasePath);
+            }).WithTags(ListAnimalEndpoint.BasePath);
 
-            endpoints.MapPost(SealTabEndpoint.UpdateSeal, [Authorize(AuthenticationSchemes = "Bearer")] async (UpdateSealTabModel model, ISealTabService sealTabService) =>
+            endpoints.MapPost(ListAnimalEndpoint.UpdateLsAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (UpdateListAnimalModel model, IListAnimalService listAnimalService) =>
             {
                 try
                 {
-                    await sealTabService.UpdateAsync(model);
+                    await listAnimalService.UpdateAsync(model);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
@@ -69,9 +69,9 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
-            }).WithTags(SealTabEndpoint.BasePath);
+            }).WithTags(ListAnimalEndpoint.BasePath);
 
-            endpoints.MapPost(SealTabEndpoint.DeleteSeal, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, ISealTabService sealTabService) =>
+            endpoints.MapPost(ListAnimalEndpoint.DeleteLsAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, ISealTabService sealTabService) =>
             {
                 try
                 {
@@ -87,7 +87,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
 
-            }).WithTags(SealTabEndpoint.BasePath);
+            }).WithTags(ListAnimalEndpoint.BasePath);
 
             return endpoints;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
+using Thu_y.Modules.ReportModule.Model;
 using Thu_y.Utils.Infrastructure.Application.Models;
 
 namespace Thu_y.Modules.ReceiptModule.Endpoints
@@ -70,11 +71,11 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
                 }
             }).WithTags(ReceiptReportEndpoint.BasePath);
 
-            endpoints.MapPost(ReceiptReportEndpoint.DeleteReceiptReport, [Authorize(AuthenticationSchemes = "Bearer")] async (string id, IReceiptReportService receiptReportService) =>
+            endpoints.MapPost(ReceiptReportEndpoint.DeleteReceiptReport, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, IReceiptReportService receiptReportService) =>
             {
                 try
                 {
-                    await receiptReportService.DeleteAsync(id);
+                    await receiptReportService.DeleteAsync(request.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)
