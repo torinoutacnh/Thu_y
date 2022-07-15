@@ -9,7 +9,6 @@ namespace Thu_y.Modules.UserModule.Core
     {
         public string? Token { get; set; }
         public DateTimeOffset Expires { get; set; }
-        public string? ReplacedByToken { get; set; }
         public bool IsExpired => SystemHelper.SystemTimeNow >= Expires;
         public bool IsActive => !IsExpired;
     }

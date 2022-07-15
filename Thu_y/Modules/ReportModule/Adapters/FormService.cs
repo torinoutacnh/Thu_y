@@ -13,6 +13,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
         private readonly IFormAttributeRepository _formAttributeRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReportTicketValueRepository _reportTicketValueRepository;
 
         public FormService(IServiceProvider serviceProvider)
         {
@@ -20,8 +21,9 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _formAttributeRepository = serviceProvider.GetRequiredService<IFormAttributeRepository>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            _reportTicketValueRepository = serviceProvider.GetRequiredService<IReportTicketValueRepository>();
         }
-        
+
         public bool CreateForm(FormModel model)
         {
             var old = _formRepository.Get(x=>x.FormCode.ToLower().Equals(model.FormCode.ToLower())
@@ -72,6 +74,14 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _formRepository.Delete(oldForm,true);
             _unitOfWork.SaveChange();
             return true;
+        }
+
+        public ICollection<string> RecommentAttribute(string attributeName)
+        {
+            return _reportTicketValueRepository.Get(_ => _.AttributeName == attributeName && _.Value != null)
+                                               .Select(x => x.Value)
+                                               .Distinct()
+                                               .ToList();
         }
     }
 }

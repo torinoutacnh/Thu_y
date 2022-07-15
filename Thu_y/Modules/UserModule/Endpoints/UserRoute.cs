@@ -4,6 +4,7 @@ using Thu_y.Utils.Infrastructure.Application.Models;
 using Microsoft.AspNetCore.Authorization;
 using Thu_y.Modules.ReportModule.Model;
 using AutoMapper;
+using Thu_y.Infrastructure.Utils.Exceptions;
 
 namespace Thu_y.Modules.UserModule.Endpoints
 {
@@ -91,7 +92,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
                     return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Not found User"));
 
-                var user = userService.GetByAccount(request.UserName);
+                var user = userService.GetUserByAccount(request.UserName);
                 if (user == null)
                     return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Not found User"));
 
@@ -102,7 +103,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 return Results.Ok(new ResponseModel<ResponseLoginModel>(data: response));
             }).WithTags(UserEndpoint.BasePath);
 
-            endpoints.MapGet(UserEndpoint.GetUser, [Authorize(AuthenticationSchemes = "Bearer")] async (int pageIndex, int pageNumber,IUserService userService, IMapper mapper) =>
+            endpoints.MapGet(UserEndpoint.GetUser, [Authorize(AuthenticationSchemes = "Bearer")]  (int pageIndex, int pageNumber,IUserService userService, IMapper mapper) =>
             {
                 try
                 {
@@ -110,6 +111,25 @@ namespace Thu_y.Modules.UserModule.Endpoints
                     if (listUser == null) throw new Exception("NoT found form!") { HResult = 400 };
 
                     return Results.Ok(value: new ResponseModel<ICollection<UserGetListModel>>(mapper.Map<ICollection<UserGetListModel>>(listUser)));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                }
+            }).WithTags(UserEndpoint.BasePath);
+
+            endpoints.MapGet(UserEndpoint.GetUserById, [Authorize(AuthenticationSchemes = "Bearer")]  (string id, IUserService userService) =>
+            {
+                try
+                {
+                    var user = userService.GetUserById(id);
+                    if (user == null) throw new AppException($"Not found user with id {id}!");
+
+                    return Results.Ok(value: new ResponseModel<UserGetListModel>(data: user));
                 }
                 catch (Exception ex)
                 {

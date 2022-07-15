@@ -12,6 +12,7 @@ namespace Thu_y.Db.DbContext
         // User
         public DbSet<UserEntity> User { get; set; }
         public DbSet<UserScheduleEntity> UserSchedule { get; set; }
+        //public DbSet<RefreshToken> RefreshToken { get; set; }
 
         // Abattoir
         public DbSet<AbattoirEntity> Abattoir { get; set; }

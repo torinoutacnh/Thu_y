@@ -71,11 +71,11 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(ListAnimalEndpoint.BasePath);
 
-            endpoints.MapPost(ListAnimalEndpoint.DeleteLsAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, ISealTabService sealTabService) =>
+            endpoints.MapPost(ListAnimalEndpoint.DeleteLsAnimal, [Authorize(AuthenticationSchemes = "Bearer")] async (DeleteModel request, IListAnimalService listAnimalService) =>
             {
                 try
                 {
-                    await sealTabService.DeleteAsync(request.Id);
+                    await listAnimalService.DeleteAsync(request.Id);
                     return Results.Ok(value: new ResponseModel<string>(data: "Success"));
                 }
                 catch (Exception ex)

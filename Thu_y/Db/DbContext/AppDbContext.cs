@@ -7,6 +7,14 @@ namespace Thu_y.Db.DbContext
 {
     public sealed partial class AppDbContext : BaseContext
     {
+        public static readonly ILoggerFactory LoggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(
+            builder =>
+            {
+                builder
+                    .AddFilter((category, level) =>
+                        category == DbLoggerCategory.Database.Command.Name && level == LogLevel.Information)
+                    .AddConsole();
+            });
         public readonly int CommandTimeoutInSecond = 20 * 60;
 
         public AppDbContext()
@@ -27,8 +35,9 @@ namespace Thu_y.Db.DbContext
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.Development.json")
                     .Build();
-
+                //var connectionString = SystemHelper.AppDb;
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
+
 
                 optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction =>
                 {
@@ -37,6 +46,7 @@ namespace Thu_y.Db.DbContext
 
                     sqlServerOptionsAction.MigrationsHistoryTable("Migration");
                 });
+                optionsBuilder.UseLoggerFactory(LoggerFactory);
             }
         }
 

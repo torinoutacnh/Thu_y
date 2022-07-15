@@ -50,7 +50,7 @@ builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper
 builder.Services.AddJwtSetting(builder.Configuration.GetSection("JwtSetting").Get<JWTSettingModel>());
 
 var connectionstring = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<IDbContext, AppDbContext>(/*option => option.UseSqlServer(connectionstring)*/);
+builder.Services.AddDbContext<IDbContext, AppDbContext>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -73,23 +73,6 @@ builder.Services.Configure<RouteOptions>(options =>
 });
 builder.Services.AddAuth();
 builder.Services.AddControllers();
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(name: "LongPolicy",
-//                      policy =>
-//                      {
-//                          policy.WithOrigins("https://apithuy72.amazingtech.vn",
-//                                              "https://amazingtech.vn",
-//                                              "https://localhost:3000",
-//                                              "http://localhost:3000")
-//                            .AllowAnyMethod()
-//                            .AllowAnyHeader()
-//                            .SetIsOriginAllowed(hostname => true)
-//                            .SetIsOriginAllowedToAllowWildcardSubdomains();
-//                      });
-
-
-//});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("LongCors", builder => builder
@@ -100,7 +83,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.RegisterModules();
-//builder.Services.AutoRegisterDependencies();
 
 var app = builder.Build();
 
@@ -129,5 +111,6 @@ app.UseEndpoints(endpoint =>
 {
     endpoint.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 });
+
 
 app.Run();

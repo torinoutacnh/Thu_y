@@ -17,6 +17,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
         public const string UpdateForm = BasePath + "/update-form";
         public const string DeleteForm = BasePath + "/delete-form";
         public const string GetTemplate = BasePath + "/template";
+        public const string RecommentAttribute = BasePath + "/recomment-attribute";
 
     }
     public static class FormRoute
@@ -106,6 +107,24 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     if (form == null) throw new Exception("NoT found form!") { HResult = 400 };
 
                     return Results.Ok(value: new ResponseModel<ICollection<FormTemplateModel>>(mapper.Map<ICollection<FormTemplateModel>>(form)));
+                }
+                catch (Exception ex)
+                {
+                    if (ex.HResult >= 400 && ex.HResult < 500)
+                    {
+                        return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: ex.HResult);
+                    }
+                    return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
+                }
+            }).WithTags(FormEndpoint.BasePath);
+
+            endpoints.MapGet(FormEndpoint.RecommentAttribute, [Authorize(AuthenticationSchemes = "Bearer")] (string attributeName, IFormService formService) =>
+            {
+                try
+                {
+                    var values = formService.RecommentAttribute(attributeName);
+
+                    return Results.Ok(value: new ResponseModel<ICollection<string>>(data: values));
                 }
                 catch (Exception ex)
                 {

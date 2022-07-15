@@ -20,6 +20,9 @@ namespace Thu_y.Modules.UserModule
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+
             return services;
         }
     }

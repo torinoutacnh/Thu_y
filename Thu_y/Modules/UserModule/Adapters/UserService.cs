@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Thu_y.Infrastructure.Utils.Constant;
 using System.Security.Cryptography;
 using Thu_y.Utils.Infrastructure.Application;
+using Thu_y.Infrastructure.Utils.Exceptions;
 
 namespace Thu_y.Modules.UserModule.Adapters
 {
@@ -35,6 +36,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             var token = CreateJWTToken(account);
             var refreshToken = GenerateRefreshToken();
             account.RefreshTokens.Add(refreshToken);
+            _unitOfWork.SaveChange();
 
             // xóa mấy refreshtoken củ đi
             RemoveOldRefreshTokens(account);
@@ -86,8 +88,8 @@ namespace Thu_y.Modules.UserModule.Adapters
         #region Delete User
         public bool DeleteUser(string id)
         {
-            var user = _userRepository.Get(x => x.Id.Equals(id)).FirstOrDefault();
-            if (user == null) throw new Exception("No user found!") { HResult = 400 };
+            var user = _userRepository.GetSingle(x => x.Id == id);
+            if (user == null) throw new AppException("No user found!");
 
             _userRepository.Delete(user);
             _unitOfWork.SaveChange();
@@ -96,12 +98,21 @@ namespace Thu_y.Modules.UserModule.Adapters
         }
         #endregion Delete User
 
-        #region Get BY Account
-        public UserEntity GetByAccount(string username)
+        #region Get By Account
+        public UserEntity GetUserByAccount(string username)
         {
-            return _userRepository.Get(_ => _.Account == username && _.DateDeleted == null).FirstOrDefault();
+            return _userRepository.GetSingle(_ => _.Account == username && _.DateDeleted == null);
         }
-        #endregion Get BY Account
+        #endregion Get By Account
+
+        #region Get By Id
+        public UserGetListModel GetUserById(string id)
+        {
+
+            var user = _userRepository.GetSingle(_ => _.Id == id);
+            return _mapper.Map<UserGetListModel>(user);
+        }
+        #endregion Get By Id
 
         public List<UserEntity> GetAccount(int PageIndex, int PageNumber)
         {
@@ -133,7 +144,7 @@ namespace Thu_y.Modules.UserModule.Adapters
         #endregion Create Token
 
         #region GenerateRefreshToken
-        public static RefreshToken GenerateRefreshToken()
+        private static RefreshToken GenerateRefreshToken()
         {
             var randomByte = new byte[64];
             var rngCryptoServiceProvider = new RNGCryptoServiceProvider();

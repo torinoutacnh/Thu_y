@@ -13,6 +13,7 @@ namespace Thu_y.Modules.ReportModule
             endpoints.MapReportEndpoints();
             endpoints.MapSealConfigEndpoints();
             endpoints.MapSealTabEndpoints();
+            endpoints.MapListAnimalEndpoints();
             return endpoints;
         }
 
