@@ -50,7 +50,7 @@ builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper
 builder.Services.AddJwtSetting(builder.Configuration.GetSection("JwtSetting").Get<JWTSettingModel>());
 
 var connectionstring = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<IDbContext, AppDbContext>(option => option.UseSqlServer(connectionstring));
+builder.Services.AddDbContext<IDbContext, AppDbContext>(/*option => option.UseSqlServer(connectionstring)*/);
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
