@@ -11,5 +11,6 @@ namespace Thu_y.Modules.UserModule.Ports
         UserEntity GetByAccount(string username);
         List<UserEntity> GetAccount(int PageIndex, int PageNumber);
         string CreateJWTToken(UserEntity loggedUser);
+        ResponseLoginModel Authenticate(UserDtoModel model);
     }
 }

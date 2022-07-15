@@ -28,6 +28,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             _sealTabRepository = serviceProvider.GetRequiredService<ISealTabRepository>();
             _listAnimalRepository = serviceProvider.GetRequiredService<IListAnimalRepository>();
+            _animalRepository = serviceProvider.GetRequiredService<IAnimalRepository>();
         }
 
         #region Create ReportTicket

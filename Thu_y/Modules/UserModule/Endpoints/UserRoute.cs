@@ -97,16 +97,9 @@ namespace Thu_y.Modules.UserModule.Endpoints
 
                 if (user.Password != request.Password)
                     return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Wrong password"));
-                var token = userService.CreateJWTToken(user);
-                var data = new ResponseLoginModel
-                {
-                    UserId = user.Id,
-                    Name = user.Name,
-                    Account = user.Account,
-                    Role = user.Role,
-                    Token = token
-                };
-                return Results.Ok(new ResponseModel<ResponseLoginModel>(data: data));
+                var response = userService.Authenticate(request);
+                
+                return Results.Ok(new ResponseModel<ResponseLoginModel>(data: response));
             }).WithTags(UserEndpoint.BasePath);
 
             endpoints.MapGet(UserEndpoint.GetUser, [Authorize(AuthenticationSchemes = "Bearer")] async (int pageIndex, int pageNumber,IUserService userService, IMapper mapper) =>

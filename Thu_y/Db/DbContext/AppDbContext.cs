@@ -25,10 +25,10 @@ namespace Thu_y.Db.DbContext
             {
                 var configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile("appsettings.Development.json")
                     .Build();
 
-                var connectionString = SystemHelper.ConnectionString ?? configuration.GetConnectionString(SystemHelper.IsProduction());
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
 
                 optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction =>
                 {

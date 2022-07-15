@@ -15,5 +15,6 @@ namespace Thu_y.Modules.UserModule.Core
         public RoleType Role { get; set; }
 
         public virtual ICollection<UserScheduleEntity>? UserSchedules { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

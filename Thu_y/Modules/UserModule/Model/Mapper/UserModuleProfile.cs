@@ -14,6 +14,9 @@ namespace Thu_y.Modules.UserModule.Model.Mapper
             CreateMap<UserEntity, UserGetListModel>().ReverseMap();
             CreateMap<UserModel, UserEntity>()
                 .ForMember(x=>x.Id,opt=>opt.Ignore());
+
+            CreateMap<UserEntity, ResponseLoginModel>()
+                .ForMember(des=>des.UserId,opt => opt.MapFrom((src, des) => src.Id));
         }
     }
 }

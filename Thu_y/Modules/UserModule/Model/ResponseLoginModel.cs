@@ -9,5 +9,6 @@ namespace Thu_y.Modules.UserModule.Model
         public string Account { get; set; }
         public RoleType Role { get; set; }
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

@@ -1,9 +1,11 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Thu_y;
 using Thu_y.Db.DbContext;
 using Thu_y.Extensions;
 using Thu_y.Infrastructure.DbContext;
 using Thu_y.Infrastructure.UOF;
+using Thu_y.Middleware;
 using Thu_y.Modules.AbttoirModule.Model.Mapper;
 using Thu_y.Modules.ReceiptModule.Model.Mapper;
 using Thu_y.Modules.ReportModule.Model.Mapper;
@@ -17,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(o =>
 {
     o.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -46,7 +49,9 @@ builder.Services.AddSwaggerGen(o =>
 builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper").Get<SystemHelperModel>());
 builder.Services.AddJwtSetting(builder.Configuration.GetSection("JwtSetting").Get<JWTSettingModel>());
 
-builder.Services.AddDbContext<IDbContext, AppDbContext>();
+var connectionstring = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<IDbContext, AppDbContext>(option => option.UseSqlServer(connectionstring));
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddAutoMapper(cfg =>
@@ -67,6 +72,7 @@ builder.Services.Configure<RouteOptions>(options =>
     options.LowercaseQueryStrings = false;
 });
 builder.Services.AddAuth();
+builder.Services.AddControllers();
 //builder.Services.AddCors(options =>
 //{
 //    options.AddPolicy(name: "LongPolicy",
@@ -99,14 +105,17 @@ builder.Services.RegisterModules();
 var app = builder.Build();
 
 //// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+var swagger = builder.Configuration.GetValue("UseSwagger", false);
+if(swagger)
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.UseSwagger();
-app.UseSwaggerUI();
 app.UseSystemSetting();
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -114,7 +123,11 @@ app.UseCors("LongCors");
 app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapEndpoints();
+app.UseEndpoints(endpoint =>
+{
+    endpoint.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 app.Run();

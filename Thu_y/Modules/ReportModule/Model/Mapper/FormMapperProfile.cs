@@ -19,10 +19,15 @@ namespace Thu_y.Modules.ReportModule.Model.Mapper
 
             CreateMap<ReportModel, ReportTicketEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.DateCreated, opt => opt.Ignore())
                 .ForMember(x => x.Values, opt => opt.MapFrom(y => y.Values))
                 .ForMember(x => x.ListAnimals, opt => opt.MapFrom(y => y.ListAnimals))
-                .ForMember(x => x.SealTabs, opt => opt.MapFrom(y => y.SealTabs))
-                .ReverseMap();
+                .ForMember(x => x.SealTabs, opt => opt.MapFrom(y => y.SealTabs));
+
+            CreateMap<ReportTicketEntity, ReportModel>()
+                .ForMember(x => x.Values, opt => opt.MapFrom(y => y.Values))
+                .ForMember(x => x.ListAnimals, opt => opt.MapFrom(y => y.ListAnimals))
+                .ForMember(x => x.SealTabs, opt => opt.MapFrom(y => y.SealTabs));
 
             CreateMap<ReportValueModel, ReportTicketValueEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
