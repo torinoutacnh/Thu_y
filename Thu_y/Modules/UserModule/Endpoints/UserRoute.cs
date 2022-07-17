@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Thu_y.Modules.ReportModule.Model;
 using AutoMapper;
 using Thu_y.Infrastructure.Utils.Exceptions;
+using Microsoft.AspNetCore.Http;
 
 namespace Thu_y.Modules.UserModule.Endpoints
 {
@@ -20,7 +21,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
         public const string GetUser = BasePath + "/get-user";
     }
 
-    public static class UserRoute
+    public static class UserRoute 
     {
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder endpoints)
         {

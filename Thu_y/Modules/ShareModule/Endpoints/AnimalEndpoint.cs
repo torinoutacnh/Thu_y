@@ -24,7 +24,7 @@ namespace Thu_y.Modules.ShareModule.Endpoints
             {
                 try
                 {
-                    var animal = animalRepository.Get(x => x.Id== model.Id)
+                    var animal = animalRepository.Get(x => model.Id == null? true : x.Id== model.Id)
                     .Skip(model.PageNumber * model.PageSize)
                     .Take(model.PageSize);  
 

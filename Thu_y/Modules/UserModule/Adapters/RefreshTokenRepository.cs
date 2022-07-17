@@ -10,5 +10,17 @@ namespace Thu_y.Modules.UserModule.Adapters
         public RefreshTokenRepository(IDbContext dbContext) : base(dbContext)
         { 
         }
+        public void Delete(RefreshToken entity)
+        {
+            try
+            {
+                DbSet.Remove(entity);
+
+            }
+            catch (Exception)
+            {
+                DbContext.Entry(entity).Reload();
+            }
+        }
     }
 }

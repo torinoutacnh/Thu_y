@@ -12,6 +12,7 @@ using Thu_y.Infrastructure.Utils.Constant;
 using System.Security.Cryptography;
 using Thu_y.Utils.Infrastructure.Application;
 using Thu_y.Infrastructure.Utils.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Thu_y.Modules.UserModule.Adapters
 {
@@ -21,28 +22,31 @@ namespace Thu_y.Modules.UserModule.Adapters
         private readonly IUserScheduleRepository _userScheduleRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
+
         public UserService(IServiceProvider serviceProvider)
         {
             _userRepository = serviceProvider.GetRequiredService<IUserRepository>();
             _userScheduleRepository = serviceProvider.GetRequiredService<IUserScheduleRepository>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            _refreshTokenRepository = serviceProvider.GetRequiredService<IRefreshTokenRepository>();
         }
 
         #region Authenticate
         public ResponseLoginModel Authenticate(UserDtoModel model)
         {
-            var account = _userRepository.GetSingle(_=>_.Account == model.UserName);
+            var account = _userRepository.Get(_=>_.Account == model.UserName, false, _=>_.RefreshTokens).FirstOrDefault();
             var token = CreateJWTToken(account);
             var refreshToken = GenerateRefreshToken();
-            account.RefreshTokens.Add(refreshToken);
-            _unitOfWork.SaveChange();
+            refreshToken.UserId = account.Id;
+            _refreshTokenRepository.Add(refreshToken);
 
             // xóa mấy refreshtoken củ đi
             RemoveOldRefreshTokens(account);
             try
             {
-                _userRepository.Update(account);
+                _refreshTokenRepository.Add(refreshToken);
                 _unitOfWork.SaveChange();
             }
             catch (Exception e)
@@ -58,6 +62,36 @@ namespace Thu_y.Modules.UserModule.Adapters
             return response;
         }
         #endregion Authenticate
+
+        #region Refresh Token
+        public ResponseLoginModel RefreshToken(string token)
+        {
+            var (refreshToken, user) = GetRefreshToken(token);
+            var newRefreshToken = GenerateRefreshToken();
+
+            newRefreshToken.UserId = user.Id;
+            _refreshTokenRepository.Add(newRefreshToken);
+
+            // xóa mấy refreshtoken củ đi
+            RemoveOldRefreshTokens(user);
+            try
+            {
+                _refreshTokenRepository.Add(refreshToken);
+                _unitOfWork.SaveChange();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            var jwtToken = CreateJWTToken(user);
+            var response = _mapper.Map<ResponseLoginModel>(user);
+            response.RefreshToken = refreshToken.Token;
+            response.Token = jwtToken;
+
+            return response;
+        }
+        #endregion Refresh Token
 
         #region Create User
         public bool CreateUser(UserModel model)
@@ -158,17 +192,29 @@ namespace Thu_y.Modules.UserModule.Adapters
         }
         #endregion Generate Refresh Token
 
-        private static void RemoveOldRefreshTokens(UserEntity userEntity)
+        private void RemoveOldRefreshTokens(UserEntity userEntity)
         {
             foreach (var item in userEntity.RefreshTokens)
             {
                 if (!item.IsActive &&
                     item.DateCreated.AddDays(2) <= SystemHelper.SystemTimeNow)
                 {
-                    userEntity.RefreshTokens.Remove(item);
+                    //userEntity.RefreshTokens.Remove(item);
+                    _refreshTokenRepository.Delete(item);
                 }
             }
         }
 
+        private (RefreshToken, UserEntity) GetRefreshToken(string token)
+        {
+            var account = _userRepository.Get()
+                                         .Include(_=>_.RefreshTokens)
+                                         .Where(y => y.RefreshTokens.Any( t => t.Token == token))
+                                         .FirstOrDefault();
+            if (account == null) throw new AppException("Invalid token");
+            var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
+            if (!refreshToken.IsActive) throw new AppException("Invalid token");
+            return (refreshToken, account);
+        }
     }
 }

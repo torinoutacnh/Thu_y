@@ -13,6 +13,7 @@ using Thu_y.Modules.ShareModule.Model.Mapper;
 using Thu_y.Modules.UserModule.Model.Mapper;
 using Thu_y.Utils.Infrastructure.Application.Models;
 using Thu_y.Utils.Module;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -45,6 +46,7 @@ builder.Services.AddSwaggerGen(o =>
              new List<string>()
         }
     });
+    o.SwaggerDoc("v1",new OpenApiInfo { Title = "Thu_Y.API",Version = "v1"});
 });
 builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper").Get<SystemHelperModel>());
 builder.Services.AddJwtSetting(builder.Configuration.GetSection("JwtSetting").Get<JWTSettingModel>());
@@ -72,7 +74,9 @@ builder.Services.Configure<RouteOptions>(options =>
     options.LowercaseQueryStrings = false;
 });
 builder.Services.AddAuth();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddJsonOptions(x => x.JsonSerializerOptions.IgnoreNullValues = true);
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("LongCors", builder => builder
@@ -95,7 +99,11 @@ var swagger = builder.Configuration.GetValue("UseSwagger", false);
 if(swagger)
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.DefaultModelsExpandDepth(-1);
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Thu_Y.API v1");
+    });
 }
 
 app.UseSystemSetting();
@@ -110,7 +118,8 @@ app.MapEndpoints();
 app.UseEndpoints(endpoint =>
 {
     endpoint.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+    endpoint.MapControllers();
 });
-
+app.MapControllers();
 
 app.Run();

@@ -13,5 +13,6 @@ namespace Thu_y.Modules.UserModule.Ports
         string CreateJWTToken(UserEntity loggedUser);
         ResponseLoginModel Authenticate(UserDtoModel model);
         UserGetListModel GetUserById(string id);
+        ResponseLoginModel RefreshToken(string token);
     }
 }
