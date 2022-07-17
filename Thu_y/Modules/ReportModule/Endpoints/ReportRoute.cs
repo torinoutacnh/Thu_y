@@ -189,10 +189,10 @@ namespace Thu_y.Modules.ReportModule.Endpoints
             {
                 try
                 {
-                    var reports = reportRepository.Get(x => x.Id == reportId)
-                                                  .Include(y => y.Values)
-                                                  .Include(y => y.SealTabs)
-                                                  .Include(y => y.ListAnimals).FirstOrDefault();
+                    var reports = reportRepository.Get(x => x.Id == reportId);
+                                                  //.Include(y => y.Values)
+                                                  //.Include(y => y.SealTabs)
+                                                  //.Include(y => y.ListAnimals);.FirstOrDefault();
 
                     return Results.Ok(value: new ResponseModel<ReportModel>(mapper.Map<ReportModel>(reports)));
                 }

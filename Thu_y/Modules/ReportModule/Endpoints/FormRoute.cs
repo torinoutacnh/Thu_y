@@ -118,11 +118,11 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                 }
             }).WithTags(FormEndpoint.BasePath);
 
-            endpoints.MapGet(FormEndpoint.RecommentAttribute, [Authorize(AuthenticationSchemes = "Bearer")] (string attributeName, IFormService formService) =>
+            endpoints.MapGet(FormEndpoint.RecommentAttribute, [Authorize(AuthenticationSchemes = "Bearer")] (string attributeId, IFormService formService) =>
             {
                 try
                 {
-                    var values = formService.RecommentAttribute(attributeName);
+                    var values = formService.RecommentAttribute(attributeId);
 
                     return Results.Ok(value: new ResponseModel<ICollection<string>>(data: values));
                 }

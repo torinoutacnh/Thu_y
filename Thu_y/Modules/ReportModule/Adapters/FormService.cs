@@ -76,9 +76,9 @@ namespace Thu_y.Modules.ReportModule.Adapters
             return true;
         }
 
-        public ICollection<string> RecommentAttribute(string attributeName)
+        public ICollection<string> RecommentAttribute(string attributeId)
         {
-            return _reportTicketValueRepository.Get(_ => _.AttributeName == attributeName && _.Value != null)
+            return _reportTicketValueRepository.Get(_ => _.AttributeId == attributeId&& _.Value != null)
                                                .Select(x => x.Value)
                                                .Distinct()
                                                .ToList();

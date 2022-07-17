@@ -14,7 +14,7 @@ namespace Thu_y.Modules.ShareModule.Model
         public int PageSize { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Id { get; set; }
 
         public AnimalPagingModel(int pageNumber, int pageSize)
         {

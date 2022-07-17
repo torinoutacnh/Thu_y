@@ -29,7 +29,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
         {
             var report = _reportTicketRepository.GetSingle(_ => _.Id == model.ReportTicketId);
             if (report == null) throw new Exception("Not found report!") { HResult = 404 };
-            var ani = _animalRepository.GetSingle(_ => _.Name == model.AnimalName);
+            var ani = _animalRepository.GetSingle(_ => _.Id == model.AnimalId);
             if (ani == null) throw new Exception($"Not found '{model.AnimalName}' in list!") { HResult = 404 };
 
             var entity = _mapper.Map<ListAnimalEntity>(model);
