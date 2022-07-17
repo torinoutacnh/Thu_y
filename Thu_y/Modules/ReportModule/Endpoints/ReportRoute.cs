@@ -37,14 +37,14 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     var reports = new List<Core.ReportTicketEntity>();
                     if (string.IsNullOrEmpty(model.UserId))
                     {
-                        reports = reportRepository.Get(x => x.FormId == model.FormId, true, y => y.Values)
+                        reports = reportRepository.Get(x => x.FormId == model.FormId, false, y => y.Values)
                                                   .OrderByDescending(x => x.DateCreated)
                                                   .Skip(model.PageNumber * model.PageSize)
                                                   .Take(model.PageSize).ToList();
                         return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.Map<List<ReportModel>>(reports)));
 
                     }
-                    reports = reportRepository.Get(x => x.UserId == model.UserId && x.FormId == model.FormId, true, y => y.Values)
+                    reports = reportRepository.Get(x => x.UserId == model.UserId && x.FormId == model.FormId, false, y => y.Values)
                                               .OrderByDescending(x => x.DateCreated)
                                               .Skip(model.PageNumber * model.PageSize)
                                               .Take(model.PageSize).ToList();
@@ -189,10 +189,10 @@ namespace Thu_y.Modules.ReportModule.Endpoints
             {
                 try
                 {
-                    var reports = reportRepository.Get(x => x.Id == reportId);
-                                                  //.Include(y => y.Values)
-                                                  //.Include(y => y.SealTabs)
-                                                  //.Include(y => y.ListAnimals);.FirstOrDefault();
+                    var reports = reportRepository.Get(x => x.Id == reportId)
+                                                  .Include(y => y.Values)
+                                                  .Include(y => y.SealTabs)
+                                                  .Include(y => y.ListAnimals).FirstOrDefault();
 
                     return Results.Ok(value: new ResponseModel<ReportModel>(mapper.Map<ReportModel>(reports)));
                 }
