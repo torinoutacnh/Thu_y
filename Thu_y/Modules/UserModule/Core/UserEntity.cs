@@ -11,10 +11,12 @@ namespace Thu_y.Modules.UserModule.Core
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }
+        public bool IsVerify { get; set; }
+        public string? VerifyToken { get; set; }
         public SexType Sex { get; set; }
         public RoleType Role { get; set; }
 
         public virtual ICollection<UserScheduleEntity>? UserSchedules { get; set; }
-        public ICollection<RefreshToken> RefreshTokens { get; set; }
+        public  ICollection<RefreshToken>? RefreshTokens { get; set; }
     }
 }
