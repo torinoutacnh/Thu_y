@@ -5,6 +5,7 @@ using Thu_y.Utils.Infrastructure.Application;
 
 namespace Thu_y.Modules.UserModule.Core
 {
+    [Table("RefreshToken")]
     public class RefreshToken : Entity
     {
         [ForeignKey("UserId")]

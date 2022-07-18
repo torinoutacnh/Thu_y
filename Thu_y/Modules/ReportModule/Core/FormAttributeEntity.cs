@@ -4,6 +4,7 @@ using Thu_y.Infrastructure.Utils.Constant;
 
 namespace Thu_y.Modules.ReportModule.Core
 {
+    [Table("FormAttribute")]
     public class FormAttributeEntity : Entity
     {
         public string? Name { get; set; }

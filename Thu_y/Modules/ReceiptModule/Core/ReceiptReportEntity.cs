@@ -1,7 +1,9 @@
-﻿using Thu_y.Infrastructure.Model;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Thu_y.Infrastructure.Model;
 
 namespace Thu_y.Modules.ReceiptModule.Core
 {
+    [Table("ReceiptReport")]
     public class ReceiptReportEntity : Entity
     {
         public string? UserId { get; set; }

@@ -3,6 +3,7 @@ using Thu_y.Infrastructure.Model;
 
 namespace Thu_y.Modules.AbttoirModule.Core
 {
+    [Table("AbattoirDetail")]
     public class AbattoirDetailEntity : Entity
     {
         public int? Status { get; set; }

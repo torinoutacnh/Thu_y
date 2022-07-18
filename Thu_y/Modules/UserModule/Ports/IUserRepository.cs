@@ -7,5 +7,7 @@ namespace Thu_y.Modules.UserModule.Ports
     public interface IUserRepository : IRepository<UserEntity>
     {
         UserEntity GetSingle(Expression<Func<UserEntity, bool>> predicate);
+        UserEntity GetByVerifyToken(string token);
+        bool Edit(UserEntity entity);
     }
 }

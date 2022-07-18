@@ -24,21 +24,9 @@ namespace Thu_y.Modules.AbttoirModule.Endpoints
             {
                 try
                 {
-                    var receipts = abattoirRepository.Get(x =>
-                    model.Id == null ? true : x.Id == model.Id &&
-                    model.Name == null ? true : x.Name == model.Name &&
-                    model.Address == null ? true : x.Address == model.Address &&
-                    model.ManagerName == null ? true : x.ManagerName == model.ManagerName &&
-                    model.Email == null ? true : x.Email == model.Email &&
-                    model.Phone == null ? true : x.Phone == model.Phone)
+                    var receipts = abattoirRepository.Get(x => model.Id == null ? true : x.Id == model.Id)
                     .Skip(model.PageNumber * model.PageSize)
                     .Take(model.PageSize);
-
-                    //var receipts = abattoirRepository.Get(x =>
-                    //model.Phone == null? true : x.Phone == model.Phone && 
-                    //true)
-                    //.Skip(model.PageNumber * model.PageSize)
-                    //.Take(model.PageSize);
 
                     return Results.Ok(value: new ResponseModel<List<AbattoirModel>>(mapper.ProjectTo<AbattoirModel>(receipts).ToList()));
                 }

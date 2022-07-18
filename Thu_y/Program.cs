@@ -50,6 +50,7 @@ builder.Services.AddSwaggerGen(o =>
 });
 builder.Services.AddSystemSetting(builder.Configuration.GetSection("SystemHelper").Get<SystemHelperModel>());
 builder.Services.AddJwtSetting(builder.Configuration.GetSection("JwtSetting").Get<JWTSettingModel>());
+builder.Services.AddMailSetting(builder.Configuration.GetSection("MailSetting").Get<MailSettingModel>());
 
 var connectionstring = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<IDbContext, AppDbContext>();
@@ -76,7 +77,6 @@ builder.Services.Configure<RouteOptions>(options =>
 builder.Services.AddAuth();
 builder.Services.AddControllers()
                 .AddJsonOptions(x => x.JsonSerializerOptions.IgnoreNullValues = true);
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("LongCors", builder => builder
@@ -118,8 +118,6 @@ app.MapEndpoints();
 app.UseEndpoints(endpoint =>
 {
     endpoint.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
-    endpoint.MapControllers();
 });
-app.MapControllers();
 
 app.Run();

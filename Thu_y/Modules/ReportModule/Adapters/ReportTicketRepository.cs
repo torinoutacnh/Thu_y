@@ -34,6 +34,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
 	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId )
 															and rp.FormId = 'c81c3aad-b1f1-41de-80c7-ee1f724b6a1d'
+                                                            and rp.[DateDeleted] is null
                                                         ) t
                                                         PIVOT(
                                                         	max([value])
@@ -78,6 +79,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
 	                                                        select rp.[Name] as ReportName, rv.AttributeName, cast(rv.[Value] as decimal(12,2)) as [value] 
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
 	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId)
+                                                            and rp.[DateDeleted] is null
                                                         ) t
                                                         PIVOT(
                                                         	sum([value])
@@ -126,6 +128,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
 																				  where convert(varchar(10),DateCreated,110)>= convert(varchar(10),@fromDay,110)
 																				  and convert(varchar(10),DateCreated,110)<= convert(varchar(10),@toDay,110))
 															and rp.FormId = '4e64e271-38f9-4f87-9c7a-c03df9fa67fb'
+                                                            and rp.[DateDeleted] is null
                                                         ) t
                                                         PIVOT(
                                                         	max([value])
@@ -173,6 +176,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId
 	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId)
                                                             and rp.FormId = '4e64e271-38f9-4f87-9c7a-c03df9fa67fb'
+                                                            and rp.[DateDeleted] is null
                                                         ) t
                                                         PIVOT(
                                                         	max([value])

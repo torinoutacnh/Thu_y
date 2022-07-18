@@ -49,6 +49,11 @@ namespace Thu_y.Infrastructure.Utils.Constant
 
     public enum SealType
     {
+    }
 
+    public enum MailType
+    {
+        Verify,
+        ResetPassword
     }
 }

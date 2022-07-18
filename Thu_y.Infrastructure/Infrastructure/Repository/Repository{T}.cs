@@ -1,5 +1,7 @@
-﻿using Invedia.Data.Dapper.SqlGenerator;
+﻿using Dapper;
+using Invedia.Data.Dapper.SqlGenerator;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Linq.Expressions;
 using Thu_y.Infrastructure.DbContext;
 using Thu_y.Utils.Infrastructure.Application;
@@ -190,6 +192,31 @@ namespace Thu_y.Infrastructure.Repository
         {
             
             return Get(predicate, isIncludeDeleted, includeProperties).FirstOrDefault();
+        }
+
+        public bool Insert(T entity)
+        {
+            var dateTimeNow = SystemHelper.SystemTimeNow;
+            entity.DateCreated= dateTimeNow;
+            entity.DateUpdated = dateTimeNow;
+
+            var sqlQuery = SqlGenerator.GetInsert(entity);
+            IDbConnection con = null;
+            try
+            {
+                con = new Microsoft.Data.SqlClient.SqlConnection(ConnectionString);
+                con.Open();
+                var result = con.Execute(sqlQuery.GetSql(), sqlQuery.Param);
+                return result != 0;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                if (con != null && con.State != ConnectionState.Closed) con.Close();
+            }
         }
     }
 }

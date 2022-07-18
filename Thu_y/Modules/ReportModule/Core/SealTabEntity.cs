@@ -3,6 +3,7 @@ using Thu_y.Infrastructure.Model;
 
 namespace Thu_y.Modules.ReportModule.Core
 {
+    [Table("SealTab")]
     public class SealTabEntity : Entity
     {
         public SealTabEntity()

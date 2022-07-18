@@ -23,4 +23,23 @@ namespace Thu_y.Utils.Infrastructure.Application.Models
         public int Expires { get; set; }
         public int RefreshExpires { get; set; }
     }
+
+    public class MailSettingModel
+    {
+        public static MailSettingModel Instance { get; set; }
+        public static IConfiguration Configs { get; set; }
+        public SmtpSetting Smtp { get; set; }
+        public string FromAddress { get; set; }
+        public string FromDisplayName { get; set; }
+    }
+
+    public class SmtpSetting
+    {
+        public string Host { get; set; }
+        public int Port { get; set; }
+        public bool EnableSsl { get; set; }
+        public bool UsingCredential { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
 }

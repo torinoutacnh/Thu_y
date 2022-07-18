@@ -3,6 +3,7 @@ using Thu_y.Infrastructure.Model;
 using Thu_y.Infrastructure.Utils.Constant;
 namespace Thu_y.Modules.ReportModule.Core
 {
+    [Table("ListAnimal")]
     public class ListAnimalEntity : Entity
     {
         public string? AnimalName { get; set; }

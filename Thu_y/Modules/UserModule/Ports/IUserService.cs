@@ -14,5 +14,11 @@ namespace Thu_y.Modules.UserModule.Ports
         ResponseLoginModel Authenticate(UserDtoModel model);
         UserGetListModel GetUserById(string id);
         ResponseLoginModel RefreshToken(string token);
+        void Register(RegisterModel model);
+        void VerifyEmail(VerifyEmailRequestModel model);
+        void ForgotPassword(ForgotPasswordRequestModel model);
+        void ResetPassword(ResetPasswordRequest model);
+        void ReSendEmail(ResendEmailModel model);
+        void ValidateResetToken(ValidateResetTokenRequest model);
     }
 }

@@ -22,6 +22,7 @@ namespace Thu_y.Modules.UserModule
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

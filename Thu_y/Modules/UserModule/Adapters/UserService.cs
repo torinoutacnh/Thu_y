@@ -23,6 +23,7 @@ namespace Thu_y.Modules.UserModule.Adapters
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly IEmailService _emailService;
 
         public UserService(IServiceProvider serviceProvider)
         {
@@ -31,12 +32,17 @@ namespace Thu_y.Modules.UserModule.Adapters
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             _refreshTokenRepository = serviceProvider.GetRequiredService<IRefreshTokenRepository>();
+            _emailService = serviceProvider.GetRequiredService<IEmailService>();
         }
 
         #region Authenticate
         public ResponseLoginModel Authenticate(UserDtoModel model)
         {
-            var account = _userRepository.Get(_=>_.Account == model.UserName, false, _=>_.RefreshTokens).FirstOrDefault();
+            var account = _userRepository.Get(_ => _.Account == model.UserName, false, _ => _.RefreshTokens).FirstOrDefault();
+            if (account == null) throw new AppException("Invalid Account");
+            if (!account.IsVerifed || account.Password != model.Password) throw new AppException("Invalid Password");
+
+
             var token = CreateJWTToken(account);
             var refreshToken = GenerateRefreshToken();
             refreshToken.UserId = account.Id;
@@ -76,7 +82,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             RemoveOldRefreshTokens(user);
             try
             {
-                _refreshTokenRepository.Add(refreshToken);
+                _refreshTokenRepository.Add(newRefreshToken);
                 _unitOfWork.SaveChange();
             }
             catch (Exception e)
@@ -86,12 +92,137 @@ namespace Thu_y.Modules.UserModule.Adapters
             }
             var jwtToken = CreateJWTToken(user);
             var response = _mapper.Map<ResponseLoginModel>(user);
-            response.RefreshToken = refreshToken.Token;
+            response.RefreshToken = newRefreshToken.Token;
             response.Token = jwtToken;
 
             return response;
         }
         #endregion Refresh Token
+
+        #region Register
+        public void Register(RegisterModel model)
+        {
+            if (GetUserByAccount(model.Account) != null)
+            {
+                // already registered
+                throw new AppException($"Account '{model.Account}' is already registered");
+            }
+            
+            var account = _mapper.Map<UserEntity>(model);
+            account.VerificationToken = RandomTokenString();
+            _userRepository.Insert(account);
+
+            var mailRequest = new SendMailModel
+            {
+                Account = account.Account,
+                Email = account.Email,
+                Token = account.VerificationToken,
+                Type = MailType.Verify
+            };
+            _emailService.SendMail(mailRequest);
+        }
+        #endregion Register
+
+        #region Verify Registe Email
+        public void VerifyEmail(VerifyEmailRequestModel model)
+        {
+            var account = _userRepository.GetByVerifyToken(model.Token);
+
+            if (account == null) throw new AppException("Verification failed");
+
+            account.Verified = SystemHelper.SystemTimeNow;
+            account.VerificationToken = null;
+            _userRepository.Edit(account);
+
+        }
+        #endregion Verify Registe Email
+
+        #region Forgot Password
+        public void ForgotPassword(ForgotPasswordRequestModel model)
+        {
+            var account = GetUserByAccount(model.Account);
+
+            if (account == null) throw new KeyNotFoundException($"User '{model.Account}' not found");
+
+            // create reset token that expires after 1 day
+            account.ResetToken = RandomTokenString();
+            account.ResetTokenExpires = SystemHelper.SystemTimeNow.AddDays(1);
+            //update accountEntity
+            _userRepository.Edit(account);
+
+            var mailRequest = new SendMailModel
+            {
+                Account = account.Account,
+                Email = account.Email,
+                Token = account.ResetToken,
+                Type = MailType.ResetPassword
+            };
+            _emailService.SendMail(mailRequest);
+        }
+        #endregion Forgot Password
+
+        #region Reset Password
+
+        #endregion Reset Password
+        public void ResetPassword(ResetPasswordRequest model)
+        {
+            var account = GetUserByAccount(model.Account);
+
+            if (account == null) throw new AppException("Invalid token");
+            if (!string.IsNullOrWhiteSpace(account.ResetToken))
+            {
+                if (account.ResetToken != model.Token || account.ResetTokenExpires < SystemHelper.SystemTimeNow) //reset password
+                {
+                    throw new AppException("Invalid token");
+                }
+            }
+            else if (account.Password != model.Token) //change password
+            {
+                throw new AppException("Invalid token");
+            }
+
+            // update password and remove reset token
+            account.Password = model.Password;
+            account.PasswordReset = SystemHelper.SystemTimeNow;
+            account.ResetToken = null;
+            account.ResetTokenExpires = null;
+
+            if(!_userRepository.Edit(account)) throw new AppException("Sysmtem error!");
+        }
+
+        #region ReSend Email
+        public void ReSendEmail(ResendEmailModel model)
+        {
+            var account = GetUserByAccount(model.Account);
+            if (account == null) throw new KeyNotFoundException($"User '{model.Account}' not found");
+            if (account.VerificationToken == null) throw new KeyNotFoundException($"Email is confirmed");
+
+            account.VerificationToken = RandomTokenString();
+            _userRepository.Edit(account);
+
+            var mailRequest = new SendMailModel
+            {
+                Account = account.Account,
+                Email = account.Email,
+                Token = account.VerificationToken,
+                Type = MailType.Verify
+            };
+            _emailService.SendMail(mailRequest);
+
+        }
+        #endregion ReSend Email
+
+        #region Validate-reset-token
+        public void ValidateResetToken(ValidateResetTokenRequest model)
+        {
+            var account = _userRepository.GetSingle(x =>
+                x.ResetToken == model.Token &&
+                x.ResetTokenExpires > SystemHelper.SystemTimeNow &&
+                x.Account == model.Account);
+
+            if (account == null) throw new AppException("Invalid token");
+        }
+        #endregion Validate-reset-token
 
         #region Create User
         public bool CreateUser(UserModel model)
@@ -215,6 +346,15 @@ namespace Thu_y.Modules.UserModule.Adapters
             var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
             if (!refreshToken.IsActive) throw new AppException("Invalid token");
             return (refreshToken, account);
+        }
+
+        private static string RandomTokenString()
+        {
+            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var randomBytes = new byte[40];
+            rngCryptoServiceProvider.GetBytes(randomBytes);
+            // convert random bytes to hex string
+            return BitConverter.ToString(randomBytes).Replace("-", "");
         }
     }
 }

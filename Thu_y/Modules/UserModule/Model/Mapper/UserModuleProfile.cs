@@ -17,6 +17,7 @@ namespace Thu_y.Modules.UserModule.Model.Mapper
 
             CreateMap<UserEntity, ResponseLoginModel>()
                 .ForMember(des=>des.UserId,opt => opt.MapFrom((src, des) => src.Id));
+            CreateMap<RegisterModel, UserEntity>();
         }
     }
 }

@@ -4,6 +4,7 @@ using Thu_y.Infrastructure.Utils.Constant;
 
 namespace Thu_y.Modules.ShareModule.Core
 {
+    [Table("Animal")]
     public class AnimalEntity : Entity
     {
         public string? Name { get; set; }

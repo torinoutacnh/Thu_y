@@ -25,5 +25,12 @@ namespace Thu_y
 
             return app;
         }
+
+        public static IServiceCollection AddMailSetting(this IServiceCollection services, MailSettingModel mailSetting)
+        {
+            MailSettingModel.Instance = mailSetting ?? new MailSettingModel();
+
+            return services;
+        }
     }
 }

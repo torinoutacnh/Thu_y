@@ -3,6 +3,7 @@ using Thu_y.Infrastructure.Model;
 
 namespace Thu_y.Modules.ReportModule.Core
 {
+    [Table("ReportTicketValue")]
     public class ReportTicketValueEntity : Entity
     {
         public string? Value { get; set; }

@@ -37,6 +37,7 @@ namespace Thu_y.Modules.ReportModule.Endpoints
                     var reports = new List<Core.ReportTicketEntity>();
                     if (string.IsNullOrEmpty(model.UserId))
                     {
+   
                         reports = reportRepository.Get(x => x.FormId == model.FormId, false, y => y.Values)
                                                   .OrderByDescending(x => x.DateCreated)
                                                   .Skip(model.PageNumber * model.PageSize)
