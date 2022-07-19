@@ -218,5 +218,10 @@ namespace Thu_y.Infrastructure.Repository
                 if (con != null && con.State != ConnectionState.Closed) con.Close();
             }
         }
+
+        public T GetByKey(object key)
+        {
+            return DbSet.Find(key);
+        }
     }
 }

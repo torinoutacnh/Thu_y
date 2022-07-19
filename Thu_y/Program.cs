@@ -114,6 +114,7 @@ app.UseHttpLogging();
 app.UseAuthorization();
 app.UseAuthentication();
 app.UseMiddleware<ErrorHandlerMiddleware>();
+app.UseMiddleware<JwtMiddleware>();
 app.MapEndpoints();
 app.UseEndpoints(endpoint =>
 {

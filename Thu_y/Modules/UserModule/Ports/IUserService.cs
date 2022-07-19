@@ -1,4 +1,5 @@
-﻿using Thu_y.Modules.UserModule.Core;
+﻿using Thu_y.Infrastructure.Utils.Constant;
+using Thu_y.Modules.UserModule.Core;
 using Thu_y.Modules.UserModule.Model;
 
 namespace Thu_y.Modules.UserModule.Ports
@@ -20,5 +21,6 @@ namespace Thu_y.Modules.UserModule.Ports
         void ResetPassword(ResetPasswordRequest model);
         void ReSendEmail(ResendEmailModel model);
         void ValidateResetToken(ValidateResetTokenRequest model);
+        void ChangePassword(ChangePasswordRequest model, RoleType loggInRole);
     }
 }

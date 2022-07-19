@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Thu_y.Modules.UserModule.Model;
 using Thu_y.Modules.UserModule.Ports;
@@ -7,7 +8,7 @@ namespace Thu_y.Controllers
 {
     [ApiController]
     [Route("accounts")]
-    public class AuthenticateController : ControllerBase
+    public class AuthenticateController : BaseController
     {
         private readonly IUserService _userService;
 
@@ -70,6 +71,14 @@ namespace Thu_y.Controllers
         {
             _userService.ForgotPassword(model);
             return Ok(new { message = "Please check your email for password reset instructions" });
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("change-password")]
+        public IActionResult ChangePassword(ChangePasswordRequest model)
+        {
+            _userService.ChangePassword(model, UserEntity.Role);
+            return Ok(new { message = "Password change successful, you can now login" });
         }
 
         [HttpPost("reset-password")]

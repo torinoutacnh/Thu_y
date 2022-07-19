@@ -176,10 +176,10 @@ namespace Thu_y.Modules.UserModule.Adapters
                     throw new AppException("Invalid token");
                 }
             }
-            else if (account.Password != model.Token) //change password
-            {
-                throw new AppException("Invalid token");
-            }
+            //else if (account.Password != model.Token) //change password
+            //{
+            //    throw new AppException("Invalid token");
+            //}
 
             // update password and remove reset token
             account.Password = model.Password;
@@ -189,6 +189,25 @@ namespace Thu_y.Modules.UserModule.Adapters
 
             if(!_userRepository.Edit(account)) throw new AppException("Sysmtem error!");
         }
+
+        #region Change Password
+        public void ChangePassword(ChangePasswordRequest model, RoleType loggInRole)
+        {
+            var account = GetUserByAccount(model.Account);
+            if (account == null) throw new KeyNotFoundException("User not found!");
+
+            if(loggInRole != RoleType.Manager) // nếu là Manaer thì cho update luôn
+            {
+                if (account.Password != model.OldPassword) 
+                {
+                    throw new AppException("Invalid token");
+                }
+            }
+
+            account.Password = model.Password;
+            if (!_userRepository.Edit(account)) throw new AppException("Sysmtem error!");
+        }
+        #endregion Change Password
 
         #region ReSend Email
         public void ReSendEmail(ResendEmailModel model)
@@ -296,7 +315,8 @@ namespace Thu_y.Modules.UserModule.Adapters
                     new Claim("account", loggedUser.Account),
                     new Claim(ClaimTypes.Name, loggedUser.Name),
                     new Claim(ClaimTypes.Email, loggedUser.Email),
-                    new Claim(ClaimTypes.Role, loggedUser.Role.ToString())
+                    new Claim(ClaimTypes.Role, loggedUser.Role.ToString()),
+                    new Claim(ClaimTypes.Sid, loggedUser.Id)
                 }),
                 IssuedAt = DateTime.Now,
                 Expires = DateTime.Now.AddHours(1),
