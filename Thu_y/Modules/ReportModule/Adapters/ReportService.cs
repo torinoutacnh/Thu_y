@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
 using Thu_y.Infrastructure.UOF;
 using Thu_y.Infrastructure.Utils.Constant;
 using Thu_y.Modules.ReportModule.Core;
@@ -43,7 +45,8 @@ namespace Thu_y.Modules.ReportModule.Adapters
                     CreateQuarantineReport(model);
                     break;
                 default:
-                    throw new Exception($"Not found formId") { HResult = 404 };
+                    CreateDefaultReport(model);
+                    break;
             }
             return Task.CompletedTask;
         }
@@ -114,6 +117,44 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _reportTicketRepository.Add(entity);
             _unitOfWork.SaveChange();
         }
+
+        private void CreateDefaultReport(ReportModel model)
+        {
+            var entity = _mapper.Map<ReportTicketEntity>(model);
+            if (entity.Values != null)
+            {
+                foreach (var value in entity.Values)
+                {
+                    value.ReportId = entity.Id;
+                }
+            }
+
+            if (entity.ListAnimals != null)
+            {
+                foreach (var animal in entity.ListAnimals)
+                {
+                    var lsAnimal = _animalRepository.Get();
+                    var unitPrice = lsAnimal.Where(_ => _.Name == animal.AnimalName).Select(x => x.Pricing).FirstOrDefault();
+
+                    if (unitPrice == null)
+                        throw new Exception($"Not found {animal.AnimalName} in animal categories") { HResult = 404 };
+
+                    animal.TotalPrice = animal.Amount * unitPrice;
+                    animal.ReportTicketId = entity.Id;
+                }
+            }
+
+            if (entity.SealTabs != null)
+            {
+                foreach (var seal in entity.SealTabs)
+                {
+                    seal.ReportTicketId = entity.Id;
+                    entity.TotalPrice += 1; // chạy hết vong thì được tổng số seal
+                }
+            }
+            _reportTicketRepository.Add(entity);
+            _unitOfWork.SaveChange();
+        }
         #endregion Create ReportTicket
 
         #region Update Report
@@ -139,5 +180,20 @@ namespace Thu_y.Modules.ReportModule.Adapters
             return Task.CompletedTask;
         }
         #endregion Delete Report
+
+        public ExcelPackage ExportExcel(string userId)
+        {
+            var data = _reportTicketRepository.GetListQuarantineReport(userId);
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            var excel = new ExcelPackage();
+
+            var WookSheet = excel.Workbook.Worksheets.Add("Report");
+            WookSheet.Cells[2,1].LoadFromCollection(data, true, TableStyles.Dark9);
+            var modelTable = WookSheet.Cells[$"A1:E{data.Count + 1}"];
+            WookSheet.Cells["A1:E" + (data.Count + 1)].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            WookSheet.Cells.AutoFitColumns();
+
+            return excel;
+        }
     }
 }

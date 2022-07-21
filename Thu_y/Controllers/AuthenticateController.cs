@@ -94,5 +94,6 @@ namespace Thu_y.Controllers
             _userService.ReSendEmail(model);
             return Ok(new { message = "Resend Email successful" });
         }
+
     }
 }

@@ -10,6 +10,7 @@ namespace Thu_y.Modules.ReportModule.Core
         public string? AttributeName { get; set; }
         public string? AttributeDataType { get; set; }
         public string? AttributeControlType { get; set; }
+        public string? AttributeCode { get; set; }
         public string? FormNumber { get; set; }
         public string? FormName { get; set; }
         public string? FormCode { get; set; }

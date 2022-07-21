@@ -9,5 +9,7 @@ namespace Thu_y.Modules.ReportModule.Model
         public DataTypes DataType { get; set; }
         public ControlTypes ControlType { get; set; }
         public int SortNo { get; set; }
+        public string AttributeCode { get; set; }
+        public string Value { get; set; }
     }
 }

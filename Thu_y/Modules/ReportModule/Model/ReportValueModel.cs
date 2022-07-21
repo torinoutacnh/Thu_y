@@ -15,6 +15,7 @@ namespace Thu_y.Modules.ReportModule.Model
 
         //[Required]
         public string AttributeName { get; set; }
+        public string AttributeCode { get; set; }
         public string FormName { get; set; }
         public int Sort { get; set; }    }
 }

@@ -83,5 +83,26 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                .Distinct()
                                                .ToList();
         }
+
+        public FormModel GetSingleForm(string code, string refReportId)
+        {
+            code = code.ToLower();
+            var entity = _formRepository.GetSingle(_ => _.FormCode == code || _.Id == code, false, _ => _.FormAttributes);
+            var form = _mapper.Map<FormModel>(entity);
+            if (string.IsNullOrEmpty(refReportId)) return form;
+
+            var reportvalue = _reportTicketValueRepository.Get(_ => _.ReportId == refReportId)
+                                                          .Select(x => new { x.Value, x.AttributeCode });
+            foreach (var value in reportvalue)
+            {
+                foreach (var item in form.Attributes)
+                {
+                    if (item.AttributeCode == value.AttributeCode)
+                        item.Value = value.Value;
+                }
+            }
+
+            return form;
+        }
     }
 }

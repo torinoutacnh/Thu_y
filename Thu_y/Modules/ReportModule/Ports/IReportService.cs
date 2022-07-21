@@ -1,4 +1,5 @@
-﻿using Thu_y.Modules.ReportModule.Model;
+﻿using OfficeOpenXml;
+using Thu_y.Modules.ReportModule.Model;
 
 namespace Thu_y.Modules.ReportModule.Ports
 {
@@ -7,5 +8,6 @@ namespace Thu_y.Modules.ReportModule.Ports
         Task CreateReport(ReportModel model, CancellationToken cancellationToken = default);
         Task UpdateReport(UpdateReportModel model);
         Task DeleteReport(string id);
+        ExcelPackage ExportExcel(string userId);
     }
 }

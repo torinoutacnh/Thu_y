@@ -50,7 +50,8 @@ namespace Thu_y.Modules.UserModule.Adapters
                 };
                 mailmsg.To.Add(model.Email);
 
-                mailmsg.Body = $"[Account: {model.Account}] Tạm thời lấy token này đi bắn API đi: {model.Token}";
+                mailmsg.Body = $"[Account: {model.Account}] Verify Account as link: " +
+                               $"https://chicucthuy.amazingtech.vn/dang-nhap/verify?token={model.Token}&username={model.Account}";
 
                 SmtpClient smtp = new SmtpClient();
 
@@ -84,7 +85,8 @@ namespace Thu_y.Modules.UserModule.Adapters
                 };
                 mailmsg.To.Add(model.Email);
 
-                mailmsg.Body = $"[Account: {model.Account}] Tạm thời lấy token này đi bắn API đi: {model.Token}";
+                mailmsg.Body = $"[Account: {model.Account}] Reset password as link: " +
+                               $"https://chicucthuy.amazingtech.vn/dang-nhap/forgotpass?={model.Token}&username={model.Account}";
 
                 SmtpClient smtp = new SmtpClient();
 

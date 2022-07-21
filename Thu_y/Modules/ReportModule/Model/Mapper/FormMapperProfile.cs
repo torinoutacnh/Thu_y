@@ -14,8 +14,10 @@ namespace Thu_y.Modules.ReportModule.Model.Mapper
 
             CreateMap<AttributeModel, FormAttributeEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
-                .ForMember(x => x.Form, opt => opt.Ignore())
-                .ReverseMap();
+                .ForMember(x => x.Form, opt => opt.Ignore());
+
+            CreateMap<FormAttributeEntity, AttributeModel>()
+                .ForMember(x => x.Value, opt => opt.Ignore());
 
             CreateMap<ReportModel, ReportTicketEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())

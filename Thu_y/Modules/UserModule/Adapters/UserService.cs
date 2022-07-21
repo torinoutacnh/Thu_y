@@ -107,7 +107,7 @@ namespace Thu_y.Modules.UserModule.Adapters
                 // already registered
                 throw new AppException($"Account '{model.Account}' is already registered");
             }
-            
+
             var account = _mapper.Map<UserEntity>(model);
             account.VerificationToken = RandomTokenString();
             _userRepository.Insert(account);
@@ -169,17 +169,13 @@ namespace Thu_y.Modules.UserModule.Adapters
             var account = GetUserByAccount(model.Account);
 
             if (account == null) throw new AppException("Invalid token");
-            if (!string.IsNullOrWhiteSpace(account.ResetToken))
+
+            if (account.ResetToken != model.Token || account.ResetTokenExpires < SystemHelper.SystemTimeNow) //reset password
             {
-                if (account.ResetToken != model.Token || account.ResetTokenExpires < SystemHelper.SystemTimeNow) //reset password
-                {
-                    throw new AppException("Invalid token");
-                }
+                throw new AppException("Invalid token");
             }
-            //else if (account.Password != model.Token) //change password
-            //{
-            //    throw new AppException("Invalid token");
-            //}
+
+
 
             // update password and remove reset token
             account.Password = model.Password;
@@ -187,7 +183,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             account.ResetToken = null;
             account.ResetTokenExpires = null;
 
-            if(!_userRepository.Edit(account)) throw new AppException("Sysmtem error!");
+            if (!_userRepository.Edit(account)) throw new AppException("Sysmtem error!");
         }
 
         #region Change Password
@@ -196,9 +192,9 @@ namespace Thu_y.Modules.UserModule.Adapters
             var account = GetUserByAccount(model.Account);
             if (account == null) throw new KeyNotFoundException("User not found!");
 
-            if(loggInRole != RoleType.Manager) // nếu là Manaer thì cho update luôn
+            if (loggInRole != RoleType.Manager) // nếu là Manaer thì cho update luôn
             {
-                if (account.Password != model.OldPassword) 
+                if (account.Password != model.OldPassword)
                 {
                     throw new AppException("Invalid token");
                 }
@@ -359,8 +355,8 @@ namespace Thu_y.Modules.UserModule.Adapters
         private (RefreshToken, UserEntity) GetRefreshToken(string token)
         {
             var account = _userRepository.Get()
-                                         .Include(_=>_.RefreshTokens)
-                                         .Where(y => y.RefreshTokens.Any( t => t.Token == token))
+                                         .Include(_ => _.RefreshTokens)
+                                         .Where(y => y.RefreshTokens.Any(t => t.Token == token))
                                          .FirstOrDefault();
             if (account == null) throw new AppException("Invalid token");
             var refreshToken = account.RefreshTokens.Single(x => x.Token == token);
