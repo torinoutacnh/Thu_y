@@ -46,7 +46,6 @@ namespace Thu_y.Modules.UserModule.Adapters
             var token = CreateJWTToken(account);
             var refreshToken = GenerateRefreshToken();
             refreshToken.UserId = account.Id;
-            _refreshTokenRepository.Add(refreshToken);
 
             // xóa mấy refreshtoken củ đi
             RemoveOldRefreshTokens(account);
@@ -350,6 +349,7 @@ namespace Thu_y.Modules.UserModule.Adapters
                     _refreshTokenRepository.Delete(item);
                 }
             }
+            _unitOfWork.SaveChange();
         }
 
         private (RefreshToken, UserEntity) GetRefreshToken(string token)

@@ -27,5 +27,6 @@ namespace Thu_y.Modules.ReceiptModule.Model
 
         [Required]
         public string ReceiptName { get; set; }
+        public int TotalPage { get; set; }
     }
 }

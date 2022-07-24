@@ -26,12 +26,7 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
             {
                 try
                 {
-                    var receipts = receiptRepository.Get(x =>
-                    model.Id == null ? true : x.Id == model.Id &&
-                    model.IsEffect ? x.EffectiveDate < DateTimeOffset.UtcNow : true &&
-                    model.CodeName == null ? true : x.CodeName.Contains(model.CodeName) &&
-                    model.Name == null ? true : x.Name.Contains(model.Name) &&
-                    model.CodeNumber == null ? true : x.CodeNumber.Contains(model.CodeNumber))
+                    var receipts = receiptRepository.Get(x => model.Id == null ? true : x.Id == model.Id)
                     .Include(x => x.Allocates)
                     .Skip(model.PageNumber * model.PageSize)
                     .Take(model.PageSize);

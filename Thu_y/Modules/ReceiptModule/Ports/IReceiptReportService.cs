@@ -7,6 +7,6 @@ namespace Thu_y.Modules.ReceiptModule.Ports
         Task<string> CreateAsync(ReceiptReportModel model, CancellationToken cancellationToken = default);
         Task UpdateAsync(ReceiptReportModel model, CancellationToken cancellationToken = default);
         Task DeleteAsync(string id, CancellationToken cancellationToken = default);
-        ICollection<ReceiptReportQuarantineModel> GetReceiptReport(ReceiptReportPagingModel model);
+        ICollection<ReceiptReportQuarantineModel> GetReceiptReport(ReceiptReportPagingModel model, string userId = null);
     }
 }

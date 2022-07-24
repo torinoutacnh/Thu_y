@@ -61,11 +61,18 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
         #endregion Delete Receipt Report
 
         #region Get Receipt Report
-        public ICollection<ReceiptReportQuarantineModel> GetReceiptReport(ReceiptReportPagingModel model)
+        public ICollection<ReceiptReportQuarantineModel> GetReceiptReport(ReceiptReportPagingModel model, string userId = null)
         {
-            var data = _receiptReportRepository.Get(_ => _.UserId == model.UserId && _.ReceiptName == model.ReportName)
+            var data = userId switch
+            {
+                null => _receiptReportRepository.Get(_ => model.AllocateId == null ? true : _.ReceiptAllocateId == model.AllocateId)
                                                .Skip(model.PageNumber * model.PageSize)
-                                               .Take(model.PageSize).ToList();
+                                               .Take(model.PageSize).ToList(),
+                _ => _receiptReportRepository.Get(_ => _.UserId == userId &&
+                                                       model.AllocateId == null ? true : _.ReceiptAllocateId == model.AllocateId)
+                                               .Skip(model.PageNumber * model.PageSize)
+                                               .Take(model.PageSize).ToList()
+            };
             return _mapper.Map<ICollection<ReceiptReportQuarantineModel>>(data);
         }
         #endregion Get Receipt Report

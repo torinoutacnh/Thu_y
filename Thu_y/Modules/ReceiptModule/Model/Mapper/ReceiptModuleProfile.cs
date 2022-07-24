@@ -14,6 +14,7 @@ namespace Thu_y.Modules.ReceiptModule.Model.Mapper
 
             CreateMap<ReceiptAllocateModel, ReceiptAllocateEntity>()
                 .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.TotalPage, opt => opt.Ignore())
                 .ReverseMap();
 
             CreateMap<ReceiptReportModel, ReceiptReportEntity>()

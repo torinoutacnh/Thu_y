@@ -12,8 +12,7 @@ namespace Thu_y.Modules.ReceiptModule.Model
         [Required]
         public int PageSize { get; set; }
 
-        public string UserId { get; set; }
-        public string ReportName { get; set; }
+        public string AllocateId { get; set; }
 
         public ReceiptReportPagingModel(int pageNumber, int pageSize)
         {

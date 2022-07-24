@@ -24,16 +24,14 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapFormEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = "Bearer")] (string code, IFormRepository formRepository, IMapper mapper) =>
+            endpoints.MapGet(FormEndpoint.GetForm, [Authorize(AuthenticationSchemes = "Bearer")] (string code, string? refReportId, IFormService formService) =>
             {
                 try
                 {
-                    var form = formRepository.Get(x => x.FormCode.ToLower() == code.ToLower() || x.Id.ToLower() == code.ToLower())
-                                             .Include(x => x.FormAttributes)
-                                             .FirstOrDefault();
+                    var form = formService.GetSingleForm(code, refReportId);
                     if (form == null) throw new Exception("NoT found form!") { HResult = 400 };
 
-                    return Results.Ok(value: new ResponseModel<FormModel>(mapper.Map<FormModel>(form)));
+                    return Results.Ok(value: new ResponseModel<FormModel>(data: form));
                 }
                 catch (Exception ex)
                 {

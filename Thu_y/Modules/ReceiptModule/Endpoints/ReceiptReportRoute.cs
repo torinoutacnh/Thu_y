@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Thu_y.Infrastructure.Utils.Constant;
 using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
 using Thu_y.Modules.ReportModule.Model;
+using Thu_y.Modules.UserModule.Core;
 using Thu_y.Utils.Infrastructure.Application.Models;
 
 namespace Thu_y.Modules.ReceiptModule.Endpoints
@@ -19,11 +21,17 @@ namespace Thu_y.Modules.ReceiptModule.Endpoints
     {
         public static IEndpointRouteBuilder MapReceiptReportEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost(ReceiptReportEndpoint.GetReceiptReport, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptReportPagingModel model, IReceiptReportService receiptReportService) =>
+            endpoints.MapPost(ReceiptReportEndpoint.GetReceiptReport, [Authorize(AuthenticationSchemes = "Bearer")] (ReceiptReportPagingModel model, IReceiptReportService receiptReportService, IHttpContextAccessor httpContextAccessor) =>
             {
                 try
                 {
-                    var report = receiptReportService.GetReceiptReport(model);
+                    UserEntity userEntity = (UserEntity)httpContextAccessor.HttpContext.Items["UserEntity"];
+                    if (userEntity == null) throw new Exception("Login Failed") { HResult = 500};
+                    var report = userEntity.Role switch
+                    {
+                        RoleType.Manager => receiptReportService.GetReceiptReport(model),
+                        _ => receiptReportService.GetReceiptReport(model, userEntity.Id)
+                    };
 
                     return Results.Ok(value: new ResponseModel<ICollection<ReceiptReportQuarantineModel>>(data: report));
                 }

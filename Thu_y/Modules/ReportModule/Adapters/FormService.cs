@@ -91,8 +91,9 @@ namespace Thu_y.Modules.ReportModule.Adapters
             var form = _mapper.Map<FormModel>(entity);
             if (string.IsNullOrEmpty(refReportId)) return form;
 
-            var reportvalue = _reportTicketValueRepository.Get(_ => _.ReportId == refReportId)
+            var reportvalue = _reportTicketValueRepository.Get(_ => _.ReportId == refReportId && _.AttributeCode != null)
                                                           .Select(x => new { x.Value, x.AttributeCode });
+
             foreach (var value in reportvalue)
             {
                 foreach (var item in form.Attributes)

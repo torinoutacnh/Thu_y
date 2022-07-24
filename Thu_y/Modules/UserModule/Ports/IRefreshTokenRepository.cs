@@ -5,6 +5,6 @@ namespace Thu_y.Modules.UserModule.Ports
 {
     public interface IRefreshTokenRepository : IRepository<RefreshToken>
     {
-        void Delete(RefreshToken entity);
+        bool Delete(RefreshToken entity);
     }
 }
