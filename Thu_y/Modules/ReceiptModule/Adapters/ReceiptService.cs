@@ -15,12 +15,14 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
         private readonly IReceiptAllocateRepository _receiptAllocateRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReceiptReportRepository _receiptReportRepository;
         public ReceiptService(IServiceProvider serviceProvider)
         {
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             _receiptAllocateRepository = serviceProvider.GetRequiredService<IReceiptAllocateRepository>();
             _receiptRepository = serviceProvider.GetRequiredService<IReceiptRepository>();
             _mapper = serviceProvider.GetRequiredService<IMapper>();
+            _receiptReportRepository = serviceProvider.GetRequiredService<IReceiptReportRepository>();
         }
 
         #region Get Receipt by Id
@@ -110,6 +112,7 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
             var totalPage = receipt.Page * model.Amount;
             var entity = _mapper.Map<ReceiptAllocateEntity>(model);
             entity.TotalPage = totalPage;
+            entity.RemainPage = totalPage;
 
             _receiptAllocateRepository.Add(entity);
             _unitOfWork.SaveChange();
@@ -128,6 +131,10 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
 
             _mapper.Map(model, entity);
             entity.TotalPage = receipt.Page * model.Amount;
+
+            var pageUse = _receiptReportRepository.Get(_ => _.ReceiptAllocateId == entity.Id)?
+                                                  .Sum(x => x.PageUse).Value?? 0;
+            entity.RemainPage = entity.TotalPage - pageUse;
             _receiptAllocateRepository.Update(entity);
             _unitOfWork.SaveChange();
 

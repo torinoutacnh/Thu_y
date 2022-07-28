@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Thu_y.Infrastructure.UOF;
+using Thu_y.Infrastructure.Utils.Exceptions;
 using Thu_y.Modules.ReceiptModule.Core;
 using Thu_y.Modules.ReceiptModule.Model;
 using Thu_y.Modules.ReceiptModule.Ports;
@@ -28,6 +29,11 @@ namespace Thu_y.Modules.ReceiptModule.Adapters
             if (allocateReceipt == null) throw new Exception("Not found Allocate Receipt!") { HResult = 404 };
 
             var receipt = _mapper.Map<ReceiptReportEntity>(model);
+
+            allocateReceipt.RemainPage -= receipt.PageUse;
+            if (allocateReceipt.RemainPage < 0) throw new AppException("Pase Use is Overload!");
+            _receiptAllocateRepository.Update(allocateReceipt);
+
             var data = _receiptReportRepository.Add(receipt);
             _unitOfWork.SaveChange();
             return Task.FromResult(receipt.Id);

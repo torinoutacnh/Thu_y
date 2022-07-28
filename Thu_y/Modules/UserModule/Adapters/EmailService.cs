@@ -51,7 +51,7 @@ namespace Thu_y.Modules.UserModule.Adapters
                 mailmsg.To.Add(model.Email);
 
                 mailmsg.Body = $"[Account: {model.Account}] Verify Account as link: " +
-                               $"https://chicucthuy.amazingtech.vn/dang-nhap/verify?token={model.Token}&username={model.Account}";
+                               $"https://chicucthuy.amazingtech.vn/verify?token={model.Token}&username={model.Account}";
 
                 SmtpClient smtp = new SmtpClient();
 
@@ -86,7 +86,7 @@ namespace Thu_y.Modules.UserModule.Adapters
                 mailmsg.To.Add(model.Email);
 
                 mailmsg.Body = $"[Account: {model.Account}] Reset password as link: " +
-                               $"https://chicucthuy.amazingtech.vn/dang-nhap/forgotpass?={model.Token}&username={model.Account}";
+                               $"https://chicucthuy.amazingtech.vn/forgotpass?={model.Token}&username={model.Account}";
 
                 SmtpClient smtp = new SmtpClient();
 

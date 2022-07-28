@@ -12,6 +12,7 @@ namespace Thu_y.Modules.ReceiptModule.Core
         public string? CodeNumber { get; set; }
         public int? Amount { get; set; }
         public int? TotalPage { get; set; }
+        public int? RemainPage { get; set; }
 
         public string? ReceiptName { get; set; }
         public string ReceiptId { get; set; }
