@@ -79,16 +79,7 @@ namespace Thu_y.Modules.UserModule.Adapters
 
             // xóa mấy refreshtoken củ đi
             RemoveOldRefreshTokens(user);
-            try
-            {
-                _refreshTokenRepository.Add(newRefreshToken);
-                _unitOfWork.SaveChange();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
             var jwtToken = CreateJWTToken(user);
             var response = _mapper.Map<ResponseLoginModel>(user);
             response.RefreshToken = newRefreshToken.Token;

@@ -216,7 +216,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
             StringBuilder sqlQuery = new StringBuilder(@$"UPDATE [ReportTicketValue] SET [Value] = CASE [AttributeId] ");
             foreach (var data in lsModel)
             {
-                sqlQuery.Append($"WHEN '{data.AttributeId}' THEN '{data.Value}' ");
+                sqlQuery.Append($"WHEN '{data.AttributeId}' THEN N'{data.Value}' ");
             }
 
             sqlQuery.Append("ELSE [Value] END WHERE [ReportId] = @reportId ");

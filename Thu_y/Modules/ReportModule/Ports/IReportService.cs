@@ -9,5 +9,6 @@ namespace Thu_y.Modules.ReportModule.Ports
         Task UpdateReport(UpdateReportModel model);
         Task DeleteReport(string id);
         ExcelPackage ExportExcel(string userId);
+        ICollection<ReportModel> GetReport(ReportPagingModel model, string userId, bool isManager = false);
     }
 }

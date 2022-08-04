@@ -10,7 +10,6 @@ namespace Thu_y.Modules.ReportModule.Model
         [Range(0, int.MaxValue)]
         [Required]
         public int PageSize { get; set; }
-        public string? UserId { get; set; }
         public string? FormId { get; set; }
         //public DateTimeOffset? DateStart { get; set; }
         //public DateTimeOffset? DateEnd { get; set; }

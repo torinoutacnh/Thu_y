@@ -181,6 +181,27 @@ namespace Thu_y.Modules.ReportModule.Adapters
         }
         #endregion Delete Report
 
+        #region Get Report
+        public ICollection<ReportModel> GetReport(ReportPagingModel model, string userId, bool isManager = false)
+        {
+            var reports = new List<ReportTicketEntity>();
+            if (isManager)
+            {
+                reports = _reportTicketRepository.Get(x => x.FormId == model.FormId, false, y => y.Values)
+                                                  .OrderByDescending(x => x.DateCreated)
+                                                  .Skip(model.PageNumber * model.PageSize)
+                                                  .Take(model.PageSize).ToList();
+                return _mapper.Map<ICollection<ReportModel>>(reports);
+            }
+
+            reports = _reportTicketRepository.Get(x => x.UserId == userId && x.FormId == model.FormId, false, y => y.Values)
+                                              .OrderByDescending(x => x.DateCreated)
+                                              .Skip(model.PageNumber * model.PageSize)
+                                              .Take(model.PageSize).ToList();
+            return _mapper.Map<ICollection<ReportModel>>(reports);
+        }
+        #endregion Get Report
+
         public ExcelPackage ExportExcel(string userId)
         {
             var data = _reportTicketRepository.GetListQuarantineReport(userId);

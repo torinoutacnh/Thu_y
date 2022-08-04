@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Thu_y.Db.DbContext;
 
 #nullable disable
 
-namespace Thu_y.Db.Migrations
+namespace Thu_y.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220707194513_init10")]
-    partial class init10
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,11 +27,10 @@ namespace Thu_y.Db.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Amount")
+                    b.Property<int?>("Amount")
                         .HasColumnType("int");
 
                     b.Property<string>("AnimalId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -45,7 +42,7 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("Status")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -59,7 +56,6 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -72,19 +68,15 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ManagerName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -100,15 +92,13 @@ namespace Thu_y.Db.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Amount")
+                    b.Property<int?>("Amount")
                         .HasColumnType("int");
 
                     b.Property<string>("CodeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CodeNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -125,21 +115,21 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ReceiptName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RemainPage")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalPage")
+                    b.Property<int?>("TotalPage")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -155,11 +145,9 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CodeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CodeNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -171,14 +159,13 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("EffectiveDate")
+                    b.Property<DateTimeOffset?>("EffectiveDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Page")
+                    b.Property<int?>("Page")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -195,11 +182,9 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CodeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CodeNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -211,29 +196,25 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateUse")
+                    b.Property<DateTimeOffset?>("DateUse")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("PageUse")
+                    b.Property<int?>("PageUse")
                         .HasColumnType("int");
 
                     b.Property<string>("ReceiptAllocateId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReceiptName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -245,6 +226,12 @@ namespace Thu_y.Db.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttributeCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Col_Design")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ControlType")
                         .HasColumnType("int");
@@ -262,18 +249,19 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FormId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SortNo")
+                    b.Property<int?>("SortNo")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("api_DropDownlist")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -297,15 +285,12 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FormCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -322,14 +307,12 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("AnimalId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AnimalName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AnimalSex")
@@ -344,11 +327,13 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<int?>("DayAge")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsCar")
                         .HasColumnType("bit");
 
                     b.Property<string>("Purpose")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReportTicketId")
@@ -358,17 +343,26 @@ namespace Thu_y.Db.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,4)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ReportTicketId");
 
-                    b.ToTable("ListAnimalEntity");
+                    b.ToTable("ListAnimal");
                 });
 
             modelBuilder.Entity("Thu_y.Modules.ReportModule.Core.ReportTicketEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApproveId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApproveName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
                         .HasColumnType("datetimeoffset");
@@ -379,22 +373,28 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("FormId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SerialNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -407,24 +407,19 @@ namespace Thu_y.Db.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AnimalId")
-                        .IsRequired()
+                    b.Property<string>("AttributeCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AttributeControlType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AttributeDataType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AttributeId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttributeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -437,26 +432,25 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("FormCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FormNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReportId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("Sort")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -468,17 +462,49 @@ namespace Thu_y.Db.Migrations
                     b.ToTable("ReportTicketValue");
                 });
 
+            modelBuilder.Entity("Thu_y.Modules.ReportModule.Core.SealConfigEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("DateUpdated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("SealCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SealName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SealConfig");
+                });
+
             modelBuilder.Entity("Thu_y.Modules.ReportModule.Core.SealTabEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CodeSeal")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -490,9 +516,14 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<string>("Id_Pricing")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("ReportTicketId")
                         .IsRequired()
@@ -505,7 +536,7 @@ namespace Thu_y.Db.Migrations
 
                     b.HasIndex("ReportTicketId");
 
-                    b.ToTable("SealTabEntity");
+                    b.ToTable("SealTab");
                 });
 
             modelBuilder.Entity("Thu_y.Modules.ShareModule.Core.AnimalEntity", b =>
@@ -522,16 +553,17 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("DayAge")
+                    b.Property<int?>("DayAge")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Pricing")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("Sex")
                         .HasColumnType("int");
@@ -559,25 +591,22 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset?>("DateDeleted")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateInjected")
+                    b.Property<DateTimeOffset?>("DateInjected")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset>("DateUpdated")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("VaccinationFacilityAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VaccinationFacilityName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -587,17 +616,49 @@ namespace Thu_y.Db.Migrations
                     b.ToTable("Vacine");
                 });
 
+            modelBuilder.Entity("Thu_y.Modules.UserModule.Core.RefreshToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTimeOffset>("DateCreated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset?>("DateDeleted")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("DateUpdated")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("Expires")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshToken");
+                });
+
             modelBuilder.Entity("Thu_y.Modules.UserModule.Core.UserEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Account")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -610,20 +671,25 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTimeOffset?>("PasswordReset")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("ResetTokenExpires")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
@@ -633,6 +699,12 @@ namespace Thu_y.Db.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("VerificationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("Verified")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -645,15 +717,12 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AbattoirAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AbattoirId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AbattoirName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset>("DateCreated")
@@ -662,10 +731,10 @@ namespace Thu_y.Db.Migrations
                     b.Property<DateTimeOffset?>("DateDeleted")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateEnd")
+                    b.Property<DateTimeOffset?>("DateEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("DateStart")
+                    b.Property<DateTimeOffset?>("DateStart")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset>("DateUpdated")
@@ -675,7 +744,6 @@ namespace Thu_y.Db.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -700,9 +768,7 @@ namespace Thu_y.Db.Migrations
                 {
                     b.HasOne("Thu_y.Modules.ReportModule.Core.FormEntity", "Form")
                         .WithMany("FormAttributes")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FormId");
 
                     b.Navigation("Form");
                 });
@@ -722,9 +788,7 @@ namespace Thu_y.Db.Migrations
                 {
                     b.HasOne("Thu_y.Modules.ReportModule.Core.FormAttributeEntity", "Attribute")
                         .WithMany("ReportTicketValues")
-                        .HasForeignKey("AttributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AttributeId");
 
                     b.HasOne("Thu_y.Modules.ReportModule.Core.ReportTicketEntity", "ReportTicket")
                         .WithMany("Values")
@@ -759,13 +823,22 @@ namespace Thu_y.Db.Migrations
                     b.Navigation("Animal");
                 });
 
+            modelBuilder.Entity("Thu_y.Modules.UserModule.Core.RefreshToken", b =>
+                {
+                    b.HasOne("Thu_y.Modules.UserModule.Core.UserEntity", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Thu_y.Modules.UserModule.Core.UserScheduleEntity", b =>
                 {
                     b.HasOne("Thu_y.Modules.UserModule.Core.UserEntity", "User")
                         .WithMany("UserSchedules")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -801,6 +874,8 @@ namespace Thu_y.Db.Migrations
 
             modelBuilder.Entity("Thu_y.Modules.UserModule.Core.UserEntity", b =>
                 {
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("UserSchedules");
                 });
 #pragma warning restore 612, 618

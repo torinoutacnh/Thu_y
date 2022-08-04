@@ -1,11 +1,11 @@
-﻿using Thu_y.Modules.UserModule.Ports;
-using Thu_y.Modules.UserModule.Model;
-using Thu_y.Utils.Infrastructure.Application.Models;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Thu_y.Modules.ReportModule.Model;
-using AutoMapper;
+using Thu_y.Infrastructure.Utils.Constant;
 using Thu_y.Infrastructure.Utils.Exceptions;
-using Microsoft.AspNetCore.Http;
+using Thu_y.Modules.UserModule.Core;
+using Thu_y.Modules.UserModule.Model;
+using Thu_y.Modules.UserModule.Ports;
+using Thu_y.Utils.Infrastructure.Application.Models;
 
 namespace Thu_y.Modules.UserModule.Endpoints
 {
@@ -13,12 +13,11 @@ namespace Thu_y.Modules.UserModule.Endpoints
     {
         public const string Prefix = "";
         public const string BasePath = Prefix + "/user";
-        public const string GetUserById = BasePath;
         public const string CreateUser = BasePath + "/create-user";
         public const string UpdateUser = BasePath + "/update-user";
         public const string DeleteUser = BasePath + "/delete-user";
-        public const string Login = BasePath + "/login";
         public const string GetUser = BasePath + "/get-user";
+        public const string GetSingeUser = BasePath + "/get-single";
     }
 
     public static class UserRoute 
@@ -67,10 +66,14 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 }
             }).WithTags(UserEndpoint.BasePath);
 
-            endpoints.MapPost(UserEndpoint.DeleteUser, async (string id, IUserService userService) =>
+            endpoints.MapPost(UserEndpoint.DeleteUser, async (string id, IUserService userService, IHttpContextAccessor httpContext) =>
             {
                 try
                 {
+                    var userLogger = (UserEntity)httpContext.HttpContext.Items["UserEntity"];
+                    if (userLogger == null) return Results.Unauthorized();
+                    if (userLogger.Role != RoleType.Manager) return Results.Unauthorized();
+
                     if (userService.DeleteUser(id))
                     {
                         return Results.Ok(value: new ResponseModel<string>(data: "Success"));
@@ -86,22 +89,6 @@ namespace Thu_y.Modules.UserModule.Endpoints
                     }
                     return Results.Json(new ResponseModel<string>(message: ex.Message), statusCode: 500);
                 }
-            }).WithTags(UserEndpoint.BasePath);
-
-            endpoints.MapPost(UserEndpoint.Login, (UserDtoModel request, IUserService userService) =>
-            {
-                if (string.IsNullOrEmpty(request.UserName) || string.IsNullOrEmpty(request.Password))
-                    return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Not found User"));
-
-                var user = userService.GetUserByAccount(request.UserName);
-                if (user == null)
-                    return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Not found User"));
-
-                if (user.Password != request.Password)
-                    return Results.NotFound(new ResponseModel<ResponseLoginModel>(message: "Wrong password"));
-                var response = userService.Authenticate(request);
-                
-                return Results.Ok(new ResponseModel<ResponseLoginModel>(data: response));
             }).WithTags(UserEndpoint.BasePath);
 
             endpoints.MapGet(UserEndpoint.GetUser, [Authorize(AuthenticationSchemes = "Bearer")]  (int pageIndex, int pageNumber,IUserService userService, IMapper mapper) =>
@@ -123,7 +110,7 @@ namespace Thu_y.Modules.UserModule.Endpoints
                 }
             }).WithTags(UserEndpoint.BasePath);
 
-            endpoints.MapGet(UserEndpoint.GetUserById, [Authorize(AuthenticationSchemes = "Bearer")]  (string id, IUserService userService) =>
+            endpoints.MapGet(UserEndpoint.GetSingeUser, [Authorize(AuthenticationSchemes = "Bearer")]  ( string id,IUserService userService) =>
             {
                 try
                 {

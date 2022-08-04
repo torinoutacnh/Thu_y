@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Thu_y.Infrastructure.Utils.Constant;
 using Thu_y.Modules.ReportModule.Model;
 using Thu_y.Modules.ReportModule.Ports;
+using Thu_y.Modules.UserModule.Core;
 using Thu_y.Utils.Infrastructure.Application.Models;
 
 namespace Thu_y.Modules.ReportModule.Endpoints
@@ -29,28 +31,19 @@ namespace Thu_y.Modules.ReportModule.Endpoints
     {
         public static IEndpointRouteBuilder MapReportEndpoints(this IEndpointRouteBuilder endpoints)
         {
-            endpoints.MapPost(ReportEndpoint.GetAllReport, [Authorize(AuthenticationSchemes = "Bearer")] async ([FromBody] ReportPagingModel model, IReportTicketRepository reportRepository, IMapper mapper) =>
+            endpoints.MapPost(ReportEndpoint.GetAllReport, [Authorize(AuthenticationSchemes = "Bearer")] async ([FromBody] ReportPagingModel model, IReportService reportService, IHttpContextAccessor httpContext) =>
             {
                 try
                 {
-                    
-                    var reports = new List<Core.ReportTicketEntity>();
-                    if (string.IsNullOrEmpty(model.UserId))
+                    var userLogger = (UserEntity)httpContext.HttpContext.Items["UserEntity"];
+                    if (userLogger == null) return Results.Unauthorized();
+
+                    var report = userLogger.Role switch
                     {
-   
-                        reports = reportRepository.Get(x => x.FormId == model.FormId, false, y => y.Values)
-                                                  .OrderByDescending(x => x.DateCreated)
-                                                  .Skip(model.PageNumber * model.PageSize)
-                                                  .Take(model.PageSize).ToList();
-                        return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.Map<List<ReportModel>>(reports)));
-
-                    }
-                    reports = reportRepository.Get(x => x.UserId == model.UserId && x.FormId == model.FormId, false, y => y.Values)
-                                              .OrderByDescending(x => x.DateCreated)
-                                              .Skip(model.PageNumber * model.PageSize)
-                                              .Take(model.PageSize).ToList();
-
-                    return Results.Ok(value: new ResponseModel<List<ReportModel>>(mapper.Map<List<ReportModel>>(reports)));
+                        RoleType.Manager => reportService.GetReport(model, userLogger.Id, true),
+                        _ => reportService.GetReport(model, userLogger.Id)
+                    };
+                    return Results.Ok(value: new ResponseModel<ICollection<ReportModel>>(report));
                 }
                 catch (Exception ex)
                 {
