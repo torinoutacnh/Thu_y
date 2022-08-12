@@ -14,6 +14,8 @@ using Thu_y.Modules.UserModule.Model.Mapper;
 using Thu_y.Utils.Infrastructure.Application.Models;
 using Thu_y.Utils.Module;
 using Microsoft.Extensions.DependencyInjection;
+using Invedia.Web.HealthCheck;
+using Thu_y.Utils.Infrastructure.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +89,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.RegisterModules();
+builder.Services.AddInvediaHealthCheck(configure => { configure.DbConnectionString = SystemHelper.AppDb; });
 
 var app = builder.Build();
 
@@ -120,5 +123,6 @@ app.UseEndpoints(endpoint =>
 {
     endpoint.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 });
+app.UseInvediaHealthCheck();
 
 app.Run();

@@ -286,7 +286,7 @@ namespace Thu_y.Modules.UserModule.Adapters
 
         public List<UserEntity> GetAccount(int PageIndex, int PageNumber)
         {
-            return _userRepository.Get(_ => _.Status == 0).Skip((PageIndex - 1) * PageNumber).Take(PageNumber).ToList();
+            return _userRepository.Get(_ => _.Status == 0).Skip((PageIndex) * PageNumber).Take(PageNumber).ToList();
         }
 
         #region Create Token

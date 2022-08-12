@@ -5,5 +5,6 @@ namespace Thu_y.Modules.ReportModule.Ports
 {
     public interface IReportTicketValueRepository : IRepository<ReportTicketValueEntity>
     {
+        bool DeleteByAttributeId(string attributeId);
     }
 }
