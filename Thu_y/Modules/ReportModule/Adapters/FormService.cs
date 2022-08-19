@@ -13,6 +13,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
         private readonly IFormAttributeRepository _formAttributeRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReportTicketRepository _reportTicketRepository;
         private readonly IReportTicketValueRepository _reportTicketValueRepository;
 
         public FormService(IServiceProvider serviceProvider)
@@ -22,6 +23,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
             _mapper = serviceProvider.GetRequiredService<IMapper>();
             _unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
             _reportTicketValueRepository = serviceProvider.GetRequiredService<IReportTicketValueRepository>();
+            _reportTicketRepository = serviceProvider.GetRequiredService<IReportTicketRepository>();
         }
 
         public bool CreateForm(FormModel model)
@@ -90,11 +92,40 @@ namespace Thu_y.Modules.ReportModule.Adapters
             var entity = _formRepository.GetSingle(_ => _.FormCode == code || _.Id == code, false, _ => _.FormAttributes);
             var form = _mapper.Map<FormModel>(entity);
             if (string.IsNullOrEmpty(refReportId)) return form;
-
-            var reportvalue = _reportTicketValueRepository.Get(_ => _.ReportId == refReportId && _.AttributeCode != null)
-                                                          .Select(x => new { x.Value, x.AttributeCode });
+            var reportvalue = _reportTicketValueRepository.Get(_ => 
+            _.ReportId == refReportId && _.AttributeCode != null)
+                .Select(x => new { x.Value, x.AttributeCode });
 
             foreach (var value in reportvalue)
+            {
+                foreach (var item in form.Attributes)
+                {
+                    if (item.AttributeCode == value.AttributeCode)
+                        item.Value = value.Value;
+                }
+            }
+
+            return form;
+        }
+
+        public FormModel GetSingleForm(string code, string refReportId, string refReportNumber)
+        {
+            code = code.ToLower();
+            var entity = _formRepository.GetSingle(_ => _.FormCode == code || _.Id == code, false, _ => _.FormAttributes);
+            var mapfrom = _formRepository.GetSingle(_ => _.FormCode == "ĐK-KDĐV-001");
+            var form = _mapper.Map<FormModel>(entity);
+            if (string.IsNullOrEmpty(refReportId) && string.IsNullOrEmpty(refReportNumber)) return form;
+
+            var reportvalues = _reportTicketRepository
+                .Get(x => x.FormId == mapfrom.Id && (x.SerialNumber == refReportNumber || x.Id==refReportId))
+                .Select(x=>x.Values)
+                .FirstOrDefault()?
+                .Where(x=>x.AttributeCode != null)
+                .Select(x => new { x?.Value, x?.AttributeCode });
+
+            if (reportvalues == null) return form;
+
+            foreach (var value in reportvalues)
             {
                 foreach (var item in form.Attributes)
                 {

@@ -34,23 +34,21 @@ namespace Thu_y.Modules.ReportModule.Adapters
         }
 
         #region Create ReportTicket
-        public Task CreateReport(ReportModel model, CancellationToken cancellationToken = default)
+        public Task<string> CreateReport(ReportModel model, CancellationToken cancellationToken = default)
         {
+            //var check = _reportTicketRepository.Get(x=>x.FormId==model.FormId && x.SerialNumber==model.SerialNumber).Any();
+            //if (check) throw new Exception($"Biên bản với số {model.SerialNumber} đã tồn tại!") { HResult = 400 };
             switch (model.FormId)
             {
                 case FormIdConstants.AnimalDeadId:
-                    CreateAnimalDeadReport(model);
-                    break;
+                    return Task.FromResult(CreateAnimalDeadReport(model));
                 case FormIdConstants.QuanrantineId:
-                    CreateQuarantineReport(model);
-                    break;
+                    return Task.FromResult(CreateQuarantineReport(model));
                 default:
-                    CreateDefaultReport(model);
-                    break;
+                    return Task.FromResult(CreateDefaultReport(model));
             }
-            return Task.CompletedTask;
         }
-        private void CreateAnimalDeadReport(ReportModel model)
+        private string CreateAnimalDeadReport(ReportModel model)
         {
             var entity = _mapper.Map<ReportTicketEntity>(model);
             decimal totalPrice = 0;
@@ -81,8 +79,10 @@ namespace Thu_y.Modules.ReportModule.Adapters
             entity.TotalPrice = totalPrice;
             _reportTicketRepository.Add(entity);
             _unitOfWork.SaveChange();
+
+            return entity.Id;
         }
-        private void CreateQuarantineReport(ReportModel model)
+        private string CreateQuarantineReport(ReportModel model)
         {
             var entity = _mapper.Map<ReportTicketEntity>(model);
             foreach (var value in entity.Values)
@@ -116,9 +116,10 @@ namespace Thu_y.Modules.ReportModule.Adapters
 
             _reportTicketRepository.Add(entity);
             _unitOfWork.SaveChange();
+            return entity.Id;
         }
 
-        private void CreateDefaultReport(ReportModel model)
+        private string CreateDefaultReport(ReportModel model)
         {
             var entity = _mapper.Map<ReportTicketEntity>(model);
             if (entity.Values != null)
@@ -154,6 +155,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
             }
             _reportTicketRepository.Add(entity);
             _unitOfWork.SaveChange();
+            return entity.Id;
         }
         #endregion Create ReportTicket
 

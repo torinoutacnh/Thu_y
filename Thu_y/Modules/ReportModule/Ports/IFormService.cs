@@ -9,5 +9,6 @@ namespace Thu_y.Modules.ReportModule.Ports
         bool DeleteForm(string id);
         ICollection<string> RecommentAttribute(string attributeName);
         FormModel GetSingleForm(string code, string refReportId);
+        FormModel GetSingleForm(string code, string refReportId, string refReportNumber);
     }
 }

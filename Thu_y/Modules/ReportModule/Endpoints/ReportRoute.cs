@@ -59,8 +59,8 @@ namespace Thu_y.Modules.ReportModule.Endpoints
             {
                 try
                 {
-                    await reportService.CreateReport(model);
-                    return Results.Ok(value: new ResponseModel<string>(data: "Success"));
+                    var id = await reportService.CreateReport(model);
+                    return Results.Ok(value: new ResponseModel<string>(data: id));
                 }
                 catch (Exception ex)
                 {

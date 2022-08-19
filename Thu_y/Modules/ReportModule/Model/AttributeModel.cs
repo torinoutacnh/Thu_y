@@ -11,5 +11,6 @@ namespace Thu_y.Modules.ReportModule.Model
         public int SortNo { get; set; }
         public string AttributeCode { get; set; }
         public string Value { get; set; }
+        public string? AttributeGroup { get; set; }
     }
 }

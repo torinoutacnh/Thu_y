@@ -55,6 +55,7 @@ dkms.conf
 [Bb]in/
 [Oo]bj/
 .vs/Thu_y/FileContentIndex
+.config/
 
 # User-specific files
 *.suo

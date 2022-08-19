@@ -11,6 +11,8 @@ namespace Thu_y.Modules.ReportModule.Model
         [Required]
         public string UserId { get; set; }
         public string UserName { get; set; }
+        [Required]
+        public string? SerialNumber { get; set; }
 
         [Required]
         public string FormId { get; set; }
