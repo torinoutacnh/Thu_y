@@ -57,21 +57,21 @@ namespace Thu_y.Controllers
         public IActionResult Register(RegisterModel model)
         {
             _userService.Register(model);
-            return Ok(new { message = "Registration successful, please check your email for verification instructions" });
+            return Ok(new { message = "Đăng ký tài khoản thành công, vui lòng vào email để kích hoạt tài khoản" });
         }
 
         [HttpPost("verify-email")]
         public IActionResult VerifyEmail(VerifyEmailRequestModel model)
         {
             _userService.VerifyEmail(model);
-            return Ok(new { message = "Verification successful, you can now login" });
+            return Ok(new { message = "Kích hoạt tài khoản thành công" });
         }
 
         [HttpPost("forgot-password")]
         public IActionResult ForgotPassword(ForgotPasswordRequestModel model)
         {
             _userService.ForgotPassword(model);
-            return Ok(new { message = "Please check your email for password reset instructions" });
+            return Ok(new { message = "Yêu cầu cấp lại mật khẩu thành công, vui lòng kiểm tra email" });
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
@@ -79,14 +79,14 @@ namespace Thu_y.Controllers
         public IActionResult ChangePassword(ChangePasswordRequest model)
         {
             _userService.ChangePassword(model, UserEntity.Role);
-            return Ok(new { message = "Password change successful, you can now login" });
+            return Ok(new { message = "Thay đổi mật khẩu thành công" });
         }
 
         [HttpPost("reset-password")]
         public IActionResult ResetPassword(ResetPasswordRequest model)
         {
             _userService.ResetPassword(model);
-            return Ok(new { message = "Password reset successful, you can now login" });
+            return Ok(new { message = "Đặt lại mật khẩu thành công" });
         }
 
         [HttpPost("resend-email")]

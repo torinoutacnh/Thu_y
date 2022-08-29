@@ -95,7 +95,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             if (GetUserByAccount(model.Account) != null)
             {
                 // already registered
-                throw new AppException($"Account '{model.Account}' is already registered") { HResult=400};
+                throw new AppException($"Tên tài khoản '{model.Account}' đã tồn tại") { HResult=400};
             }
 
             var account = _mapper.Map<UserEntity>(model);
@@ -113,12 +113,12 @@ namespace Thu_y.Modules.UserModule.Adapters
         }
         #endregion Register
 
-        #region Verify Registe Email
+        #region Verify Register Email
         public void VerifyEmail(VerifyEmailRequestModel model)
         {
             var account = _userRepository.GetByVerifyToken(model.Token);
 
-            if (account == null) throw new AppException("Verification failed");
+            if (account == null) throw new AppException("Kích hoạt tài khoản thất bại");
 
             account.Verified = SystemHelper.SystemTimeNow;
             account.VerificationToken = null;
@@ -132,7 +132,7 @@ namespace Thu_y.Modules.UserModule.Adapters
         {
             var account = GetUserByAccount(model.Account);
 
-            if (account == null) throw new KeyNotFoundException($"User '{model.Account}' not found");
+            if (account == null) throw new KeyNotFoundException($"Tài khoản '{model.Account}' không tồn tại");
 
             // create reset token that expires after 1 day
             account.ResetToken = RandomTokenString();
@@ -158,11 +158,11 @@ namespace Thu_y.Modules.UserModule.Adapters
         {
             var account = GetUserByAccount(model.Account);
 
-            if (account == null) throw new AppException("Invalid token");
+            if (account == null) throw new AppException("Tên tài khoản không tồn tại");
 
             if (account.ResetToken != model.Token || account.ResetTokenExpires < SystemHelper.SystemTimeNow) //reset password
             {
-                throw new AppException("Invalid token");
+                throw new AppException("Mã đặt lại mật khẩu đã hết hạn, vui lòng thử lại");
             }
 
 
@@ -180,7 +180,7 @@ namespace Thu_y.Modules.UserModule.Adapters
         public void ChangePassword(ChangePasswordRequest model, RoleType loggInRole)
         {
             var account = GetUserByAccount(model.Account);
-            if (account == null) throw new KeyNotFoundException("User not found!");
+            if (account == null) throw new KeyNotFoundException("Tên tài khoản không tồn tại");
 
             //if (loggInRole != RoleType.Manager) // nếu là Manaer thì cho update luôn
             //{
@@ -191,7 +191,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             //}
             if (account.Password != model.OldPassword)
             {
-                throw new AppException("Invalid token");
+                throw new AppException("Mật khẩu cũ không chính xác");
             }
 
             account.Password = model.Password;
