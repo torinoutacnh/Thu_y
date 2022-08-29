@@ -95,7 +95,7 @@ namespace Thu_y.Modules.UserModule.Adapters
             if (GetUserByAccount(model.Account) != null)
             {
                 // already registered
-                throw new AppException($"Account '{model.Account}' is already registered");
+                throw new AppException($"Account '{model.Account}' is already registered") { HResult=400};
             }
 
             var account = _mapper.Map<UserEntity>(model);
@@ -182,12 +182,16 @@ namespace Thu_y.Modules.UserModule.Adapters
             var account = GetUserByAccount(model.Account);
             if (account == null) throw new KeyNotFoundException("User not found!");
 
-            if (loggInRole != RoleType.Manager) // nếu là Manaer thì cho update luôn
+            //if (loggInRole != RoleType.Manager) // nếu là Manaer thì cho update luôn
+            //{
+            //    if (account.Password != model.OldPassword)
+            //    {
+            //        throw new AppException("Invalid token");
+            //    }
+            //}
+            if (account.Password != model.OldPassword)
             {
-                if (account.Password != model.OldPassword)
-                {
-                    throw new AppException("Invalid token");
-                }
+                throw new AppException("Invalid token");
             }
 
             account.Password = model.Password;

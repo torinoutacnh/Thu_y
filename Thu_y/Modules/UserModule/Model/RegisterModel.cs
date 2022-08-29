@@ -22,7 +22,7 @@ namespace Thu_y.Modules.UserModule.Model
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        public string Address { get; set; }
+        public string? Address { get; set; }
         public SexType Sex { get; set; }
         public RoleType Role { get; set; }
     }

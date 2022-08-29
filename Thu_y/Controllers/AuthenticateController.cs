@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Thu_y.Modules.UserModule.Model;
 using Thu_y.Modules.UserModule.Ports;
+using Thu_y.Utils.Infrastructure.Application.Models;
 
 namespace Thu_y.Controllers
 {
