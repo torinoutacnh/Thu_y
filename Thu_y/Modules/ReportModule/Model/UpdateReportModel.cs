@@ -3,6 +3,7 @@
     public class UpdateReportModel
     {
         public string ReportId { get; set; }
+        public string? SerialNumber { get; set; }
         public List<Values> Values { get; set; }
     }
 
