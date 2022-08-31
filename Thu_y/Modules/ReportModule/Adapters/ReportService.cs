@@ -164,7 +164,13 @@ namespace Thu_y.Modules.ReportModule.Adapters
         {
             var report = _reportTicketRepository.GetSingle(x => x.Id == model.ReportId);
             if (report == null) throw new Exception("No report found!") { HResult = 404 };
-
+            
+            if(model.SerialNumber != null && model.SerialNumber != "")
+            {
+                report.SerialNumber = model.SerialNumber;
+                _reportTicketRepository.Update(report);
+                _unitOfWork.SaveChange();
+            }
             _reportTicketRepository.UpdateMultiReport(model.Values, model.ReportId);
             return Task.CompletedTask;
         }
