@@ -18,7 +18,8 @@ namespace Thu_y.Controllers
         [HttpPost("excel")]
         public  IActionResult ExportExcel([FromBody] string userId)
         {
-            var excel = _reportService.ExportExcel(userId);
+            //var excel = _reportService.ExportExcel(userId);
+            var excel = _reportService.ExportAimalDailyExcel();
             var ms = new MemoryStream();
             excel.SaveAs(ms);
             ms.Position = 0;

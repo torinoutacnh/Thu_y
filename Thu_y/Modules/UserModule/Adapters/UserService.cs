@@ -40,7 +40,7 @@ namespace Thu_y.Modules.UserModule.Adapters
         {
             var account = _userRepository.Get(_ => _.Account == model.UserName, false, _ => _.RefreshTokens).FirstOrDefault();
             if (account == null) throw new AppException("Invalid Account");
-            if (!account.IsVerifed || account.Password != model.Password) throw new AppException("Invalid Password");
+            if (!account.IsVerifed || account.Password != model.Password) throw new AppException("Tài khoản chưa được xác thực");
 
 
             var token = CreateJWTToken(account);

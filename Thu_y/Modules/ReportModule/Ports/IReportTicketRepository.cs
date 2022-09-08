@@ -43,5 +43,11 @@ namespace Thu_y.Modules.ReportModule.Ports
         /// <param name="reportId"></param>
         /// <returns></returns>
         bool UpdateMultiReport(List<Values> lsModel, string reportId);
+
+        /// <summary>
+        /// Get list animal daily report
+        /// </summary>
+        /// <returns></returns>
+        ICollection<AnimalDailyReportModel> GetAnimalDailyReport();
     }
 }

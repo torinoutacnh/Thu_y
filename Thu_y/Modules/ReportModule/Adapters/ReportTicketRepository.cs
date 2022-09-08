@@ -32,7 +32,7 @@ namespace Thu_y.Modules.ReportModule.Adapters
                                                         (
 	                                                        select rp.[Name] as ReportName, rv.AttributeName, rv.[Value] as [value], rv.ReportId 
                                                             from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
-	                                                        where rv.ReportId in (select  Id from ReportTicket where UserId = @userId )
+	                                                        where rv.ReportId in (select Id from ReportTicket where UserId = @userId )
 															and rp.FormId = 'c81c3aad-b1f1-41de-80c7-ee1f724b6a1d'
                                                             and rp.[DateDeleted] is null
                                                         ) t
@@ -235,6 +235,67 @@ namespace Thu_y.Modules.ReportModule.Adapters
             catch (Exception ex)
             {
                 return false;
+            }
+            finally
+            {
+                if (con != null && con.State != ConnectionState.Closed) con.Close();
+            }
+        }
+
+        public ICollection<AnimalDailyReportModel> GetAnimalDailyReport()
+        {
+            StringBuilder sqlQuery = new StringBuilder(@$"select
+    row_number() over (order by [Thời gian nhập(ngày)],[Tên chủ động vật hoặc chủ hàng]) [STT],
+	[Tên chủ động vật hoặc chủ hàng] as [Owner],
+	[Loại Động vật] as [Animal],
+	isnull(cast([Số lượng cùng một lô] as decimal(12,2)), 0) as [PackSize],
+	cast([Thời gian nhập(ngày)] as datetimeoffset(7)) as [DateReceived],
+	isnull(cast([Số lượng tồn ngày hôm trước] as decimal(12,2)), 0) as [YesterdayLeftover],
+	isnull(cast([Tổng số được kiểm tra lâm sàng] as decimal(12,2)), 0) as [CheckedAmount],
+	[Kết quả kiểm tra trước giết mổ] as [CheckedResult],
+	isnull(cast([Số lượng giết mổ] as decimal(12,2)), 0) as [ProcessedAmount],
+	isnull(cast([Số lượng, lý do chưa giết mổ] as decimal(12,2)), 0) as [NotProcessedAmount],
+	[Biện pháp sử lý] as [Solution],
+	[Chữ ký của chủ cơ sở] as [OwnerSign],
+	[Chữ ký của nhân viên thú y] as [QuarantinerSign]
+from(
+SELECT * FROM
+(
+	select rp.[Name] as ReportName, rv.AttributeName, rv.[Value] as [value], rv.ReportId 
+    from ReportTicketValue rv inner join ReportTicket rp on rp.Id = rv.ReportId 
+	where rv.ReportId in (select Id from ReportTicket )
+	and rp.FormId = 'c81c3aad-b1f1-41de-80c7-ee1f724b6a1d'
+    and rp.[DateDeleted] is null
+) t
+PIVOT(
+    max([value])
+    for AttributeName in(
+        [Số],
+		[Tên chủ động vật hoặc chủ hàng],
+		[Loại Động vật],
+		[Số lượng cùng một lô],
+        [Thời gian nhập(ngày)],
+		[Số lượng tồn ngày hôm trước],
+		[Tổng số được kiểm tra lâm sàng],
+		[Kết quả kiểm tra trước giết mổ],
+		[Số lượng giết mổ],
+		[Số lượng, lý do chưa giết mổ],
+		[Biện pháp sử lý],
+        [Chữ ký của chủ cơ sở],
+        [Chữ ký của nhân viên thú y])
+) as pivot_table) as tb");
+
+            IDbConnection con = null;
+            try
+            {
+                con = new SqlConnection(ConnectionString);
+                con.Open();
+                var result = con.Query<AnimalDailyReportModel>(sqlQuery.ToString()).ToList();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new List<AnimalDailyReportModel>();
             }
             finally
             {

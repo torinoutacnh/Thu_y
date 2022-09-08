@@ -218,5 +218,35 @@ namespace Thu_y.Modules.ReportModule.Adapters
 
             return excel;
         }
+
+        public ExcelPackage ExportExcel()
+        {
+            var data = _reportTicketRepository.GetAnimalDailyReport();
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            var excel = new ExcelPackage();
+
+            var WookSheet = excel.Workbook.Worksheets.Add("Report");
+            WookSheet.Cells[2, 1].LoadFromCollection(data, true, TableStyles.Dark9);
+            var modelTable = WookSheet.Cells[$"A1:E{data.Count + 1}"];
+            WookSheet.Cells["A1:E" + (data.Count + 1)].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            WookSheet.Cells.AutoFitColumns();
+
+            return excel;
+        }
+
+        public ExcelPackage ExportAimalDailyExcel()
+        {
+            var data = _reportTicketRepository.GetAnimalDailyReport();
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            var excel = new ExcelPackage();
+
+            var WookSheet = excel.Workbook.Worksheets.Add("Report");
+            WookSheet.Cells[2, 1].LoadFromCollection(data, true, TableStyles.Dark3);
+            var modelTable = WookSheet.Cells[$"A1:E{data.Count + 1}"];
+            WookSheet.Cells["A1:E" + (data.Count + 1)].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+            WookSheet.Cells.AutoFitColumns();
+
+            return excel;
+        }
     }
 }
