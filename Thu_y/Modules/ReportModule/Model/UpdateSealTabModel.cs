@@ -11,5 +11,6 @@
         public string Id { get; set; }
         public string SealName { get; set; }
         public string SealCode { get; set; }
+        public int Amount { get; set; }
     }
 }

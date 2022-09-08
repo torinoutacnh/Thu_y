@@ -18,6 +18,7 @@ namespace Thu_y.Modules.ReportModule.Core
 
         [Column(TypeName = "decimal(18, 4)")]
         public decimal Price { get; set; }
+        public int Amount { get; set; }
         public string ReportTicketId { get; set; }
 
         [ForeignKey("ReportTicketId")]
