@@ -30,8 +30,12 @@ namespace Thu_y.Modules.ReportModule.Adapters
             {
                 sqlQuery.Append($"WHEN '{seal.Id}' THEN N'{seal.SealCode}' ");
             }
-
-            sqlQuery.Append($"ELSE [CodeSeal] END WHERE ReportTicketId = @reportId");
+            sqlQuery.Append($"ELSE [CodeSeal] END, [Amount] = CASE [Id] ");
+            foreach(var seal in lsModel)
+            {
+                sqlQuery.Append($"WHEN '{seal.Id}' THEN N'{seal.Amount}' ");
+            }
+            sqlQuery.Append($"ELSE [Amount] END WHERE ReportTicketId = @reportId");
 
             var param = new DynamicParameters();
 

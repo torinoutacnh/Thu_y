@@ -43,5 +43,7 @@ namespace Thu_y.Modules.ReportModule.Ports
         /// <param name="reportId"></param>
         /// <returns></returns>
         bool UpdateMultiReport(List<Values> lsModel, string reportId);
+
+        
     }
 }
