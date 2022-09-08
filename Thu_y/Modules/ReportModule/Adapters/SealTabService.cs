@@ -62,7 +62,8 @@ namespace Thu_y.Modules.ReportModule.Adapters
         #region Update SealTab
         public Task UpdateAsync(UpdateSealTabModel model, CancellationToken cancellationToken = default)
         {
-            var report = _reportTicketRepository.GetSingle(_ => _.Id == model.ReportId);
+            //var report = _reportTicketRepository.GetSingle(_ => _.Id == model.ReportId);
+            var report = _sealTabRepository.Get(_ => _.ReportTicketId == model.ReportId).ToList();
             if (report == null) throw new Exception("Not found report!") { HResult = 404 };
 
             _sealTabRepository.UpdateMultiSealTab(model.SealTabs, model.ReportId);

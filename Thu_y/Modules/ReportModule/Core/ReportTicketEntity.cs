@@ -16,6 +16,7 @@ namespace Thu_y.Modules.ReportModule.Core
         public string? ApproveId { get; set; }
         public string? ApproveName { get; set; }
         public string? SerialNumber { get; set; }
+        public string? NoteBook { get; set; }
 
         [Column(TypeName = "decimal(18, 4)")]
         public decimal TotalPrice { get; set; }

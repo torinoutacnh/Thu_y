@@ -15,5 +15,6 @@ namespace Thu_y.Modules.ReportModule.Model
         public string Id_Pricing { get; set; }
         public string ReportTicketId { get; set; }
         public decimal Price { get; set; }
+        public int Amount { get; set; }
     }
 }

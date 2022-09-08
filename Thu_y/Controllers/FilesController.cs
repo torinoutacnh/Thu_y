@@ -24,5 +24,14 @@ namespace Thu_y.Controllers
             ms.Position = 0;
             return File(ms, "application/octet-stream", "reportExcel.xlsx");
         }
+
+        [HttpPost("reports")]
+        public IActionResult ExportReportToExcel()
+        {
+            var excel = _reportService.ExportReportToExcel();
+            var ms = new MemoryStream();
+            excel.SaveAs(ms);
+            return File(ms.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "report-thu-y.xlsx");
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
@@ -217,6 +218,87 @@ namespace Thu_y.Modules.ReportModule.Adapters
             WookSheet.Cells.AutoFitColumns();
 
             return excel;
+        }
+
+        public XLWorkbook ExportReportToExcel()
+        {
+            //var data = _reportTicketRepository.GetListQuarantineReport(userId);
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+            var excel = new XLWorkbook();
+
+            var ws = excel.Worksheets.Add("VE NIEM PHONG");
+            if(ws != null)
+            {
+                ws.Cell("A2").Value = "BÁO CÁO SỬ DỤNG VÉ NIÊM PHONG NĂM 2022";
+                CreateExcelLayout(ws);
+            }
+            ws = excel.Worksheets.Add("VE TIEU DOC");
+            if (ws != null)
+            {
+                ws.Cell("A2").Value = "BÁO CÁO SỬ DỤNG VÉ TIÊU ĐỘC NĂM 2022";
+                CreateExcelLayout(ws);
+            }
+
+            return excel;
+        }
+
+        private void CreateExcelLayout(IXLWorksheet ws)
+        {
+            #region Header
+            ws.Cell("B1").Value = "PHÒNG KIỂM DỊCH";
+            ws.Cell("N1").Value = "Tháng 7";
+            ws.Cell("E3").Value = "Thông tin tồn đầu kỳ";
+            ws.Cell("H3").Value = "Thông tin đã sử dụng trong kỳ";
+            ws.Cell("L3").Value = "Thông tin tồn cuối kỳ";
+
+            //Merge rows
+            foreach (var str in new[] { "B1:E2", "A2:O3", "N1:O2", "E3:G4", "H3:J4", "L3:N3" })
+                ws.Range(str).Row(1).Merge();
+
+            //Assign values for headercell
+            string[] titles = { "TT", "Kí hiệu", "Quyển sổ", "Mệnh giá", "Số tờ (tờ)", "Từ số seri", "Đến số seri", "Tổng (tờ)", "Số tờ dùng", "Số tờ hủy", "Số tiền thu (đ)", "Số tờ (tờ)", "Từ số seri", "Đến số seri", "Ghi chú" };
+            for (int i = 1; i <= titles.Length; i++)
+            {
+                if (i >= 1 && i <= 4 || i == 11 || i == 15)
+                    ws.Cell(3, i).Value = titles[i - 1];
+                ws.Cell(4, i).Value = titles[i - 1];
+            }
+            //Merge columns
+            ws.Range("A3:O4").Columns("A:D,K,O").ToList().ForEach(col =>
+            {
+                col.Merge();
+                col.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+
+            });
+
+            //styling
+            var header = ws.Cells("A1:O4").Style;
+            header.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            header.Font.Bold = true;
+            header.Font.FontName = "arial";
+            var tableHeader = ws.Cells("A3:O4").Style;
+            tableHeader.Border.OutsideBorder = XLBorderStyleValues.Thin;
+            tableHeader.Border.TopBorder = XLBorderStyleValues.Medium;
+            tableHeader.Border.BottomBorder = XLBorderStyleValues.Medium;
+            ws.Columns().AdjustToContents();
+            #endregion Header
+
+            int currentRow = 5;
+
+            //insert data
+
+
+            #region Footer
+            currentRow = ws.RowsUsed().Count() + 1;
+            ws.Cell(currentRow, 2).Value = "TỔNG";
+            var tableFooter = ws.Range($"B{currentRow}:D{currentRow + 1}").Row(1);
+            tableFooter.Merge();
+            tableFooter.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            tableFooter.Style.Font.Bold = true;
+
+            ws.Cells($"A{currentRow}:O{currentRow}").Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+            foreach (var a in new[] { "E", "H", "I", "J", "K", "L" }) ws.Cell($"{a}{currentRow}").FormulaA1 = $"=SUM({a}5:{a}{currentRow-1})";
+            #endregion Footer
         }
     }
 }
