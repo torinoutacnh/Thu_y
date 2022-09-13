@@ -27,8 +27,10 @@ namespace Thu_y.Modules.ReportModule.Adapters
         {
             var report = _reportTicketRepository.GetSingle(_=>_.Id == model.ReportTicketId);
             if (report == null) throw new Exception("Not found report!") { HResult = 404 };
-            var config = _sealConfigRepository.GetSingle(_ => _.SealName == model.SealName);
-            if (config == null) throw new Exception("Not found seal config!") { HResult = 404 };
+            //var config = _sealConfigRepository.GetSingle(_ => _.SealName == model.SealName);
+            //if (config == null) throw new Exception("Not found seal config!") { HResult = 404 };
+            var receiptName = _receiptRepository.GetSingle(_=>_.CodeName == model.SealCode);
+            if (receiptName == null) throw new Exception("Not found receipt name!") { HResult = 404 };
 
             var entity = _mapper.Map<SealTabEntity>(model);
             _sealTabRepository.Add(entity);
